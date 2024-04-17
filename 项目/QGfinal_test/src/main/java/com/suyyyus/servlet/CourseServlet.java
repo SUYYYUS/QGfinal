@@ -1,0 +1,227 @@
+package com.suyyyus.servlet;
+
+import com.alibaba.fastjson.JSON;
+import com.suyyyus.pojo.Course;
+import com.suyyyus.pojo.PageBean;
+import com.suyyyus.pojo.Teacher;
+import com.suyyyus.service.CourseService;
+import com.suyyyus.service.impl.CourseServiceImpl;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.List;
+
+@WebServlet("/Course/*")
+public class CourseServlet extends BaseServlet{
+
+    CourseService courseService = new CourseServiceImpl();
+
+
+    /**
+     * 用于添加课程
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
+    public void addCourse(HttpServletRequest req, HttpServletResponse resp) throws Exception{
+        // 从seession中拿出登录成功的教师信息
+        HttpSession session = req.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+
+        BufferedReader reader = req.getReader();
+        String s = reader.readLine();
+
+        Course course = JSON.parseObject(s, Course.class);
+
+        course.setTeacher_id(teacher.getId());
+
+        courseService.addCourse(course);
+
+        System.out.println(teacher.getTeacherid());
+
+        resp.getWriter().write("addcourse_success");
+    }
+
+
+    /**
+     * 查询教师id下开设的课程
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
+    public void selectAllCourseByteacher_id(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+
+        // 从seession中拿出登录成功的教师信息
+        HttpSession session = req.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+
+        List<Course> courseList = courseService.queryAllCourseByTeacher_id(teacher.getId());
+
+        //2.转为JSON
+        String jsonString = JSON.toJSONString(courseList);
+
+        //3.写数据
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+        //System.out.println("User selectAll----------");
+    }
+
+//    *
+//     * 查询平台所有课程
+//     * @param req
+//     * @param resp
+//     * @throws Exception
+//    public void selectAllCourse(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+//
+//        // 从seession中拿出登录成功的教师信息
+////        HttpSession session = req.getSession();
+////        Teacher teacher = (Teacher) session.getAttribute("teacher");
+//
+////        List<Course> courseList = courseService.queryAllCourseByTeacher_id(teacher.getId());
+//
+//        List<Course> courseList = courseService.queryAllCourse();
+//        //2.转为JSON
+//        String jsonString = JSON.toJSONString(courseList);
+//
+//        //3.写数据
+//        resp.setContentType("text/json;charset=utf-8");
+//        resp.getWriter().write(jsonString);
+//        //System.out.println("User selectAll----------");
+//    }
+
+    /**
+     * 分页查询
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void selectByPage(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        //1.调用查询
+        String _currentPage = req.getParameter("currentPage");
+        String _pageSize = req.getParameter("pageSize");
+
+        int currentPage = Integer.parseInt(_currentPage);
+        int pageSize = Integer.parseInt(_pageSize);
+
+        PageBean<Course> pageBean = courseService.selectByPage(currentPage, pageSize);
+
+        //2.转为JSON
+        String jsonString = JSON.toJSONString(pageBean);
+        //3.写数据
+
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+        //System.out.println("User selectAll----------");
+    }
+
+
+    /**
+     * 通过课程id查询课程
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
+    public void queryById(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        //1.调用查询
+        //String _id = req.getParameter("id");
+
+
+        BufferedReader reader = req.getReader();
+        String _id = reader.readLine();
+        int id = Integer.parseInt(_id);
+
+        Course course = courseService.queryByCourse_id(id);
+
+        //2.转为JSON
+        String jsonString = JSON.toJSONString(course);
+        //3.写数据
+
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+        //System.out.println("User selectAll----------");
+    }
+
+    /**
+     * 通过学科进行模糊查询
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
+    public void queryBySubject(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        //1.调用查询
+
+        req.setCharacterEncoding("UTF-8");
+
+        BufferedReader reader = req.getReader();
+        String subject = reader.readLine();
+
+//        System.out.println(subject);
+        List<Course> list = courseService.queryBySubject(subject);
+
+        //2.转为JSON
+        String jsonString = JSON.toJSONString(list);
+        //3.写数据
+
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+        //System.out.println("User selectAll----------");
+    }
+
+    /**
+     * 通过课程id查询课程并且保存
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
+    public void queryByIdAndSession(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+
+        //获取session对象，储存课程
+        HttpSession session = req.getSession();
+        BufferedReader reader = req.getReader();
+        String _id = reader.readLine();
+        int id = Integer.parseInt(_id);
+
+        Course course = courseService.queryByCourse_id(id);
+
+        session.setAttribute("course",course);
+
+        System.out.println("111111111111111222222222222222");
+        System.out.println(course.getId());
+
+        resp.getWriter().write("success");
+        //System.out.println("User selectAll----------");
+    }
+
+    /**
+     * 展示当前课程信息
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void getSelfInformation(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 从seession中拿出课程信息
+        HttpSession session = req.getSession();
+        Object course = session.getAttribute("course");
+//        System.out.println(user);
+        //  JSON数据化
+        String jsonString = JSON.toJSONString(course);
+//        System.out.println(jsonString);
+        // 写数据
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
+
+
+    }
+
+
+
+

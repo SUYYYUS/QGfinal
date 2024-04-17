@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生中心</title>
+    <style>
+        .welcome{
+            text-align: center;
+            color: #cdb1ef;
+        }
+    </style>
+
+</head>
+<body>
+
+<h2 class = "welcome" >欢迎来到学生中心</h2>
+
+<div id ="studentcenterDiv">
+
+    <!--    修改数据表单-->
+    <el-dialog
+            title="修改数据"
+            :visible.sync="dialogVisible_update"
+            width="30%"
+    >
+        <el-form ref="form" :model="Student" label-width="80px">
+            <el-form-item label="姓名">
+                <el-input v-model="Student.studentname"></el-input>
+            </el-form-item>
+            <el-form-item label="学号">
+                <el-input v-model="Student.studentid"></el-input>
+            </el-form-item>
+            <!--<el-form-item label="密码">
+                <el-input v-model="Teacher.password"></el-input>
+            </el-form-item>-->
+            <template>
+                <p class="signup">年级<el-select v-model="Student.grade" placeholder="请选择">
+                    <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select></p>
+            </template>
+
+            <el-form-item label="QQ">
+                <el-input v-model="Student.qq"></el-input>
+            </el-form-item>
+
+            <el-form-item label="描述">
+                <el-input v-model="Student.description"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="updateStudent">确认修改</el-button>
+                <el-button @click="dialogVisible_update = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+    <el-dialog title="学习情况" :visible.sync="dialogTableVisible">
+        <el-table :data="gridData">
+            <el-table-column property="answernumber" label="作答次数" width="150"></el-table-column>
+            <el-table-column property="average_score" label="平均分" width="200"></el-table-column>
+            <el-table-column property="total_score" label="总分"></el-table-column>
+            <el-table-column property="accuracy" label="正确率" width="200"></el-table-column>
+        </el-table>
+    </el-dialog>
+
+
+<!--个人信息表单-->
+<template>
+    <el-table
+            :data="tableData"
+            style="width: 100%"
+            :row-class-name="tableRowClassName"
+            @selection-change="handleSelectionChange">
+        <el-table-column
+                type="index"
+                width="50">
+        </el-table-column>
+        <el-table-column
+                prop="studentname"
+                label="姓名"
+                align="center"
+        >
+        </el-table-column>
+        <el-table-column
+                prop="studentid"
+                label="学号"
+                align="center"
+        >
+        </el-table-column>
+        <el-table-column
+                prop="grade"
+                label="年级"
+                align="center"
+        >
+        </el-table-column>
+        <el-table-column
+                prop="qq"
+                label="QQ"
+                align="center"
+        >
+        </el-table-column>
+
+        <!--        </el-table>-->
+        <!--        <el-table-->
+        <!--                :data="tableData"-->
+        <!--                style="width: 100%"-->
+        <!--                :row-class-name="tableRowClassName"-->
+        <!--                @selection-change="handleSelectionChange">-->
+        <el-table-column
+                prop="description"
+                label="描述"
+                align="center"
+        >
+        </el-table-column>
+        <el-table-column
+                prop="create_time"
+                label="注册时间"
+                align="center"
+        >
+        </el-table-column>
+        <el-table-column
+                prop="update_time"
+                label="更新时间"
+                align="center"
+        >
+        </el-table-column>
+        <el-table-column
+                prop="id"
+                align="center"
+                label="操作">
+            <template slot-scope="scope">
+                <el-row>
+                    <el-button type="primary" @click="allData(scope.row)">修改</el-button>
+                    <!--                        <el-button type="danger" @click="deleteById(scope.row.id)">删除</el-button>-->
+                </el-row>
+            </template>
+        </el-table-column>
+    </el-table>
+</template>
+
+    <h2 class="welcome">我学习的课程</h2>
+
+<!--    学生的课程菜单-->
+    <template>
+        <el-table
+                :data="tableData1"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange">
+
+            <el-table-column
+                    prop="coursename"
+                    label="课程名"
+                    align="center"
+            >
+            </el-table-column>
+
+            <el-table-column
+                    prop="description"
+                    label="描述"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="create_time"
+                    label="开课时间"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="end_time"
+                    label="结课时间"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="id"
+                    align="center"
+                    label="操作">
+                <template slot-scope="scope">
+                    <el-row>
+                        <el-button type="primary" @click="getIntoStudy(scope.row)">进入课程</el-button>
+                        <el-button type="primary" @click="seeStudy(scope.row)">获取学习记录</el-button>
+                        <el-button type="text" @click="dialogTableVisible = true">查看学习情况</el-button>
+
+                    </el-row>
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
+
+    <el-button type="primary" @click="gotocoursecenter">课程中心</el-button>
+
+</div>
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+<script>
+
+    new Vue({
+        el:"#studentcenterDiv",
+
+        mounted(){
+
+            this.see();
+            this.showCourse();
+        },
+
+        data(){
+            return{
+
+                dialogTableVisible:false,
+
+                tableData:[],
+
+                tableData1:[],
+
+                //修改个人信息
+                dialogVisible_update: false,
+
+                Student:{
+                    id:'',
+                    studentname:'',
+                    studentid:'',
+                    password:'',
+                    grade:'',
+                    qq:'',
+                    description:'',
+                    create_time:'',
+                    update_time:'',
+
+                },
+
+                Course:{
+                    id:'',
+                    coursename:'',
+                    subject:'',
+                    description:'',
+                    teacher_id:'',
+                    section_number:'',
+                    limitnumber:'',
+                    registernumber:'',
+                    create_time:'',
+                    end_time:'',
+                },
+                options: [{
+                    value: '2024级',
+                    label: '2024级'
+                }, {
+                    value: '2023级',
+                    label: '2023级'
+                },{
+                    value: '2022级',
+                    label: '2022级'
+                },{
+                    value: '2021级',
+                    label: '2021级'
+                },{
+                    value: '2020级',
+                    label: '2020级'
+                }],
+
+                gridData:[],
+
+                Student_study:{
+                    id:'',
+                    student_id:'',
+                    course_id:'',
+                    answernumber:'',
+                    average_score:'',
+                    total_score:'',
+                    accuracy:'',
+                    rightnumber:'',
+
+                }
+
+            }
+
+        },
+
+        methods:{
+
+            //展示当前学生的全部信息
+            see(){
+                var _this = this;
+                axios({
+                    method: "get",
+                    url:"http://localhost:8080/QGfinal_test_war/Student/getSelfInformation",
+                }).then(resp =>{
+                    _this.Student = resp.data;
+
+                    _this.tableData = Array.isArray(resp.data) ? resp.data : [resp.data];
+
+                    // _this.tableData = resp.data;
+                });
+            },
+
+            //修改学生信息
+            allData(row){
+                //获取数据
+                this.Student = row;
+                //弹出窗口
+                this.dialogVisible_update= true;
+            },
+
+            //修改学生信息
+            updateStudent(){
+                var _this = this;
+
+                axios({
+                    method:"post",
+                    url: "http://localhost:8080/QGfinal_test_war/Student/updateStudent",
+                    data: _this.Student,
+                }).then(function (resp) {
+                    //添加成功，关闭添加信息的对话框
+                    _this.dialogVisible_update = false;
+
+                    //刷新所有学生信息
+                    _this.see();
+
+                    //提示修改成功
+                    _this.$message({
+                        message: '恭喜你，修改成功啦',
+                        type: 'success'
+                    });
+                })
+            },
+
+
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex%2 === 0) {
+                    return 'warning-row';
+                }
+                return 'success-row';
+            },
+            //复选框选中后执行的方法
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+
+            },
+
+            gotocoursecenter(){
+                location.href = "/QGfinal_test_war/CourseCenter.html";
+            },
+
+            //展示学生的课程
+            showCourse(){
+                var _this = this;
+
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/QGfinal_test_war/Student_course/showStudentCourse",
+                }).then(resp =>{
+                    //设置表格数据
+                    _this.tableData1 = resp.data;
+                })
+
+            },
+
+            /**
+             * 进入课程
+             * @param row
+             */
+            getIntoStudy(row){
+                this.Course.id = row.id;
+
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Course/queryByIdAndSession",
+                    data:this.Course.id,
+                }).then(function (resp) {
+                    if(resp.data == "success"){
+                        f1();
+                    }
+                })
+
+            },
+
+            seeStudy(row){
+                var _this = this;
+                this.Course = row;
+
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Course/queryByIdAndSession",
+                    data:this.Course.id,
+                }).then(function (resp) {
+                    if(resp.data == "success"){
+                     _this.seeStudy1();
+                        _this.$message({
+                            message: '获取成功',
+                            type: 'success'
+                        });
+                    }
+                })
+
+            },
+
+            seeStudy1(){
+                var _this = this;
+
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/QGfinal_test_war/Student_study/getStudyInformation"
+                }).then(resp =>{
+
+                    _this.Student_study = resp.data;
+
+                    _this.gridData = Array.isArray(resp.data) ? resp.data : [resp.data];
+
+                    // _this.tableData = resp.data;
+                    console.log(_this.Student_study);
+                });
+
+            }
+
+        }
+
+    })
+</script>
+<script>
+    function f1() {
+        location.href = "/QGfinal_test_war/Study.html";
+    }
+</script>
+
+</body>
+</html>

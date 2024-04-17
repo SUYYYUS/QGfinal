@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QG在线学习平台</title>
+    <link href="css/Welcome.css" rel="stylesheet">
+</head>
+<body>
+<h1 id = "welcome">欢迎来到QG在线学习平台</h1>
+<br>
+
+<div id="welcomeDiv">
+    <h2 id = "select">请选择你的身份:</h2>
+    <el-row>
+
+        <el-button type="primary" @click="Teacher" round>教师登录</el-button>
+        <el-button type="primary" @click="Student" round>学生登录</el-button>
+    </el-row>
+
+
+</div>
+
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+<script>
+    new Vue({
+        el:"#welcomeDiv",
+
+        methods:{
+
+            //选择教师登录
+            Teacher(){
+                gotoTeacher();
+            },
+
+            //选择学生登录
+            Student(){
+                gotoStudent();
+            },
+
+        }
+
+    })
+</script>
+<script>
+    function gotoTeacher() {
+        location.href = "/QGfinal_test_war/TeacherLogin.html";
+    }
+    function gotoStudent() {
+        location.href = "/QGfinal_test_war/StudentLogin.html";
+    }
+</script>
+
+</body>
+</html>

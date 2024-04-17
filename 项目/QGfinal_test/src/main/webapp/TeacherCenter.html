@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>教师中心</title>
+    <style>
+        .welcome{
+            text-align: center;
+            color: #cdb1ef;
+        }
+    </style>
+</head>
+<body>
+
+<h2 class = "welcome" >欢迎回到个人中心</h2>
+
+<div id="selfinfoDiv" >
+
+
+
+<!--    修改数据表单-->
+    <el-dialog
+            title="修改数据"
+            :visible.sync="dialogVisible_update"
+            width="30%"
+    >
+        <el-form ref="form" :model="Teacher" label-width="80px">
+            <el-form-item label="姓名">
+                <el-input v-model="Teacher.teachername"></el-input>
+            </el-form-item>
+            <el-form-item label="教职工号">
+                <el-input v-model="Teacher.teacherid"></el-input>
+            </el-form-item>
+            <!--<el-form-item label="密码">
+                <el-input v-model="Teacher.password"></el-input>
+            </el-form-item>-->
+            <template>
+                <p class="signup">学院<el-select v-model="Teacher.college" placeholder="请选择">
+                    <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select></p>
+            </template>
+
+            <el-form-item label="QQ">
+                <el-input v-model="Teacher.qq"></el-input>
+            </el-form-item>
+            <el-form-item label="电子邮箱">
+                <el-input v-model="Teacher.email"></el-input>
+            </el-form-item>
+            <el-form-item label="描述">
+                <el-input v-model="Teacher.description"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="updateTeacher">确认修改</el-button>
+                <el-button @click="dialogVisible_update = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+
+<!--表单-->
+    <template>
+        <el-table
+                :data="tableData"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange">
+            <el-table-column
+                    type="index"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="teachername"
+                    label="姓名"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="teacherid"
+                    label="教职工号"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="college"
+                    label="所属学院"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="qq"
+                    label="QQ"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="email"
+                    label="电子邮箱"
+                    align="center"
+            >
+            </el-table-column>
+<!--        </el-table>-->
+<!--        <el-table-->
+<!--                :data="tableData"-->
+<!--                style="width: 100%"-->
+<!--                :row-class-name="tableRowClassName"-->
+<!--                @selection-change="handleSelectionChange">-->
+            <el-table-column
+                    prop="description"
+                    label="描述"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="create_time"
+                    label="注册时间"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="update_time"
+                    label="更新时间"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="id"
+                    align="center"
+                    label="操作">
+                <template slot-scope="scope">
+                    <el-row>
+                        <el-button type="primary" @click="allData(scope.row)">修改</el-button>
+<!--                        <el-button type="danger" @click="deleteById(scope.row.id)">删除</el-button>-->
+                    </el-row>
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
+
+
+
+<h2 class="welcome">以下是{{Teacher.teachername}}老师管理的课程</h2>
+
+    <!--    新增课程-->
+    <el-dialog
+            title="新增课程"
+            :visible.sync="dialogVisible"
+            width="30%"
+    >
+        <el-form ref="form" :model="Course" label-width="80px">
+            <el-form-item label="课程名">
+                <el-input v-model="Course.coursename"></el-input>
+            </el-form-item>
+            <el-form-item label="学科分类">
+                <el-input v-model="Course.subject"></el-input>
+            </el-form-item>
+            <el-form-item label="简要描述">
+                <el-input v-model="Course.description"></el-input>
+            </el-form-item>
+            <el-form-item label="限制人数">
+                <el-input v-model="Course.limitnumber"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="addCourse">提交</el-button>
+                <el-button @click="dialogVisible = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+
+    <el-row>
+        <el-button type="primary" @click="dialogVisible = true" plain>添加课程</el-button>
+    </el-row>
+
+<!--    当前教师所开的课程-->
+    <template>
+        <el-table
+                :data="tableData1"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange">
+<!--            <el-table-column-->
+<!--                    type="selection"-->
+<!--                    width="55">-->
+<!--            </el-table-column>-->
+            <el-table-column
+                    type="index"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="coursename"
+                    label="课程"
+                    align="center"
+            >
+            </el-table-column>
+<!--            <el-table-column-->
+<!--                    prop="subject"-->
+<!--                    label=学科分类-->
+<!--                    align="center"-->
+<!--            >-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--                    prop="description"-->
+<!--                    label="描述"-->
+<!--                    align="center"-->
+<!--            >-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--                    prop="section_number"-->
+<!--                    label="章节数"-->
+<!--                    align="center"-->
+<!--            >-->
+<!--            </el-table-column>-->
+            <el-table-column
+                    prop="limitnumber"
+                    label="限制人数"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="registernumber"
+                    label="报名人数"
+                    align="center"
+            >
+            </el-table-column>
+<!--            <el-table-column-->
+<!--                    prop="create_time"-->
+<!--                    label="开课时间"-->
+<!--                    align="center"-->
+<!--            >-->
+<!--            </el-table-column>-->
+            <el-table-column
+                    prop="end_time"
+                    label="结课时间"
+                    align="center"
+            >
+            </el-table-column>
+            </el-table-column>
+            <el-table-column
+                    prop="id"
+                    align="center"
+                    label="操作">
+                <template slot-scope="scope">
+                    <el-row>
+                        <el-button type="primary" @click="registerStudentDetail(scope.row)">学生情况</el-button>
+                        <el-button type="primary" @click="courseDetail(scope.row)">查看详情</el-button>
+                    </el-row>
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
+<p>
+
+
+
+</p>
+
+</div>
+
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+<script>
+
+
+    new Vue({
+        el:'#selfinfoDiv',
+
+        mounted(){
+            this.see();
+            this.selectAllCourse();
+        },
+
+        data(){
+            return{
+
+                dialogTableVisible_total: false,
+
+                //添加课程对话框是否展示的标记
+                dialogVisible: false,
+
+                //修改个人信息
+                dialogVisible_update: false,
+
+                tableData: [],
+                tableData1: [],
+
+                activeName: 'second',
+
+                Course:{
+                    id:'',
+                    coursename:'',
+                    subject:'',
+                    description:'',
+                    teacher_id:'',
+                    section_number:'',
+                    limitnumber:'',
+                    registernumber:'',
+                    create_time:'',
+                    end_time:'',
+                },
+
+                Teacher:{
+                    id:'',
+                    teachername:'',
+                    teacherid:'',
+                    password:'',
+                    college:'',
+                    qq:'',
+                    email:'',
+                    description:'',
+                    create_time:'',
+                    update_time:'',
+                },
+
+                options: [{
+                    value: '计算机学院',
+                    label: '计算机学院'
+                }, {
+                    value: '外国语学院',
+                    label: '外国语学院'
+                },{
+                    value: '信息工程学院',
+                    label: '信息工程学院'
+                }],
+            };
+        },
+
+
+
+        methods: {
+
+            //显示课程
+            selectAllCourse(){
+                var _this = this;
+
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/QGfinal_test_war/Course/selectAllCourseByteacher_id",
+                }).then(resp =>{
+                    //设置表格数据
+                    this.tableData1 = resp.data;
+
+                })
+
+            },
+
+
+            //展示当前教师的全部信息
+            see(){
+                var _this = this;
+                axios({
+                    method: "get",
+                    url:"http://localhost:8080/QGfinal_test_war/Teacher/getSelfInformation",
+                }).then(resp =>{
+
+                    _this.Teacher = resp.data;
+
+                    _this.tableData = Array.isArray(resp.data) ? resp.data : [resp.data];
+
+                    // _this.tableData = resp.data;
+                    console.log(_this.Teacher);
+                });
+            },
+
+            //修改教师信息
+            allData(row){
+                //获取数据
+                 this.Teacher = row;
+                //弹出窗口
+                this.dialogVisible_update= true;
+            },
+
+            //修改教师信息
+            updateTeacher(){
+                var _this = this;
+
+                axios({
+                    method:"post",
+                    url: "http://localhost:8080/QGfinal_test_war/Teacher/updateTeacher",
+                    data: _this.Teacher,
+                }).then(function (resp) {
+                    //添加成功，关闭添加信息的对话框
+                    _this.dialogVisible_update = false;
+
+                    //刷新所有用户信息
+                    _this.see();
+
+                    //提示修改成功
+                    _this.$message({
+                        message: '恭喜你，修改成功啦',
+                        type: 'success'
+                    });
+                })
+            },
+
+
+            //进入课程详情页面
+            courseDetail(row){
+                this.Course.id = row.id;
+
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Course/queryByIdAndSession",
+                    data:this.Course.id,
+                }).then(function (resp) {
+                    if(resp.data == "success"){
+                        f1();
+                    }
+                })
+
+            },
+
+
+            //进入学生情况页面
+            registerStudentDetail(row){
+                this.Course.id = row.id;
+
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Course/queryByIdAndSession",
+                    data:this.Course.id,
+                }).then(function (resp) {
+                    if(resp.data == "success"){
+                        f2();
+                    }
+                })
+
+            },
+
+            goto(){
+                f();
+            },
+
+
+            //添加课程
+            addCourse(){
+                var _this = this;
+
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Course/addCourse",
+                    data: _this.Course,
+                }).then(function (resp) {
+                    if(resp.data == "addcourse_success"){
+                        //关闭对话框
+                        _this.dialogVisible = false,
+                        //刷新课程信息
+                        _this.selectAllCourse();
+                        //提示添加成功
+                        _this.$message({
+                            message: '恭喜你，添加成功啦',
+                            type: 'success'
+                        });
+
+                    }
+                });
+            },
+
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex%2 === 0) {
+                    return 'warning-row';
+                } //else  {
+                //return 'success-row';
+                //}
+                return 'success-row';
+            },
+            //复选框选中后执行的方法
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+
+            },
+
+        }
+
+    })
+</script>
+<script>
+    function f() {
+        location.href = "/QGfinal_test_war/Welcome.html";
+    }
+    function f1() {
+        location.href = "/QGfinal_test_war/CourseOperator.html";
+    }
+    function f2() {
+        location.href = "/QGfinal_test_war/CourseStudentSituation.html"
+    }
+</script>
+
+</body>
+</html>
