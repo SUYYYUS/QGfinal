@@ -5,6 +5,7 @@ import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Student_course;
 import com.suyyyus.pojo.Teacher;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public interface StudentService {
@@ -25,4 +26,9 @@ public interface StudentService {
 
     //学生报名课程
     public int addStudent_course(Course course, Student_course student_course) throws SQLException;
+
+    //发送信息
+    public void sendMsg(String msg) throws IOException;
+
+
 }

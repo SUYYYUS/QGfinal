@@ -12,9 +12,9 @@
             :visible.sync="dialogVisible"
             width="30%"
     >
-        <el-form ref="form" :model="Question" label-width="80px">
+        <el-form ref="form" :model="Answer" label-width="80px">
             <el-form-item label="答案">
-                <el-input v-model="Question.answer"></el-input>
+                <el-input v-model="Answer.answer"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitanswer">确认</el-button>
@@ -62,7 +62,9 @@
     </template>
 
 
-
+    <el-row>
+        <el-button type="warning" @click="goback" round>返回</el-button>
+    </el-row>
 
 
 
@@ -100,6 +102,11 @@
                     answer: '',
                 },
 
+                Answer:{
+                    answer:'',
+                }
+
+
             }
         },
 
@@ -133,11 +140,12 @@
 
             submitanswer(){
                 var _this = this;
+                // this.Question.answer = this.Answer.answer;
                 console.log(this.Question);
                 axios({
                     method:"post",
                     url:"http://localhost:8080/QGfinal_test_war/Answer/addAnswerRecord",
-                    data:this.Question.answer,
+                    data:this.Answer.answer,
                 }).then(function (resp) {
                     if(resp.data == "right"){
                         console.log("成功提交");
@@ -186,6 +194,10 @@
                 this.multipleSelection = val;
 
             },
+
+            goback(){
+                location.href = "/QGfinal_test_war/Study.html";
+            }
 
         },
 

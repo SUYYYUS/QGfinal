@@ -1,11 +1,16 @@
 package com.suyyyus.servlet;
 
 import com.alibaba.fastjson.JSON;
+import com.suyyyus.dao.DiscussionDao;
+import com.suyyyus.dao.impl.DiscussionDaoImpl;
 import com.suyyyus.pojo.Course;
+import com.suyyyus.pojo.Discussion;
 import com.suyyyus.pojo.PageBean;
 import com.suyyyus.pojo.Teacher;
 import com.suyyyus.service.CourseService;
+import com.suyyyus.service.DiscussionServcie;
 import com.suyyyus.service.impl.CourseServiceImpl;
+import com.suyyyus.service.impl.DiscussionServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,12 +19,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/Course/*")
 public class CourseServlet extends BaseServlet{
 
     CourseService courseService = new CourseServiceImpl();
+
+    DiscussionDao discussionDao = new DiscussionDaoImpl();
+    DiscussionServcie discussionServcie = new DiscussionServiceImpl();
 
 
     /**
@@ -218,9 +227,33 @@ public class CourseServlet extends BaseServlet{
         resp.getWriter().write(jsonString);
     }
 
+    /**
+     * 通过课程id展示该课程的讨论区
+     * @param req
+     * @param resp
+     * @throws SQLException
+     * @throws IOException
+     */
+    public void showCourseDiscussionForum(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+        //获取session对象
+        HttpSession session = req.getSession();
+        //获取课程对象
+        Course course = (Course) session.getAttribute("course");
 
+        //获取讨论区信息
+        List<Discussion> discussionList = discussionServcie.queryAllByCourse_id(course.getId());
+        //转化为JSON格式
+        String jsonString = JSON.toJSONString(discussionList);
+
+        //上传数据
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
 
     }
+
+
+
+}
 
 
 

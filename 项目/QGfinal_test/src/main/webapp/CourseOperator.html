@@ -128,7 +128,8 @@
             <template slot-scope="scope">
                 <el-row>
                     <el-button type="primary" @click="dialogVisible = true">添加章节</el-button>
-                    <el-button type="primary" @click="dialogTableVisible_total = true">查看情况</el-button>
+                    <el-button type="primary" @click="dialogTableVisible_total = true">查看学习情况</el-button>
+                    <el-button type="primary" @click="gotocourseforum(scope.row)">进入讨论区</el-button>
                 </el-row>
             </template>
         </el-table-column>
@@ -389,6 +390,23 @@
 
                 });
 
+
+            },
+
+
+            gotocourseforum(row){
+                var _this = this;
+                _this.Course = row;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Course/queryByIdAndSession",
+                    data:_this.Course.id,
+                }).then(function (resp) {
+                    if(resp.data == "success"){
+                        location.href = "/QGfinal_test_war/TeacherCourseDiscussion.html";
+
+                    }
+                })
 
             }
 

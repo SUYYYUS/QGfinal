@@ -14,6 +14,22 @@
 <h2 class = "welcome" >选择你要学习的章节</h2>
 <div id="studyDiv">
 
+    <el-dialog
+            title="提问"
+            :visible.sync="dialogVisible_question"
+            width="30%"
+    >
+        <el-form ref="form" :model="PROBLEM" label-width="80px">
+            <el-form-item label="问题">
+                <el-input v-model="PROBLEM.problem"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitproblem">确认</el-button>
+                <el-button @click="dialogVisible_quesiton = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
 
     <template>
         <el-table
@@ -52,22 +68,27 @@
                 <template slot-scope="scope">
                     <el-row>
                         <el-button type="primary" @click="opencontent(scope.row)">开始学习</el-button>
-                        <el-button  type="primary" @click="answerQuestion(scope.row)">开始作答</el-button>
+                        <el-button  type="primary" @click="answerQuestion(scope.row)">进行作答</el-button>
                     </el-row>
                 </template>
             </el-table-column>
         </el-table>
     </template>
+
+    <el-row>
+        <el-button type="warning" @click="goback" round>返回</el-button>
+        <el-button type="primary" @click="dialogVisible_question = true" round>提问</el-button>
+        <el-button type="success" @click="getintoforum" round>进入学习讨论区</el-button>
+    </el-row>
+
 </div>
-
-
-
 
 <script src="js/axios-0.18.0.js"></script>
 <script src="js/vue.js"></script>
 <script src="element-ui/lib/index.js"></script>
 <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
 <script>
+
     new Vue({
         el:"#studyDiv",
 
@@ -101,8 +122,11 @@
                     create_time:'',
                 },
 
+                dialogVisible_question : false,
 
-
+                PROBLEM:{
+                    problem:'',
+                }
 
 
             }
@@ -172,6 +196,39 @@
               })
 
             },
+
+            goback(){
+             location.href = "/QGfinal_test_war/StudentCenter.html";
+            },
+
+
+            //提问
+            submitproblem(){
+            var _this = this;
+                console.log(this.PROBLEM);
+            axios({
+                method:"post",
+                url:"http://localhost:8080/QGfinal_test_war/Student/sendQuestion",
+                data:_this.PROBLEM.problem,
+            }).then(function (resp) {
+                if(resp.data == "success"){
+                    _this.dialogVisible_question = false;
+                    _this.$message({
+                        message: '成功提问，耐心等待回复',
+                        type: 'success'
+                    });
+                }
+
+            })
+
+            },
+
+
+            //进入学习讨论区
+            getintoforum(){
+                location.href = "/QGfinal_test_war/StudentStudyDiscussion.html";
+            }
+
         },
     })
 

@@ -6,8 +6,10 @@ import com.suyyyus.pojo.Course;
 import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Student_course;
 import com.suyyyus.service.StudentService;
+import com.suyyyus.utils.TCP.Client;
 import com.suyyyus.utils.TimeUtil;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -94,5 +96,11 @@ public class StudentServiceImpl implements StudentService {
     public Student queryById(int id) throws SQLException {
         Student student = studentDao.queryById(id);
         return  student;
+    }
+
+
+    @Override
+    public void sendMsg(String msg) throws IOException {
+        Client.sendMsg(msg);
     }
 }

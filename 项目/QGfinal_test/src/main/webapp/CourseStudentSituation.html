@@ -71,6 +71,10 @@
         </el-table>
     </template>
 
+    <el-row>
+        <el-button type="primary" @click="gobackteachercenter" round>返回个人信息中心</el-button>
+    </el-row>
+
 
 </div>
 
@@ -221,7 +225,11 @@
                     console.log(_this.Student_study);
                 });
 
+            },
 
+
+            gobackteachercenter(){
+                location.href = "/QGfinal_test_war/TeacherCenter.html";
             }
         }
 

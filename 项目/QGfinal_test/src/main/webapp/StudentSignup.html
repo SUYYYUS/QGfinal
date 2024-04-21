@@ -16,8 +16,8 @@
         <h1 id="loginmsg">注册账号</h1>
         <div id="errorMsg" v-model="errorMsg">{{errorMsg}}</div>
         <p class="signup">姓名<input id="studentname" type="text" name="studentname" v-model="Student.studentname"></p>
-        <p class="signup">学号<input id="studentid" type="text" name="studentid" v-model="Student.studentid"></p>
-        <p class="signup">密码<input  id="password" type="password" name="password" v-model="Student.password"></p>
+        <p class="signup">学号<input id="studentid" type="text" name="studentid" v-model="Student.studentid" pattern="^\d{10}$" required title="学号应为10位数字"></p>
+        <p class="signup">密码<input  id="password" type="password" name="password" v-model="Student.password" pattern=".{6,}" required title="密码至少为6位字符"></p>
         <template>
             <p class="signup">年级<el-select v-model="Student.grade" placeholder="请选择">
                 <el-option
@@ -88,8 +88,35 @@
 
 
         methods:{
+
+            //校验
+            validateForm(){
+                let studentid = document.getElementById('studentid');
+                let password = document.getElementById('password');
+
+                if(!studentid.checkValidity()){
+                    alert(studentid.title);
+                    return false;
+                }
+
+                if(!password.checkValidity()){
+                    alert(password.title);
+                    return false;
+                }
+
+                return true;
+
+            },
+
+
+            //注册
             signup(){
                 var _this = this;
+
+                if(!this.validateForm()){
+                    return ;
+                }
+
                 console.log(_this.Student);
                 axios({
                     method: "post",

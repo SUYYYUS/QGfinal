@@ -10,6 +10,7 @@ public class Student {
    private String description;
    private String create_time;
    private String update_time;
+   private int remember; //勾选是否记住我
 
     public Student() {
     }
@@ -44,8 +45,6 @@ public class Student {
      * @param grade
      * @param qq
      * @param description
-     * @param create_time
-     * @param update_time
      */
     public Student(String studentname, String studentid, String password,
                    String grade, String qq, String description) {
@@ -141,6 +140,14 @@ public class Student {
 
     public void setUpdate_time(String update_time) {
         this.update_time = update_time;
+    }
+
+    public int getRemember() {
+        return remember;
+    }
+
+    public void setRemember(int remember) {
+        this.remember = remember;
     }
 
     @Override

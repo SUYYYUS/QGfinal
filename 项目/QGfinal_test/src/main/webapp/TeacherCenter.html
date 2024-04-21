@@ -62,6 +62,18 @@
         </el-form>
     </el-dialog>
 
+    <el-dialog title="提问记录" :visible.sync="dialogTableVisible_questionrecord">
+        <el-table :data="discussionData">
+            <el-table-column property="course_id" label="课程" width="150"></el-table-column>
+            <el-table-column property="question" label="学生问题" width="200"></el-table-column>
+            <el-table-column property="reply" label="我的回复"></el-table-column>
+            <el-table-column property="question_time" label="提问时间"></el-table-column>
+            <el-table-column property="reply_time" label="回复时间"></el-table-column>
+            <!--            <el-table-column property="accuracy" label="正确率" width="200"></el-table-column>-->
+        </el-table>
+    </el-dialog>
+
+
 
 <!--表单-->
     <template>
@@ -254,11 +266,16 @@
             </el-table-column>
         </el-table>
     </template>
-<p>
+
+    <el-row>
+        <el-button type="primary" @click="queryMyDiscussionByTeacher_id">查看我的留言</el-button>
+    </el-row>
+
+    <el-row>
+        <el-button type="warning" @click="getout" round>退出登录</el-button>
+    </el-row>
 
 
-
-</p>
 
 </div>
 
@@ -274,12 +291,15 @@
         el:'#selfinfoDiv',
 
         mounted(){
+            // this.queryMyDiscussionByTeacher_id();
             this.see();
             this.selectAllCourse();
         },
 
         data(){
             return{
+
+                dialogTableVisible_questionrecord: false,
 
                 dialogTableVisible_total: false,
 
@@ -291,6 +311,7 @@
 
                 tableData: [],
                 tableData1: [],
+                discussionData:[],
 
                 activeName: 'second',
 
@@ -330,6 +351,18 @@
                     value: '信息工程学院',
                     label: '信息工程学院'
                 }],
+
+                Discussion:{
+                    id:'',
+                    student_id:'',
+                    teacher_id:'',
+                    course_id:'',
+                    question:'',
+                    reply:'',
+                    question_time:'',
+                    reply_time:'',
+                },
+
             };
         },
 
@@ -475,6 +508,28 @@
             //复选框选中后执行的方法
             handleSelectionChange(val) {
                 this.multipleSelection = val;
+
+            },
+
+            getout(){
+                location.href = "/QGfinal_test_war/TeacherLogin.html";
+            },
+
+            //获得学生的提问记录
+            queryMyDiscussionByTeacher_id(){
+                // var _this = this;
+                //
+                // axios({
+                //     method:"get",
+                //     url:"http://localhost:8080/QGfinal_test_war/Teacher/queryMyDiscussionByTeacher_id",
+                // }).then(resp =>{
+                //     //获得数据
+                //     _this.discussionData = resp.data;
+                //
+                //     console.log(_this.discussionData);
+                // })
+
+                location.href = "/QGfinal_test_war/TeacherLeavemessage.html";
 
             },
 

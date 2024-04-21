@@ -1,12 +1,18 @@
 package com.suyyyus.servlet;
 
 import com.alibaba.fastjson.JSON;
+import com.suyyyus.dao.DiscussionDao;
 import com.suyyyus.dao.TeacherDao;
+import com.suyyyus.dao.impl.DiscussionDaoImpl;
 import com.suyyyus.dao.impl.TeacherDaoImpl;
+import com.suyyyus.pojo.Discussion;
 import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Teacher;
+import com.suyyyus.service.DiscussionServcie;
 import com.suyyyus.service.TeacherService;
+import com.suyyyus.service.impl.DiscussionServiceImpl;
 import com.suyyyus.service.impl.TeacherServiceImpl;
+import com.suyyyus.utils.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet("/Teacher/*")
 public class TeacherServlet extends BaseServlet{
@@ -24,6 +32,9 @@ public class TeacherServlet extends BaseServlet{
     private static final Logger logger =  LoggerFactory.getLogger(TeacherServlet.class);
     TeacherService teacherService = new TeacherServiceImpl();
     TeacherDao teacherDao = new TeacherDaoImpl();
+
+    DiscussionDao discussionDao = new DiscussionDaoImpl();
+    DiscussionServcie discussionServcie = new DiscussionServiceImpl();
 
     /**
      * 教师登录
@@ -46,10 +57,15 @@ public class TeacherServlet extends BaseServlet{
         }else {
             //设置编码格式
             resp.setContentType("text/html;charset=utf-8");
+
+
+
             boolean b = teacherService.Login(teacher.getTeacherid(), teacher.getPassword());
 
             if(b){
                 Teacher teacher1 = teacherService.queryByTeacherid(teacher.getTeacherid());
+
+
 
                 session.setAttribute("teacher", teacher1);
 
@@ -131,4 +147,51 @@ public class TeacherServlet extends BaseServlet{
         //boolean b = userService.checkUsername(user.getUsername());
 
     }
+
+    /**
+     * 获取该老师的所有留言
+     * @param req
+     * @param resp
+     * @throws SQLException
+     * @throws IOException
+     */
+    public void queryMyDiscussionByTeacher_id(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+        //获取session对象
+        HttpSession session = req.getSession();
+        //获取当前老师对象
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+
+        List<Discussion> discussionList =  discussionServcie.queryAllByTeacher_id(teacher.getId());
+
+        //转化为JSON
+        String jsonString = JSON.toJSONString(discussionList);
+
+        // 写数据
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
+    /**
+     * 教师进行回复
+     * @param req
+     * @param resp
+     * @throws IOException
+     * @throws SQLException
+     */
+    public void replyStudentQuestion(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+        //获取前端数据
+        BufferedReader reader = req.getReader();
+        String s = reader.readLine();
+
+        //获得信息
+        Discussion discussion = JSON.parseObject(s,Discussion.class);
+
+        //添加回复
+        discussionServcie.TeacherReply(discussion);
+
+
+        resp.getWriter().write("success");
+
+    }
+
 }

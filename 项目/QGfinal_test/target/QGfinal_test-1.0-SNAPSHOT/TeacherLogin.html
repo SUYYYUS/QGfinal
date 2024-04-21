@@ -11,8 +11,8 @@
     <form id = "form">
         <h1 id="loginmsg">教师登录</h1>
         <div id="errorMsg" v-model="errorMsg">{{errorMsg}}</div>
-        <p class="login">工号<input id="teacherid" type="text" name="teacherid" v-model="Teacher.teacherid"></p>
-        <p class="login">密码<input  id="password" type="password" name="password" v-model="Teacher.password"></p>
+        <p class="login">工号<input id="teacherid" type="text" name="teacherid" v-model="Teacher.teacherid" ></p>
+        <p class="login">密码<input  id="password" type="password" name="password" v-model="Teacher.password" ></p>
         <el-row>
             <el-button type="primary" @click="teacherLogin">登录</el-button>
         </el-row>
@@ -72,6 +72,8 @@
                             message: '恭喜你，登录成功啦',
                             type: 'success'
                         });
+                        _this.Teacher.password = '';
+                        _this.Teacher.teacherid = '';
                     }else if(resp.data == "failed"){
                         _this.$message({
                             message: '恭喜你，登录失败啦',

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学习讨论区</title>
+    <style>
+        .welcome{
+            text-align: center;
+            color: #cdb1ef;
+        }
+    </style>
+</head>
+<body>
+<h2 class = "welcome" >欢迎来到学习讨论区</h2>
+
+<div id="studentstudydiscussionDiv">
+
+    <el-dialog
+            title="提问"
+            :visible.sync="dialogVisible_question"
+            width="30%"
+    >
+        <el-form ref="form" :model="PROBLEM" label-width="80px">
+            <el-form-item label="问题">
+                <el-input v-model="PROBLEM.problem"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitproblem">确认</el-button>
+                <el-button @click="dialogVisible_question = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+
+    <template>
+        <el-table
+                :data="tableData"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange">
+            <el-table-column
+                    type="index"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="student_id"
+                    label="学生"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="teacher_id"
+                    label="老师"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="question"
+                    label="学生问题"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="reply"
+                    label="老师回复"
+                    align="center"
+            >
+            </el-table-column>
+
+            <el-table-column
+                    prop="question_time"
+                    label="提问时间"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="reply_time"
+                    label="回复时间"
+                    align="center"
+            >
+            </el-table-column>
+
+        </el-table>
+    </template>
+
+
+<el-row>
+    <el-button type="info" @click="dialogVisible_question = true" round>添加提问</el-button>
+    <el-button type="warning" @click="goback" round>返回</el-button>
+</el-row>
+
+</div>
+
+
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+<script>
+    new Vue({
+        el:"#studentstudydiscussionDiv",
+
+        data(){
+            return{
+                tableData:[],
+
+                dialogVisible_question:false,
+
+                Discussion:{
+                    id:'',
+                    student_id:'',
+                    teacher_id:'',
+                    course_id:'',
+                    question:'',
+                    reply:'',
+                    question_time:'',
+                    reply_time:'',
+                },
+
+                PROBLEM:{
+                    problem:'',
+                }
+
+
+            }
+
+
+
+        },
+
+        mounted(){
+            this.showCourseDiscussionForum();
+
+        },
+
+        methods:{
+
+            showCourseDiscussionForum(){
+                var _this = this;
+
+                axios({
+                    methods: "get",
+                    url:"http://localhost:8080/QGfinal_test_war/Course/showCourseDiscussionForum",
+                }).then(resp =>{
+                    _this.tableData = resp.data;
+
+                    console.log(this.tableData);
+                })
+            },
+
+            goback(){
+                location.href = "/QGfinal_test_war/Study.html";
+            },
+
+            //提问
+            submitproblem(){
+                var _this = this;
+                console.log(this.PROBLEM);
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Student/sendQuestion",
+                    data:_this.PROBLEM.problem,
+                }).then(function (resp) {
+                    if(resp.data == "success"){
+                        _this.dialogVisible_question = false;
+                        _this.$message({
+                            message: '成功提问，耐心等待回复',
+                            type: 'success'
+                        });
+                        _this.showCourseDiscussionForum();
+                    }
+
+                })
+
+            },
+
+
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex%2 === 0) {
+                    return 'warning-row';
+                } //else  {
+                //return 'success-row';
+                //}
+                return 'success-row';
+            },
+            //复选框选中后执行的方法
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+
+            },
+
+
+        }
+
+
+    })
+</script>
+
+
+
+
+</body>
+</html>

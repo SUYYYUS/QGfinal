@@ -68,6 +68,17 @@
         </el-table>
     </el-dialog>
 
+    <el-dialog title="提问记录" :visible.sync="dialogTableVisible_questionrecord">
+        <el-table :data="discussionData">
+            <el-table-column property="course_id" label="课程" width="150"></el-table-column>
+            <el-table-column property="question" label="我的问题" width="200"></el-table-column>
+            <el-table-column property="reply" label="老师回复"></el-table-column>
+            <el-table-column property="question_time" label="提问时间"></el-table-column>
+            <el-table-column property="reply_time" label="回复时间"></el-table-column>
+<!--            <el-table-column property="accuracy" label="正确率" width="200"></el-table-column>-->
+        </el-table>
+    </el-dialog>
+
 
 <!--个人信息表单-->
 <template>
@@ -194,7 +205,15 @@
         </el-table>
     </template>
 
-    <el-button type="primary" @click="gotocoursecenter">课程中心</el-button>
+<el-row>
+    <el-button type="primary" @click="dialogTableVisible_questionrecord = true">查看问答记录</el-button>
+</el-row>
+
+    <el-row>
+        <el-button type="primary" @click="gotocoursecenter">课程中心</el-button>
+        <el-button type="warning" @click="getout" round>退出登录</el-button>
+    </el-row>
+
 
 </div>
 <script src="js/axios-0.18.0.js"></script>
@@ -208,9 +227,10 @@
         el:"#studentcenterDiv",
 
         mounted(){
-
+            this.getMyQuestionRecord();
             this.see();
             this.showCourse();
+
         },
 
         data(){
@@ -222,8 +242,12 @@
 
                 tableData1:[],
 
+                discussionData:[],
+
                 //修改个人信息
                 dialogVisible_update: false,
+
+                dialogTableVisible_questionrecord:false,
 
                 Student:{
                     id:'',
@@ -279,7 +303,18 @@
                     accuracy:'',
                     rightnumber:'',
 
-                }
+                },
+
+                Discussion:{
+                    id:'',
+                    student_id:'',
+                    teacher_id:'',
+                    course_id:'',
+                    question:'',
+                    reply:'',
+                    question_time:'',
+                    reply_time:'',
+                },
 
             }
 
@@ -419,7 +454,27 @@
                     console.log(_this.Student_study);
                 });
 
-            }
+            },
+
+            getout(){
+                location.href = "/QGfinal_test_war/StudentLogin.html";
+            },
+
+            //获得学生的提问记录
+            getMyQuestionRecord(){
+                var _this = this;
+
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/QGfinal_test_war/Student/getMyQuestionRecord",
+                }).then(resp =>{
+                    //获得数据
+                    _this.discussionData = resp.data;
+
+                    console.log(_this.discussionData);
+                })
+
+            },
 
         }
 
