@@ -2,6 +2,7 @@ package com.suyyyus.dao.impl;
 
 import com.suyyyus.dao.DiscussionDao;
 import com.suyyyus.pojo.Discussion;
+import com.suyyyus.pojo.Student;
 import com.suyyyus.utils.CRUDUtils;
 import com.suyyyus.utils.JDBCUtil;
 import com.suyyyus.utils.MyConnectionPool;
@@ -138,5 +139,67 @@ public class DiscussionDaoImpl implements DiscussionDao {
     }
 
 
+
+    /**
+     * 分页查询
+     * @param begin
+     * @param size
+     * @return
+     */
+    @Override
+    public List<Discussion> selectByPage(int begin, int size) {
+        String sql = "select * from tb_discussion limit  ? , ?";
+        List<Discussion> list = null;
+        try {
+            list = CRUDUtils.selectDiscussionByPage(sql,begin,size);
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * 查询学生数量
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int selectAllCount() throws Exception {
+        String sql = "select count(*) from tb_discussion ";
+        int count = CRUDUtils.allDiscussionCount(sql);
+        return count;
+    }
+
+    /**
+     * 批量删除学生操作
+     * @param id
+     */
+    @Override
+    public void deleteDiscussions(int[] id) {
+        for (int i : id) {
+            try {
+                String sql = "delete from tb_discussion where id = ?";
+                CRUDUtils.ZengShanGai(sql,i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 根据id删除留言
+     * @param id
+     */
+    @Override
+    public void deleteDiscussion(int id) {
+        try {
+            String sql = "delete from tb_discussion where id = ?";
+            CRUDUtils.ZengShanGai(sql,id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

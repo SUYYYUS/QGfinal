@@ -3,6 +3,8 @@ package com.suyyyus.service.impl;
 import com.suyyyus.dao.DiscussionDao;
 import com.suyyyus.dao.impl.DiscussionDaoImpl;
 import com.suyyyus.pojo.Discussion;
+import com.suyyyus.pojo.PageBean;
+import com.suyyyus.pojo.Student;
 import com.suyyyus.service.DiscussionServcie;
 
 import java.sql.SQLException;
@@ -70,5 +72,52 @@ public class DiscussionServiceImpl implements DiscussionServcie {
         List<Discussion> discussionList = discussionDao.queryAllByStudent_id(student_id);
 
         return discussionList;
+    }
+
+    /**
+     * 分页查询
+     * @param currentPage
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public PageBean<Discussion> selectDiscussionByPage(int currentPage, int pageSize) throws Exception {
+        //开始索引
+        int begin = (currentPage - 1) * pageSize;
+        //页数
+        int size = pageSize;
+
+        //当前页数据
+        List<Discussion> rows = discussionDao.selectByPage(begin, size);
+
+        //查询总记录数
+        int count = discussionDao.selectAllCount();
+
+        //封装pageBean对象
+        PageBean<Discussion> pageBean = new PageBean<>();
+        pageBean.setRows(rows);
+        pageBean.setTotalCount(count);
+
+        return pageBean;
+    }
+
+    /**
+     * 批量删除留言
+     * @param id
+     */
+    @Override
+    public void deleteDiscussions(int[] id) {
+        discussionDao.deleteDiscussions(id);
+    }
+
+
+    /**
+     * 单个删除留言
+     * @param id
+     */
+    @Override
+    public void deleteDiscussion(int id) {
+        discussionDao.deleteDiscussion(id);
     }
 }

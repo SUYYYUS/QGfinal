@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>教师信息</title>
+    <style>
+        .el-table .warning-row {
+            background: #ffffff;
+        }
+
+        .el-table .success-row {
+            background: #dacce7;
+        }
+    </style>
+</head>
+<body>
+<h2>以下是所有教师信息</h2>
+<div id="adminteacherDiv">
+
+    <template>
+        <p class="signup">学院<el-select v-model="Teacher.college" placeholder="请选择">
+            <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+
+        </el-select><el-button type="primary" @click="onSubmitcollege">查询</el-button>
+        </p>
+
+    </template>
+
+
+
+    <el-row>
+        <el-button type="danger" plain @click="deleteByIds">批量删除</el-button>
+    </el-row>
+
+    <template>
+        <el-table
+                :data="tableData"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange">
+            <el-table-column
+                    type="selection"
+                    width="55">
+            </el-table-column>
+            <el-table-column
+                    type="index"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="teachername"
+                    label="姓名"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="teacherid"
+                    label="工号"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="college"
+                    label="学院"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="qq"
+                    label="QQ"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="email"
+                    label="电子邮箱"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="description"
+                    label="描述"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="create_time"
+                    label="注册时间"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="update_time"
+                    label="更新时间"
+                    align="center"
+            >
+            </el-table-column>
+            <!--<el-table-column
+                    prop="id"
+                    align="center"
+                    label="操作">
+                <template slot-scope="scope">
+                    <el-row>
+                        <el-button type="primary" @click="delete(scope.row)">删除</el-button>
+                    </el-row>
+                </template>
+            </el-table-column>-->
+        </el-table>
+    </template>
+
+    <!--    分页-->
+    <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="5"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
+    </el-pagination>
+
+
+    <el-row>
+        <el-button type="primary" @click="goback" round>返回</el-button>
+    </el-row>
+
+</div>
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+<script>
+    new Vue({
+        el:"#adminteacherDiv",
+
+        data(){
+            return{
+
+                Teacher:{
+                    id:'',
+                    teachername:'',
+                    teacherid:'',
+                    password:'',
+                    college:'',
+                    qq:'',
+                    email:'',
+                    description:'',
+                    create_time:'',
+                    update_time:'',
+                },
+
+                tableData:[],
+
+                //分页
+                currentPage: 1,
+                //每页显示条数
+                pageSize:5,
+                totalCount:20, // 添加这一行
+
+                //被选中的id数组
+                selectIds:[],
+
+
+                options: [{
+                    value: '计算机学院',
+                    label: '计算机学院'
+                }, {
+                    value: '外国语学院',
+                    label: '外国语学院'
+                }, {
+                    value: '信息工程学院',
+                    label: '信息工程学院'
+                }, {
+                    value: '自动化学院',
+                    label: '自动化学院'
+                }],
+            }
+
+        },
+
+        mounted(){
+            this.queryAll();
+        },
+
+        methods: {
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex % 2 === 0) {
+                    return 'warning-row';
+                }
+                return 'success-row';
+            },
+            //复选框选中后执行的方法
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+
+            },
+
+            //分页
+            handleSizeChange(val) {
+                //console.log(`每页 ${val} 条`);
+                //设置每页显示条数
+                this.pageSize = val;
+                this.queryAll();
+            },
+            handleCurrentChange(val) {
+                //console.log(`当前页: ${val}`);
+                this.currentPage = val;
+                this.queryAll();
+            },
+
+            //分页查询
+            queryAll() {
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/QGfinal_test_war/Teacher/selectByPage?currentPage=" + this.currentPage + "&pageSize=" + this.pageSize,
+                }).then(resp => {
+                    //设置表格数据
+                    this.tableData = resp.data.rows;
+                    //设置总记录数
+                    this.totalCount = resp.data.totalCount;
+                })
+            },
+
+
+            //批量删除
+            deleteByIds() {
+
+                this.$confirm('此操作将永久删除这些数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //用户点击确认按钮
+
+                    //1.创建id数组
+                    //console.log(this.multipleSelection);
+
+                    for (let i = 0; i < this.multipleSelection.length; i++) {
+                        let multipleSelectionElement = this.multipleSelection[i];
+                        this.selectIds[i] = multipleSelectionElement.id;
+                    }
+
+                    //ajax请求
+                    var _this = this;
+                    axios({
+                        method: "post",
+                        url: "http://localhost:8080/QGfinal_test_war/Teacher/deleteByIds",
+                        data: _this.selectIds,
+                    }).then(function (resp) {
+                        if (resp.data == "success") {
+                            //添加成功，关闭添加信息的对话框
+
+                            //刷新所有用户信息
+                            _this.queryAll();
+
+                            //提示添加成功
+                            _this.$message({
+                                message: '恭喜你，批量删除成功啦',
+                                type: 'success'
+                            });
+                        }
+                    })
+
+
+                }).catch(() => {
+                    //选择取消按钮
+
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+
+            },
+
+            goback() {
+                location.href = "/QGfinal_test_war/AdminCenter.html";
+            },
+
+            //通过学院查询教师
+            onSubmitcollege(){
+                var _this = this;
+
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Teacher/queryByCollege",
+                    data:_this.Teacher.college,
+                }).then( resp =>{
+                    _this.tableData = resp.data;
+                    console.log(resp.data);
+
+                    //提示
+                    _this.$message({
+                        message: '查询完成',
+                        type: 'success'
+                    });
+                    })
+
+            }
+
+        }
+
+
+    })
+
+</script>
+
+
+</body>
+</html>

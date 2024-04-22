@@ -1,5 +1,6 @@
 package com.suyyyus.service;
 
+import com.suyyyus.pojo.PageBean;
 import com.suyyyus.pojo.Teacher;
 
 import java.sql.SQLException;
@@ -21,4 +22,11 @@ public interface TeacherService {
 
     //修改教师信息
     public int updateInfo(Teacher teacher) throws SQLException;
+
+    public PageBean<Teacher> selectTeacherByPage(int currentPage, int pageSize) throws Exception;
+
+    public void deleteStudents(int[] id);
+
+    //通过学院查询老师
+    public List<Teacher> queryByCollege(String college) throws SQLException;
 }

@@ -38,6 +38,12 @@ public class AnswerServlet extends BaseServlet{
         BufferedReader reader = req.getReader();
         String s = reader.readLine();
 
+        if(s.length() > 20)
+        {
+            System.out.println("答案长度过大");
+            resp.getWriter().write("toolong");
+            return ;
+        }
 //        Answer answer= JSON.parseObject(s, Answer.class);
         Answer answer  = new Answer();
         answer.setAnswer(s);

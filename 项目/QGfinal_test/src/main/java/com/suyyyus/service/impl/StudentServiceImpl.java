@@ -3,6 +3,7 @@ package com.suyyyus.service.impl;
 import com.suyyyus.dao.StudentDao;
 import com.suyyyus.dao.impl.StudentDaoImpl;
 import com.suyyyus.pojo.Course;
+import com.suyyyus.pojo.PageBean;
 import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Student_course;
 import com.suyyyus.service.StudentService;
@@ -12,6 +13,7 @@ import com.suyyyus.utils.TimeUtil;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class StudentServiceImpl implements StudentService {
 
@@ -102,5 +104,62 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void sendMsg(String msg) throws IOException {
         Client.sendMsg(msg);
+    };
+
+    /**
+     * 分页查询
+     * @param currentPage
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public PageBean<Student> selectStudentByPage(int currentPage, int pageSize) throws Exception {
+        //开始索引
+        int begin = (currentPage - 1) * pageSize;
+        //页数
+        int size = pageSize;
+
+        //当前页数据
+        List<Student> rows = studentDao.selectByPage(begin, size);
+
+        //查询总记录数
+        int count = studentDao.selectAllCount();
+
+        //封装pageBean对象
+        PageBean<Student> pageBean = new PageBean<>();
+        pageBean.setRows(rows);
+        pageBean.setTotalCount(count);
+
+        return pageBean;
+    }
+
+    /**
+     * 批量删除学生
+     * @param id
+     */
+    @Override
+    public void deleteStudents(int[] id) {
+        studentDao.deleteStudents(id);
+    }
+
+    /**
+     * 重置学生账号密码
+     * @param student
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public boolean resetPassword(Student student) throws SQLException {
+        studentDao.resetPassword(student);
+
+        return true;
+    }
+
+    @Override
+    public List<Student> queryByGrade(String grade) throws SQLException {
+        List<Student> studentList = studentDao.queryByGrade(grade);
+
+        return studentList;
     }
 }

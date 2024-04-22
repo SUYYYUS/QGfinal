@@ -1,0 +1,77 @@
+#errorMsg{
+    text-align: center;
+    color:red;
+}
+
+#loginmsg{
+    text-align: center;
+    color: #d1baef;
+}
+
+#account{
+    width: 150px;
+    margin-left: 15px;
+    border-radius: 5px;
+    border-style: hidden;
+    height: 25px;
+    background-color: rgb(191, 216, 213);
+    outline: none;
+    color: #b3b366;
+    padding-left: 10px;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+
+.login{
+    text-align: center;
+}
+
+#adminloginDiv{
+    width: 37%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 380px;
+    background-color: rgba(75, 81, 95,0.6);
+    box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.6);
+    border-radius: 5px;
+}
+
+p{
+    margin-top: 30px;
+    margin-left: 20px;
+    color: #b3b366;
+}
+
+#password{
+    width: 150px;
+    margin-left: 15px;
+    border-radius: 5px;
+    border-style: hidden;
+    height: 25px;
+    background-color: rgb(191, 216, 213);
+    outline: none;
+    color: #b3b366;
+    padding-left: 10px;
+
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    /*background: url(../imgs/1.jpg) no-repeat 0px 0px;*/
+    -moz-background-size: 100% 100%;
+}
+
+
+/*#zhuce{*/
+/*    text-align: left;*/
+/*    color: cyan;*/
+/*}*/

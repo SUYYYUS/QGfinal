@@ -2,14 +2,8 @@
 import com.suyyyus.dao.*;
 import com.suyyyus.dao.impl.*;
 import com.suyyyus.pojo.*;
-import com.suyyyus.service.CourseService;
-import com.suyyyus.service.QuestionService;
-import com.suyyyus.service.StudentService;
-import com.suyyyus.service.Student_studyService;
-import com.suyyyus.service.impl.CourseServiceImpl;
-import com.suyyyus.service.impl.QuestionServiceImpl;
-import com.suyyyus.service.impl.StudentServiceImpl;
-import com.suyyyus.service.impl.Student_studyServiceImpl;
+import com.suyyyus.service.*;
+import com.suyyyus.service.impl.*;
 import com.suyyyus.utils.DatabaseBackup.DatabaseBackup;
 import com.suyyyus.utils.JWTUtil;
 import com.suyyyus.utils.MD5Util;
@@ -210,6 +204,15 @@ public class test1 {
         String command = "cmd /c " + "mysqldump -uroot -pcsy090944CSY QGfinal_test>C:\\Users\\28937\\Desktop\\hhh.sql";
 
         Runtime.getRuntime().exec(command);
+
+    }
+
+    @Test
+    public void addAdmin() throws SQLException {
+        Admin admin = new Admin("suyyyus","1234567899","123456");
+        AdminService adminService = new AdminServiceImpl();
+
+        adminService.addAdmin(admin);
 
     }
 

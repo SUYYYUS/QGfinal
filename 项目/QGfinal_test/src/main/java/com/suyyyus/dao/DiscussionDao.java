@@ -22,5 +22,13 @@ public interface DiscussionDao {
     //展示某个学生它的提问记录
     public List<Discussion> queryAllByStudent_id(int student_id) throws SQLException;
 
+    public void deleteDiscussions(int[] id);
+
+    public int selectAllCount() throws Exception;
+
+    public List<Discussion> selectByPage(int begin, int size);
+
+    public void deleteDiscussion(int id);
+
 
 }

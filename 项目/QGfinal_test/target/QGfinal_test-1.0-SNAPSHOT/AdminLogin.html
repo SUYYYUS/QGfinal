@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员登录</title>
+    <link href="css/AdminLogin.css" rel="stylesheet">
+</head>
+<body>
+<div id="adminloginDiv" style="height: 350px">
+    <form id = "form">
+        <h1 id="loginmsg">管理员登录</h1>
+<!--        <div id="errorMsg" v-model="errorMsg">{{errorMsg}}</div>-->
+        <p class="login">账号<input id="account" type="text" name="account" v-model="Admin.account" ></p>
+        <p class="login">密码<input  id="password" type="password" name="password" v-model="Admin.password" ></p>
+        <el-row>
+            <el-button type="primary" @click="adminLogin">登录</el-button>
+        </el-row>
+        <!--        <span id="zhuce"> <a href="/forthweek_war/UserSignup.html" target="_blank">点击即可注册个人账号哦~</a></span>-->
+        <form>
+
+
+</div>
+
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+<script>
+    new Vue({
+        el:"#adminloginDiv",
+
+        data(){
+
+            errorMsg:'';
+
+            return{
+
+                Admin:{
+                    id:'',
+                    adminname:'',
+                    account:'',
+                    password:'',
+                },
+
+            }
+        },
+
+        methods:{
+
+            adminLogin(){
+                var _this = this;
+
+                console.log(this.Admin);
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Admin/adminLogin",
+                    data:_this.Admin,
+                }).then(function (resp) {
+                    if(resp.data == "success"){
+                        setTimeout(function(){
+                            turnto()
+                        },300);
+                        _this.$message({
+                            message: '恭喜你，登录成功啦',
+                            type: 'success'
+                        });
+                        _this.Admin.password = '';
+                        _this.Admin.account = '';
+                    }else if(resp.data == "failed"){
+                        _this.$message({
+                            message: '恭喜你，登录失败啦',
+                            type: 'warning'
+                        });
+                        _this.errorMsg = "账号或密码错误";
+                        _this.Admin.password = '';
+                    }else if(resp.data == "null"){
+                        _this.$message({
+                            message: '恭喜你，登录失败啦',
+                            type: 'warning'
+                        });
+                        _this.errorMsg = "不能为空";
+                    }
+                })
+            },
+
+
+
+        },
+
+
+    })
+</script>
+
+<script>
+    function turnto(){
+        location.href = "/QGfinal_test_war/AdminCenter.html";
+    }
+</script>
+</body>
+</html>

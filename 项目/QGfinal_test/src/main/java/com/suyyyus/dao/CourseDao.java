@@ -31,4 +31,6 @@ public interface CourseDao {
     //增加报名人数
     public void addRegister_number(Course course) throws SQLException;
 
+
+
 }

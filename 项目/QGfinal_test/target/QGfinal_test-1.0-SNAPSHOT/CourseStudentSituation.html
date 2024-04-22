@@ -21,8 +21,6 @@
     </el-dialog>
 
 
-
-
     <template>
         <el-table
                 :data="tableData"
@@ -64,7 +62,7 @@
                 <template slot-scope="scope">
                     <el-row>
                         <el-button type="primary" @click="checklearning(scope.row)">获取学习情况</el-button>
-                        <el-button type="text" @click="dialogTableVisible = true">查看学习情况</el-button>
+<!--                        <el-button type="text" @click="dialogTableVisible = true">查看学习情况</el-button>-->
                     </el-row>
                 </template>
             </el-table-column>
@@ -223,6 +221,7 @@
 
                     // _this.tableData = resp.data;
                     console.log(_this.Student_study);
+                    _this.dialogTableVisible = true;
                 });
 
             },
@@ -239,7 +238,7 @@
 </script>
 <script>
     function checklearn() {
-        location.href = "/QGfinal_test_war/CheckLearning.html";
+        location.href = "AdminCenter.html";
     }
 </script>
 

@@ -16,15 +16,13 @@
 <div id="questionDiv">
     <h2 class = "welcome" >当前章节的题目设置</h2>
 
+<!--    新增填空题-->
     <el-dialog
             title="新增题目"
             :visible.sync="dialogVisible"
             width="30%"
     >
         <el-form ref="form" :model="Question" label-width="80px">
-            <el-form-item label="类型">
-                <el-input v-model="Question.type"></el-input>
-            </el-form-item>
             <el-form-item label="题目">
                 <el-input v-model="Question.content"></el-input>
             </el-form-item>
@@ -35,11 +33,70 @@
                 <el-input v-model="Question.score"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="addQuestion">确认</el-button>
+                <el-button type="primary" @click="addQuestion_tiankong">确认</el-button>
                 <el-button @click="dialogVisible = false">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
+
+    <!--    新增判断题-->
+    <el-dialog
+            title="新增题目"
+            :visible.sync="dialogVisible_judge"
+            width="30%"
+    >
+        <el-form ref="form" :model="Question" label-width="80px">
+            <el-form-item label="题目">
+                <el-input v-model="Question.content"></el-input>
+            </el-form-item>
+            <el-form-item label="答案">
+<!--                <el-input v-model="Question.answer"></el-input>-->
+                <template>
+                    <el-radio v-model="Question.answer" label="对">对</el-radio>
+                    <el-radio v-model="Question.answer" label="错">错</el-radio>
+                </template>
+            </el-form-item>
+            <el-form-item label="分值">
+                <el-input v-model="Question.score"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="addQuestion_judge">确认</el-button>
+                <el-button @click="dialogVisible_judge = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+
+    <!--    新增选择题-->
+    <el-dialog
+            title="新增题目"
+            :visible.sync="dialogVisible_select"
+            width="30%"
+    >
+        <el-form ref="form" :model="Question" label-width="80px">
+            <p>布置题目时顺便写好选项</p>
+            <el-form-item label="题目">
+                <el-input v-model="Question.content"></el-input>
+            </el-form-item>
+
+            <el-form-item label="答案">
+                <template>
+                    <el-radio v-model="Question.answer" label="A">A</el-radio>
+                    <el-radio v-model="Question.answer" label="B">B</el-radio>
+                    <el-radio v-model="Question.answer" label="C">C</el-radio>
+                    <el-radio v-model="Question.answer" label="D">D</el-radio>
+                </template>
+            </el-form-item>
+            <el-form-item label="分值">
+                <el-input v-model="Question.score"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="addQuestion_select">确认</el-button>
+                <el-button @click="dialogVisible_select = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
 
 
 <!--    题目信息-->
@@ -101,7 +158,10 @@
     </el-table>
 </template>
     <el-row>
-        <el-button type="primary" @click="dialogVisible = true" plain>添加题目</el-button>
+        <el-button type="primary" @click="dialogVisible = true" plain>添加填空题</el-button>
+        <el-button type="primary" @click="dialogVisible_judge = true" plain>添加判断题</el-button>
+        <el-button type="primary" @click="dialogVisible_select = true" plain>添加选择题</el-button>
+
         <el-button type="primary" @click="goback" round>返回</el-button>
     </el-row>
 
@@ -128,7 +188,8 @@
             return{
 
                 dialogVisible:false,
-
+                dialogVisible_judge:false,
+                dialogVisible_select:false,
                 Question:{
                     id:'',
                     type:'',
@@ -161,9 +222,9 @@
             },
 
             //添加题目
-            addQuestion(){
+            addQuestion_tiankong(){
                 var _this = this;
-
+                _this.Question.type = "填空题";
                 console.log(this.Question);
                 axios({
                     method:"post",
@@ -180,10 +241,64 @@
                             message: '恭喜你，添加成功啦',
                             type: 'success'
                         });
-
+                        //清空缓存
+                        _this.Question = '';
                     }
                 });
             },
+
+            //新增判断题
+            addQuestion_judge(){
+                var _this = this;
+                _this.Question.type = "判断题";
+                console.log(this.Question);
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Question/addQuestion",
+                    data: _this.Question,
+                }).then(function (resp) {
+                    if(resp.data == "addquestion_success"){
+                        //关闭对话框
+                        _this.dialogVisible_judge = false
+                            //刷新题目信息
+                            _this.showQuestion();
+                        //提示添加成功
+                        _this.$message({
+                            message: '恭喜你，添加成功啦',
+                            type: 'success'
+                        });
+                        //清空缓存
+                        _this.Question = '';
+                    }
+                });
+            },
+
+            //新增选择题
+            addQuestion_select(){
+                var _this = this;
+                _this.Question.type = "选择题";
+                console.log(this.Question);
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Question/addQuestion",
+                    data: _this.Question,
+                }).then(function (resp) {
+                    if(resp.data == "addquestion_success"){
+                        //关闭对话框
+                        _this.dialogVisible_select = false
+                        //刷新题目信息
+                        _this.showQuestion();
+                        //提示添加成功
+                        _this.$message({
+                            message: '恭喜你，添加成功啦',
+                            type: 'success'
+                        });
+                        //清空缓存
+                        _this.Question = '';
+                    }
+                });
+            },
+
 
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex%2 === 0) {

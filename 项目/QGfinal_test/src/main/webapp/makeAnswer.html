@@ -7,6 +7,7 @@
 <body>
 <div id="answerDiv">
 
+<!--    回答问答题-->
     <el-dialog
             title="作答"
             :visible.sync="dialogVisible"
@@ -19,6 +20,49 @@
             <el-form-item>
                 <el-button type="primary" @click="submitanswer">确认</el-button>
                 <el-button @click="dialogVisible = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+<!--    回答判断题-->
+    <el-dialog
+            title="作答"
+            :visible.sync="dialogVisible_judge"
+            width="30%"
+    >
+        <el-form ref="form" :model="Answer" label-width="80px">
+            <el-form-item label="答案">
+                <template>
+                    <el-radio v-model="Answer.answer" label="对">对</el-radio>
+                    <el-radio v-model="Answer.answer" label="错">错</el-radio>
+                </template>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitanswer">确认</el-button>
+                <el-button @click="dialogVisible_judge = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+
+    <!--    回答选择题-->
+    <el-dialog
+            title="作答"
+            :visible.sync="dialogVisible_select"
+            width="30%"
+    >
+        <el-form ref="form" :model="Answer" label-width="80px">
+            <el-form-item label="答案">
+                <template>
+                    <el-radio v-model="Answer.answer" label="A">A</el-radio>
+                    <el-radio v-model="Answer.answer" label="B">B</el-radio>
+                    <el-radio v-model="Answer.answer" label="C">C</el-radio>
+                    <el-radio v-model="Answer.answer" label="D">D</el-radio>
+                </template>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitanswer">确认</el-button>
+                <el-button @click="dialogVisible_select = false">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -97,7 +141,8 @@
                 tableData:[],
 
                 dialogVisible:false,
-
+                dialogVisible_select: false,
+                dialogVisible_judge:false,
                 ANSWER:{
                     answer: '',
                 },
@@ -130,7 +175,15 @@
                     if(resp.data == "success"){
 
                         console.log("成功开始作答");
-                         _this.dialogVisible = true;
+                        if(_this.Question.type === "填空题"){
+                            _this.dialogVisible = true;
+                        }
+                        else if(_this.Question.type === "判断题"){
+                            _this.dialogVisible_judge = true;
+                        }else if(_this.Question.type === "选择题"){
+                            _this.dialogVisible_select = true;
+                        }
+
                     }
                 })
 
@@ -147,22 +200,36 @@
                     url:"http://localhost:8080/QGfinal_test_war/Answer/addAnswerRecord",
                     data:this.Answer.answer,
                 }).then(function (resp) {
+                    if(resp.data == "toolong"){
+                        console.log("答案太长了");
+                        //提交答案成功
+                        _this.$message({
+                            message: '答案超出字数范围',
+                            type: 'warning'
+                        });
+                    }
                     if(resp.data == "right"){
                         console.log("成功提交");
+                        _this.dialogVisible_select = false;
+                        _this.dialogVisible_judge = false;
                         _this.dialogVisible = false;
                         //提交答案成功
                         _this.$message({
                             message: '回答正确',
                             type: 'success'
                         });
+                        _this.Answer.answer = '';
                     }else if(resp.data == "wrong"){
                         console.log("成功提交");
+                        _this.dialogVisible_select = false;
+                        _this.dialogVisible_judge = false;
                         _this.dialogVisible = false;
                         //提交答案成功
                         _this.$message({
                             message: '回答错误',
                             type: 'warning'
                         });
+                        _this.Answer.answer = '';
                     }
                 })
             },

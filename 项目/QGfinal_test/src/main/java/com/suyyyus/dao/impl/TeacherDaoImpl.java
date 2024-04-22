@@ -1,17 +1,16 @@
 package com.suyyyus.dao.impl;
 
 import com.suyyyus.dao.TeacherDao;
+import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Teacher;
-import com.suyyyus.utils.CRUDUtils;
-import com.suyyyus.utils.MD5Util;
-import com.suyyyus.utils.MyConnectionPool;
-import com.suyyyus.utils.TimeUtil;
+import com.suyyyus.utils.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherDaoImpl implements TeacherDao {
@@ -112,5 +111,86 @@ public class TeacherDaoImpl implements TeacherDao {
                 teacher.getCollege(),teacher.getQq(),teacher.getEmail(),
                 teacher.getDescription(),TimeUtil.formatDateTime(LocalDateTime.now()),teacher.getId());
     return 0;
+    }
+
+
+    /**
+     * 分页查询
+     * @param begin
+     * @param size
+     * @return
+     */
+    @Override
+    public List<Teacher> selectByPage(int begin, int size) {
+        String sql = "select * from tb_teacher limit  ? , ?";
+        List<Teacher> list = null;
+        try {
+            list = CRUDUtils.selectTeacherByPage(sql,begin,size);
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * 查询学生数量
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int selectAllCount() throws Exception {
+        String sql = "select count(*) from tb_teacher ";
+        int count = CRUDUtils.allTeacherCount(sql);
+        return count;
+    }
+
+    /**
+     * 批量删除学生操作
+     * @param id
+     */
+    @Override
+    public void deleteTeachers(int[] id) {
+        for (int i : id) {
+            try {
+                String sql = "delete from tb_teacher where id = ?";
+                CRUDUtils.ZengShanGai(sql,i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 通过学院查询教师
+     * @param college
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<Teacher> queryByCollege(String college) throws SQLException {
+        String sql = "select * from tb_teacher where college = ?";
+        //获取连接
+        Connection connection = myConnectionPool.getConnection();
+        //预编译
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1,college);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<Teacher> teacherList = new ArrayList<>();
+
+        while(resultSet.next()){
+            teacherList.add(new Teacher(resultSet.getInt("id"),resultSet.getString("teachername"),
+                    resultSet.getString("teacherid"), resultSet.getString("password"),
+                    resultSet.getString("college"), resultSet.getString("qq"),
+                    resultSet.getString("email"), resultSet.getString("description"),
+                    resultSet.getString("create_time"), resultSet.getString("update_time")));
+
+        }
+
+        JDBCUtil.close(connection,preparedStatement,resultSet);
+
+        return teacherList;
     }
 }

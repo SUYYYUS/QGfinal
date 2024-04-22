@@ -1,12 +1,10 @@
 package com.suyyyus.service;
 
-import com.suyyyus.pojo.Course;
-import com.suyyyus.pojo.Student;
-import com.suyyyus.pojo.Student_course;
-import com.suyyyus.pojo.Teacher;
+import com.suyyyus.pojo.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 public interface StudentService {
     //学生登录
@@ -30,5 +28,16 @@ public interface StudentService {
     //发送信息
     public void sendMsg(String msg) throws IOException;
 
+    //所有学生分页查询
+    public PageBean<Student> selectStudentByPage(int currentPage, int pageSize) throws Exception;
+
+    //批量删除学生
+    public void deleteStudents(int[] id);
+
+    //重置学生账号密码
+    public boolean resetPassword(Student student) throws SQLException;
+
+    //通过年级查找学生
+    public List<Student> queryByGrade(String grade) throws SQLException;
 
 }

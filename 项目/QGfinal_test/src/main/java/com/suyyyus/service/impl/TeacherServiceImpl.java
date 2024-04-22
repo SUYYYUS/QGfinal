@@ -2,6 +2,8 @@ package com.suyyyus.service.impl;
 
 import com.suyyyus.dao.TeacherDao;
 import com.suyyyus.dao.impl.TeacherDaoImpl;
+import com.suyyyus.pojo.PageBean;
+import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Teacher;
 import com.suyyyus.service.TeacherService;
 
@@ -70,5 +72,57 @@ public class TeacherServiceImpl implements TeacherService {
     public int updateInfo(Teacher teacher) throws SQLException {
         int i = teacherDao.updateInfo(teacher);
         return i;
+    }
+
+
+    /**
+     * 分页查询
+     * @param currentPage
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public PageBean<Teacher> selectTeacherByPage(int currentPage, int pageSize) throws Exception {
+        //开始索引
+        int begin = (currentPage - 1) * pageSize;
+        //页数
+        int size = pageSize;
+
+        //当前页数据
+        List<Teacher> rows = teacherDao.selectByPage(begin, size);
+
+        //查询总记录数
+        int count = teacherDao.selectAllCount();
+
+        //封装pageBean对象
+        PageBean<Teacher> pageBean = new PageBean<>();
+        pageBean.setRows(rows);
+        pageBean.setTotalCount(count);
+
+        return pageBean;
+    }
+
+    /**
+     * 批量删除学生
+     * @param id
+     */
+    @Override
+    public void deleteStudents(int[] id) {
+        teacherDao.deleteTeachers(id);
+    }
+
+
+    /**
+     * 通过学院查找学生
+     * @param college
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<Teacher> queryByCollege(String college) throws SQLException {
+        List<Teacher> teacherList = teacherDao.queryByCollege(college);
+
+        return teacherList;
     }
 }

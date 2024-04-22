@@ -211,12 +211,21 @@
                 url:"http://localhost:8080/QGfinal_test_war/Student/sendQuestion",
                 data:_this.PROBLEM.problem,
             }).then(function (resp) {
+                if(resp.data == "toolong"){
+                    console.log("提问内容太长了");
+                    //提交答案成功
+                    _this.$message({
+                        message: '提问超出字数范围',
+                        type: 'warning'
+                    });
+                }
                 if(resp.data == "success"){
                     _this.dialogVisible_question = false;
                     _this.$message({
                         message: '成功提问，耐心等待回复',
                         type: 'success'
                     });
+                    _this.PROBLEM.problem = '';
                 }
 
             })

@@ -1,18 +1,18 @@
 package com.suyyyus.dao.impl;
 
 import com.suyyyus.dao.StudentDao;
+import com.suyyyus.pojo.Course;
 import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Student_course;
-import com.suyyyus.utils.CRUDUtils;
-import com.suyyyus.utils.MD5Util;
-import com.suyyyus.utils.MyConnectionPool;
-import com.suyyyus.utils.TimeUtil;
+import com.suyyyus.utils.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentDaoImpl implements StudentDao {
 
@@ -148,5 +148,105 @@ public class StudentDaoImpl implements StudentDao {
         CRUDUtils.ZengShanGai(sql,student_course.getStudent_id(),student_course.getCourse_id(),TimeUtil.formatDateTime(LocalDateTime.now()),1);
 
         return true;
+    }
+
+    /**
+     * 分页查询
+     * @param begin
+     * @param size
+     * @return
+     */
+    @Override
+    public List<Student> selectByPage(int begin, int size) {
+        String sql = "select * from tb_student limit  ? , ?";
+        List<Student> list = null;
+        try {
+            list = CRUDUtils.selectStudentByPage(sql,begin,size);
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * 查询学生数量
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int selectAllCount() throws Exception {
+        String sql = "select count(*) from tb_student ";
+        int count = CRUDUtils.allStudentCount(sql);
+        return count;
+    }
+
+    /**
+     * 批量删除学生操作
+     * @param id
+     */
+    @Override
+    public void deleteStudents(int[] id) {
+        for (int i : id) {
+            try {
+                String sql = "delete from tb_student where id = ?";
+                CRUDUtils.ZengShanGai(sql,i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * 重置学生账号密码
+     * @param student
+     * @throws SQLException
+     */
+    @Override
+    public void resetPassword(Student student) throws SQLException {
+        String password = MD5Util.generateSaltPassword("123456");
+
+        String sql = "update tb_student set password = ? where id = ?";
+
+        CRUDUtils.ZengShanGai(sql, password, student.getId());
+    }
+
+
+    /**
+     * 通过年级查找学生
+     * @param grade
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<Student> queryByGrade(String grade) throws SQLException {
+        String sql = "select * from tb_student where grade = ?";
+        //获取连接
+        Connection connection = myConnectionPool.getConnection();
+        //预编译
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1,grade);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<Student> list = new ArrayList<>();
+
+        while(resultSet.next()) {
+            list.add(new Student(resultSet.getInt("id"),resultSet.getString("studentname"),
+                    resultSet.getString("studentid"), resultSet.getString("password"),
+                    resultSet.getString("grade"), resultSet.getString("qq"),
+                    resultSet.getString("description"), resultSet.getString("create_time"),
+                    resultSet.getString("update_time")));
+
+        }
+        if(list.size() == 0) {
+            System.out.println("当前没有学生");
+            JDBCUtil.close(connection,preparedStatement,resultSet);
+            return null;
+        }else {
+            JDBCUtil.close(connection,preparedStatement,resultSet);
+            return list;
+        }
     }
 }

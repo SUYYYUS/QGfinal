@@ -295,6 +295,12 @@ public class StudentServlet extends BaseServlet{
         BufferedReader reader = req.getReader();
         String question = reader.readLine();
 
+        if(question.length() > 100){
+            System.out.println("问题字数超出");
+            resp.getWriter().write("toolong");
+            return ;
+        }
+
         Discussion discussion = new Discussion();
 
         discussion.setQuestion(question);
@@ -328,6 +334,83 @@ public class StudentServlet extends BaseServlet{
         String jsonString = JSON.toJSONString(discussionList);
 
         // 写数据
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
+    /**
+     * 分页查询
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void selectByPage(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        //1.调用查询
+        String _currentPage = req.getParameter("currentPage");
+        String _pageSize = req.getParameter("pageSize");
+
+        int currentPage = Integer.parseInt(_currentPage);
+        int pageSize = Integer.parseInt(_pageSize);
+
+        PageBean<Student> pageBean = studentService.selectStudentByPage(currentPage, pageSize);
+
+        //2.转为JSON
+        String jsonString = JSON.toJSONString(pageBean);
+        //3.写数据
+
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+        //System.out.println("User selectAll----------");
+    }
+
+    /**
+     * 批量删除学生
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void deleteByIds(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        //post方法
+        BufferedReader reader = req.getReader();
+
+        String params = reader.readLine();
+
+        int[] ids = JSON.parseObject(params, int[].class);
+        studentService.deleteStudents(ids);
+
+        resp.getWriter().write("success");
+    }
+
+    public void resetPassword(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+        //获取对象
+        BufferedReader reader = req.getReader();
+
+        String s = reader.readLine();
+
+        Student student = JSON.parseObject(s, Student.class);
+
+        System.out.println(student);
+
+        boolean b = studentService.resetPassword(student);
+
+        if(b){
+            resp.getWriter().write("resetsuccess");
+        }
+    }
+
+    public void queryByGrade(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
+        BufferedReader reader = req.getReader();
+        String s = reader.readLine();
+
+        System.out.println(s);
+        List<Student> studentList = studentService.queryByGrade(s);
+
+        String jsonString = JSON.toJSONString(studentList);
+
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
     }

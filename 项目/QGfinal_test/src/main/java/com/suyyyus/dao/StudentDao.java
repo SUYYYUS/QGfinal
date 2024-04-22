@@ -4,6 +4,7 @@ import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Student_course;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface StudentDao {
 
@@ -24,4 +25,19 @@ public interface StudentDao {
 
     //学生报名课程
     public boolean addStudent_course(Student_course student_course) throws SQLException;
+
+    //分页查询学生
+    public List<Student> selectByPage(int begin, int size);
+
+    //查询学生数量
+    public int selectAllCount() throws Exception;
+
+    //批量删除学生操作
+    public void deleteStudents(int[] id);
+
+    //重置密码
+    public void resetPassword(Student student) throws SQLException;
+
+    //通过年级查找学生
+    public List<Student> queryByGrade(String grade) throws SQLException;
 }
