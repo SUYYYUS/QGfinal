@@ -73,6 +73,16 @@
         </el-table>
     </el-dialog>
 
+    <el-dialog title="历史记录" :visible.sync="dialogVisible_logging">
+        <el-table :data="loggingData">
+            <el-table-column property="id" label="ID" width="150"></el-table-column>
+            <el-table-column property="logging" label="内容" ></el-table-column>
+<!--            <el-table-column property="reply" label="我的回复"></el-table-column>-->
+<!--            <el-table-column property="question_time" label="提问时间"></el-table-column>-->
+<!--            <el-table-column property="reply_time" label="回复时间"></el-table-column>-->
+            <!--            <el-table-column property="accuracy" label="正确率" width="200"></el-table-column>-->
+        </el-table>
+    </el-dialog>
 
 
 <!--表单-->
@@ -184,8 +194,8 @@
         </el-form>
     </el-dialog>
 
-
     <el-row>
+        <el-button type="primary" @click="getLogging" plain>查看历史记录</el-button>
         <el-button type="primary" @click="dialogVisible = true" plain>添加课程</el-button>
     </el-row>
 
@@ -269,9 +279,7 @@
 
     <el-row>
         <el-button type="primary" @click="queryMyDiscussionByTeacher_id">查看我的留言</el-button>
-    </el-row>
-
-    <el-row>
+        <el-button type="primary" @click="gotochatroom" plain>进入聊天室</el-button>
         <el-button type="warning" @click="getout" round>退出登录</el-button>
     </el-row>
 
@@ -299,6 +307,7 @@
         data(){
             return{
 
+                dialogVisible_logging : false,
                 dialogTableVisible_questionrecord: false,
 
                 dialogTableVisible_total: false,
@@ -312,7 +321,7 @@
                 tableData: [],
                 tableData1: [],
                 discussionData:[],
-
+                loggingData:[],
                 activeName: 'second',
 
                 Course:{
@@ -361,6 +370,12 @@
                     reply:'',
                     question_time:'',
                     reply_time:'',
+                },
+
+                Teacher_logging:{
+                    id:'',
+                    teacher_id:'',
+                    logging:'',
                 },
 
             };
@@ -512,7 +527,15 @@
             },
 
             getout(){
-                location.href = "/QGfinal_test_war/TeacherLogin.html";
+                var _this = this;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Teacher/getout",
+                }).then(function (resp) {
+                    if(resp.data == "success"){
+                        location.href = "/QGfinal_test_war/TeacherLogin.html";
+                    }
+                })
             },
 
             //获得学生的提问记录
@@ -531,6 +554,25 @@
 
                 location.href = "/QGfinal_test_war/TeacherLeavemessage.html";
 
+            },
+
+            gotochatroom() {
+                    location.href = "teacherindex.html";
+            },
+
+            //获得历史记录
+            getLogging(){
+                var _this = this;
+
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/QGfinal_test_war/Teacher/queryLoggingByid",
+                }).then(resp =>{
+                    //获得数据
+                    _this.loggingData = resp.data;
+
+                    _this.dialogVisible_logging = true;
+                })
             },
 
         }

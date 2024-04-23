@@ -2,12 +2,12 @@ package com.suyyyus.service.impl;
 
 import com.suyyyus.dao.TeacherDao;
 import com.suyyyus.dao.impl.TeacherDaoImpl;
-import com.suyyyus.pojo.PageBean;
-import com.suyyyus.pojo.Student;
-import com.suyyyus.pojo.Teacher;
+import com.suyyyus.pojo.*;
 import com.suyyyus.service.TeacherService;
+import com.suyyyus.utils.TimeUtil;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class TeacherServiceImpl implements TeacherService {
@@ -50,6 +50,18 @@ public class TeacherServiceImpl implements TeacherService {
         return teacher;
     }
 
+
+    /**
+     * 通过id查找老师
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public Teacher queryByid(int id) throws SQLException {
+        Teacher teacher = teacherDao.queryByid(id);
+        return teacher;
+    }
 
     /**
      * 查询所有教师信息
@@ -125,4 +137,30 @@ public class TeacherServiceImpl implements TeacherService {
 
         return teacherList;
     }
+
+    /**
+     * 添加日志
+     * @param teacher_logging
+     * @throws SQLException
+     */
+    @Override
+    public void addLogging(Teacher_logging teacher_logging) throws SQLException {
+        teacher_logging.setLogging(TimeUtil.formatDateTime(LocalDateTime.now()) + ":" + teacher_logging.getLogging());
+
+        teacherDao.addLogging(teacher_logging);
+    }
+
+    /**
+     * 通过学生id查询日志
+     * @param teacher_id
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<Teacher_logging> queryLoggingById(int teacher_id) throws SQLException {
+        List<Teacher_logging> list = teacherDao.queryLoggingById(teacher_id);
+
+        return list;
+    }
+
 }

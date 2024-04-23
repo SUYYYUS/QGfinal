@@ -8,10 +8,15 @@ import com.suyyyus.dao.impl.SectionDaoImpl;
 import com.suyyyus.pojo.Course;
 import com.suyyyus.pojo.Section;
 import com.suyyyus.pojo.Teacher;
+import com.suyyyus.pojo.Teacher_logging;
 import com.suyyyus.service.CourseService;
 import com.suyyyus.service.SectionService;
+import com.suyyyus.service.TeacherService;
 import com.suyyyus.service.impl.CourseServiceImpl;
 import com.suyyyus.service.impl.SectionServiceImpl;
+import com.suyyyus.service.impl.TeacherServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +28,15 @@ import java.util.List;
 @WebServlet("/Section/*")
 public class SectionServlet extends BaseServlet{
 
+    private static final Logger logger =  LoggerFactory.getLogger(SectionServlet.class);
+
     SectionDao sectionDao = new SectionDaoImpl();
     SectionService sectionService = new SectionServiceImpl();
 
     CourseService courseService = new CourseServiceImpl();
     CourseDao courseDao = new CourseDaoImpl();
 
+    TeacherService teacherService = new TeacherServiceImpl();
     /**
      * 用于添加章节
      * @param req
@@ -46,7 +54,6 @@ public class SectionServlet extends BaseServlet{
         String s = reader.readLine();
         System.out.println("课程id");
 
-//        Teacher teacher = JSON.parseObject(s,Teacher.class);
         Section section = JSON.parseObject(s, Section.class);
         System.out.println(course.getId());
         //设置它所属课程id
@@ -56,8 +63,14 @@ public class SectionServlet extends BaseServlet{
         //添加成功
         sectionService.addSection(section);
 
+        Teacher_logging teacher_logging = new Teacher_logging();
+        teacher_logging.setTeacher_id(course.getTeacher_id());
+        teacher_logging.setLogging(course.getCoursename() + "课程中新增加了章节" + section.getSectionname());
+        teacherService.addLogging(teacher_logging);
+
+        logger.info(course.getCoursename() + "课程中新增加了章节" + section.getSectionname());
         System.out.println(4);
-//添加章节数
+        //添加章节数
         courseService.addSection_number(course);
 
         Course course1 = courseService.queryByCourse_id(course.getId());
@@ -67,9 +80,6 @@ public class SectionServlet extends BaseServlet{
         session.setAttribute("course",course1);
         resp.getWriter().write("success");
         System.out.println(5);
-
-        //boolean b = userService.checkUsername(user.getUsername());
-
 
     }
 

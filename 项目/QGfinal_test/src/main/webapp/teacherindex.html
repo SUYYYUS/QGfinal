@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>教师界面</title>
+    <style>
+        .message {
+        list-style-type: none;
+        margin-bottom: 10px;
+    }
+        .bubble {
+            display: inline-block;
+            max-width: 80%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            background-color: #9ed0fc; /* 浅蓝色背景 */
+        }
+
+        .sent {
+            text-align: right;
+            background-color: #d3d3d3;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .received {
+            text-align: left;
+            background-color: #f0f0f0;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="teacherchatroom">
+    <h2>欢迎来到QG在线学习平台聊天室</h2>
+<h2>您的身份：{{Teacher.teachername}}老师</h2>
+    <h6>进入后请先发1表示您进入此聊天室</h6>
+    <ul id="chat"></ul>
+     <div style="position: fixed; bottom: 0; left: 0; width: 100%; background: #f2f2f2; padding: 10px;">
+    <el-row>
+<input type="text" id="message" placeholder="Type your message..." style="width: 90%; margin-right: 10px; padding: 5px; font-size: 16px;">
+
+    <el-button type="primary" @click="sendMessage()" plain>send</el-button>
+</el-row>
+    <el-row>
+    <el-button type="info" @click="turnout" plain>退出聊天室</el-button>
+    </el-row>
+
+     </div>
+</div>
+
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+<script>
+new Vue({
+    el:"#teacherchatroom",
+
+    mounted(){
+
+        this.getTeacherinfo();
+        this.textonline();
+    },
+
+    data(){
+        return{
+            Teacher:{
+                id:'',
+                teachername:'',
+                teacherid:'',
+                password:'',
+                college:'',
+                qq:'',
+                email:'',
+                description:'',
+                create_time:'',
+                update_time:'',
+            },
+
+
+        }
+    },
+
+    methods:{
+
+        //提示聊天室我已上线
+        textonline(){
+            const message =  this.Teacher.teachername  + "老师已上线";
+            socket.send(message);
+        },
+
+        getTeacherinfo(){
+            var _this = this;
+            axios({
+                method: "get",
+                url:"http://localhost:8080/QGfinal_test_war/Teacher/getSelfInformation",
+            }).then(resp =>{
+
+                _this.Teacher = resp.data;
+
+                // _this.tableData = Array.isArray(resp.data) ? resp.data : [resp.data];
+
+                // _this.tableData = resp.data;
+                console.log(_this.Teacher);
+            });
+
+        },
+
+        //发送信息
+        sendMessage() {
+        const messageInput = document.getElementById("message");
+        const message =  this.Teacher.teachername  + "老师: "+ messageInput.value;
+        socket.send(message);
+        messageInput.value = "";
+        },
+
+
+        turnout(){
+            const message =  this.Teacher.teachername  + "老师已下线";
+            socket.send(message);
+            location.href = "/QGfinal_test_war/TeacherCenter.html";
+        }
+
+    }
+
+})
+
+</script>
+
+<script>
+    const socket = new WebSocket("ws://localhost:8080/QGfinal_test_war/websocket");
+
+    socket.onmessage = function(event) {
+        const message = event.data;
+        const chat = document.getElementById("chat");
+        const li = document.createElement("li");
+
+
+        li.classList.add("message");
+        const bubble = document.createElement("div");
+        bubble.classList.add("bubble");
+        if (message.includes("老师:")) {
+            bubble.classList.add("sent");
+        } else {
+            bubble.classList.add("received");
+        }
+        bubble.appendChild(document.createTextNode(message));
+        li.appendChild(bubble);
+        chat.appendChild(li);
+
+
+       /* li.appendChild(document.createTextNode(message));
+        chat.appendChild(li);*/
+    };
+
+
+</script>
+</body>
+</html>

@@ -2,10 +2,7 @@ package com.suyyyus.service.impl;
 
 import com.suyyyus.dao.StudentDao;
 import com.suyyyus.dao.impl.StudentDaoImpl;
-import com.suyyyus.pojo.Course;
-import com.suyyyus.pojo.PageBean;
-import com.suyyyus.pojo.Student;
-import com.suyyyus.pojo.Student_course;
+import com.suyyyus.pojo.*;
 import com.suyyyus.service.StudentService;
 import com.suyyyus.utils.TCP.Client;
 import com.suyyyus.utils.TimeUtil;
@@ -161,5 +158,30 @@ public class StudentServiceImpl implements StudentService {
         List<Student> studentList = studentDao.queryByGrade(grade);
 
         return studentList;
+    }
+
+    /**
+     * 添加日志
+     * @param student_logging
+     * @throws SQLException
+     */
+    @Override
+    public void addLogging(Student_logging student_logging) throws SQLException {
+        student_logging.setLogging(TimeUtil.formatDateTime(LocalDateTime.now()) + ":" + student_logging.getLogging());
+
+        studentDao.addLogging(student_logging);
+    }
+
+    /**
+     * 通过学生id查询日志
+     * @param student_id
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<Student_logging> queryLoggingById(int student_id) throws SQLException {
+        List<Student_logging> student_loggings = studentDao.queryLoggingById(student_id);
+
+        return student_loggings;
     }
 }

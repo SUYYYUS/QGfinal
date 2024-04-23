@@ -2,10 +2,14 @@ package com.suyyyus.servlet;
 
 import com.alibaba.fastjson.JSON;
 import com.suyyyus.pojo.*;
+import com.suyyyus.service.StudentService;
 import com.suyyyus.service.Student_answerService;
 import com.suyyyus.service.Student_studyService;
+import com.suyyyus.service.impl.StudentServiceImpl;
 import com.suyyyus.service.impl.Student_answerServiceImpl;
 import com.suyyyus.service.impl.Student_studyServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +20,11 @@ import java.io.BufferedReader;
 @WebServlet("/Answer/*")
 public class AnswerServlet extends BaseServlet{
 
+    private static final Logger logger =  LoggerFactory.getLogger(AnswerServlet.class);
+
     Student_answerService student_answerService = new Student_answerServiceImpl();
     Student_studyService student_studyService = new Student_studyServiceImpl();
-
+    StudentService studentService =new StudentServiceImpl();
     /**
      * 用于添加答题记录
      * @param req
@@ -59,6 +65,12 @@ public class AnswerServlet extends BaseServlet{
         answer.setCourse_id(course.getId());
 
         student_answerService.addAnswerRecord(answer);
+
+        Student_logging student_logging = new Student_logging();
+        student_logging.setStudent_id(student.getId());
+        student_logging.setLogging("作答了" + question.getContent());
+        studentService.addLogging(student_logging);
+        logger.info(student.getStudentname() + "作答了" + question.getContent());
 
         //存储答题记录
         Student_study student_study = student_studyService.queryStudentRecordByIds(student.getId(), course.getId());

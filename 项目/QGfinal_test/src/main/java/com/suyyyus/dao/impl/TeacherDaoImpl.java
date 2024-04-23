@@ -2,7 +2,9 @@ package com.suyyyus.dao.impl;
 
 import com.suyyyus.dao.TeacherDao;
 import com.suyyyus.pojo.Student;
+import com.suyyyus.pojo.Student_logging;
 import com.suyyyus.pojo.Teacher;
+import com.suyyyus.pojo.Teacher_logging;
 import com.suyyyus.utils.*;
 
 import java.sql.Connection;
@@ -38,11 +40,11 @@ public class TeacherDaoImpl implements TeacherDao {
      */
     @Override
     public void addTeacher(Teacher teacher) throws SQLException {
+        //对密码进行加密操作
+        String saltPassword = MD5Util.generateSaltPassword(teacher.getPassword());
         //sql语句
         String sql = "insert into tb_teacher (teachername, teacherid, password, college, qq, email, description, create_time, update_time) " +
                 "values (?,?,?,?,?,?,?,?,?)";
-        //对密码进行加密操作
-        String saltPassword = MD5Util.generateSaltPassword(teacher.getPassword());
         //添加信息
         CRUDUtils.ZengShanGai(sql,teacher.getTeachername(),teacher.getTeacherid(),saltPassword, teacher.getCollege(), teacher.getQq(), teacher.getEmail(), teacher.getDescription(), TimeUtil.formatDateTime(LocalDateTime.now()),TimeUtil.formatDateTime(LocalDateTime.now()));
 
@@ -62,6 +64,42 @@ public class TeacherDaoImpl implements TeacherDao {
         //预编译
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1,teacherid);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        Teacher teacher = new Teacher();
+
+        if (resultSet.next()){
+            teacher.setId(resultSet.getInt("id"));
+            teacher.setTeachername(resultSet.getString("teachername"));
+            teacher.setTeacherid(resultSet.getString("teacherid"));
+            teacher.setPassword(resultSet.getString("password"));
+            teacher.setCollege(resultSet.getString("college"));
+            teacher.setQq(resultSet.getString("qq"));
+            teacher.setEmail(resultSet.getString("email"));
+            teacher.setDescription(resultSet.getString("description"));
+            teacher.setCreate_time(resultSet.getString("create_time"));
+            teacher.setUpdate_time(resultSet.getString("update_time"));
+        }else {
+            teacher = null;
+        }
+        return teacher;
+    }
+
+    /**
+     * 根据id查找老师
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public Teacher queryByid(int id) throws SQLException {
+        String sql = "select * from tb_teacher where id = ?";
+        //获取连接
+        Connection connection = myConnectionPool.getConnection();
+        //预编译
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1,id);
 
         ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -192,5 +230,50 @@ public class TeacherDaoImpl implements TeacherDao {
         JDBCUtil.close(connection,preparedStatement,resultSet);
 
         return teacherList;
+    }
+
+    /**
+     * 添加日志
+     * @param teacher_logging
+     * @throws SQLException
+     */
+    @Override
+    public void addLogging(Teacher_logging teacher_logging) throws SQLException {
+        String sql = "insert into tb_teacher_logging (teacher_id, logging) values (?,?)";
+
+        CRUDUtils.ZengShanGai(sql, teacher_logging.getTeacher_id(), teacher_logging.getLogging());
+    }
+
+    /**
+     * 通过id查看教师日志
+     * @param teacher_id
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<Teacher_logging> queryLoggingById(int teacher_id) throws SQLException {
+        String sql = "select * from tb_teacher_logging where teacher_id = ?";
+        //获取连接
+        Connection connection = myConnectionPool.getConnection();
+        //预编译
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1,teacher_id);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<Teacher_logging> list = new ArrayList<>();
+
+        while(resultSet.next()){
+            list.add(new Teacher_logging(resultSet.getInt("id"),resultSet.getInt("teacher_id"),
+                    resultSet.getString("logging")));
+        }
+        if(list.size() == 0) {
+            System.out.println("当前没有行为");
+            JDBCUtil.close(connection,preparedStatement,resultSet);
+            return null;
+        }else {
+            JDBCUtil.close(connection,preparedStatement,resultSet);
+            return list;
+        }
     }
 }

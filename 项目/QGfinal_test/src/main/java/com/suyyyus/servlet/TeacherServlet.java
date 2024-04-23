@@ -2,16 +2,17 @@ package com.suyyyus.servlet;
 
 import com.alibaba.fastjson.JSON;
 import com.suyyyus.dao.DiscussionDao;
+import com.suyyyus.dao.StudentDao;
 import com.suyyyus.dao.TeacherDao;
 import com.suyyyus.dao.impl.DiscussionDaoImpl;
+import com.suyyyus.dao.impl.StudentDaoImpl;
 import com.suyyyus.dao.impl.TeacherDaoImpl;
-import com.suyyyus.pojo.Discussion;
-import com.suyyyus.pojo.PageBean;
-import com.suyyyus.pojo.Student;
-import com.suyyyus.pojo.Teacher;
+import com.suyyyus.pojo.*;
 import com.suyyyus.service.DiscussionServcie;
+import com.suyyyus.service.StudentService;
 import com.suyyyus.service.TeacherService;
 import com.suyyyus.service.impl.DiscussionServiceImpl;
+import com.suyyyus.service.impl.StudentServiceImpl;
 import com.suyyyus.service.impl.TeacherServiceImpl;
 import com.suyyyus.utils.Validator;
 import org.slf4j.Logger;
@@ -36,6 +37,9 @@ public class TeacherServlet extends BaseServlet{
 
     DiscussionDao discussionDao = new DiscussionDaoImpl();
     DiscussionServcie discussionServcie = new DiscussionServiceImpl();
+
+    StudentDao studentDao = new StudentDaoImpl();
+    StudentService studentService = new StudentServiceImpl();
 
     /**
      * 教师登录
@@ -66,18 +70,22 @@ public class TeacherServlet extends BaseServlet{
             if(b){
                 Teacher teacher1 = teacherService.queryByTeacherid(teacher.getTeacherid());
 
-
-
                 session.setAttribute("teacher", teacher1);
+                req.getSession().setMaxInactiveInterval(30 * 60); //会话过期时间为30分钟
 
+                //保存日志
+                Teacher_logging teacher_logging = new Teacher_logging();
+                teacher_logging.setTeacher_id(teacher1.getId());
+                teacher_logging.setLogging("成功登录平台");
+                teacherService.addLogging(teacher_logging);
+                logger.info(teacher1.getTeachername() + "老师成功登录");
                 resp.getWriter().write("success");
-                logger.info("有教师成功登录");
             }else {
                 resp.getWriter().write("failed");
-                logger.info("有教师登录失败");
+                logger.info("登录失败");
             }
-            resp.setStatus(HttpServletResponse.SC_OK);
-            System.out.println(resp.getStatus());
+//            resp.setStatus(HttpServletResponse.SC_OK);
+//            System.out.println(resp.getStatus());
         }
     }
 
@@ -119,6 +127,12 @@ public class TeacherServlet extends BaseServlet{
         teacherService.updateInfo(teacher);
 
         Teacher teacher1 = teacherService.queryByTeacherid(teacher.getTeacherid());
+        //保存日志里面去
+        Teacher_logging teacher_logging = new Teacher_logging();
+        teacher_logging.setTeacher_id(teacher1.getId());
+        teacher_logging.setLogging("修改了个人信息");
+        teacherService.addLogging(teacher_logging);
+        logger.info(teacher1.getTeachername() + "老师修改了自己的个人信息");
         session.setAttribute("teacher", teacher1);
 
         resp.getWriter().write("success");
@@ -134,18 +148,19 @@ public class TeacherServlet extends BaseServlet{
         //post方法获取数据
         BufferedReader reader = req.getReader();
         String s = reader.readLine(); //???? s = null ????
-        System.out.println(1);
+
 
         Teacher teacher = JSON.parseObject(s,Teacher.class);
-        System.out.println(2);
-
 
         teacherService.addTeacher(teacher);
-        System.out.println(4);
-        resp.getWriter().write("success");
-        System.out.println(5);
 
-        //boolean b = userService.checkUsername(user.getUsername());
+        Teacher_logging teacher_logging = new Teacher_logging();
+        teacher_logging.setTeacher_id(teacher.getId());
+        teacher_logging.setLogging("成功注册账号");
+        teacherService.addLogging(teacher_logging);
+        logger.info(teacher.getTeachername() + "老师成功注册");
+
+        resp.getWriter().write("success");
 
     }
 
@@ -187,9 +202,17 @@ public class TeacherServlet extends BaseServlet{
         //获得信息
         Discussion discussion = JSON.parseObject(s,Discussion.class);
 
+        Teacher teacher = teacherService.queryByid(discussion.getTeacher_id());
+        Student student = studentService.queryById(discussion.getStudent_id());
+
         //添加回复
         discussionServcie.TeacherReply(discussion);
 
+        Teacher_logging teacher_logging = new Teacher_logging();
+        teacher_logging.setTeacher_id(teacher.getId());
+        teacher_logging.setLogging("回复了" + student.getStudentname() + "的留言");
+        teacherService.addLogging(teacher_logging);
+        logger.info(teacher.getTeachername() + "老师回复了" + student.getStudentname() + "同学的留言");
 
         resp.getWriter().write("success");
 
@@ -222,7 +245,7 @@ public class TeacherServlet extends BaseServlet{
     }
 
     /**
-     * 批量删除学生
+     * 批量删除教师
      * @param req
      * @param resp
      * @throws ServletException
@@ -237,10 +260,19 @@ public class TeacherServlet extends BaseServlet{
         int[] ids = JSON.parseObject(params, int[].class);
         teacherService.deleteStudents(ids);
 
+        logger.info("管理员对教师进行删除");
+
         resp.getWriter().write("success");
     }
 
 
+    /**
+     * 通过学院查询教师
+     * @param req
+     * @param resp
+     * @throws IOException
+     * @throws SQLException
+     */
     public void queryByCollege(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         req.setCharacterEncoding("UTF-8");
 
@@ -256,6 +288,47 @@ public class TeacherServlet extends BaseServlet{
 
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(s);
+    }
+
+    /**
+     * 教师退出登录
+     * @param req
+     * @param resp
+     * @throws IOException
+     */
+    public void getout(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+        HttpSession session = req.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+
+        Teacher_logging teacher_logging = new Teacher_logging();
+        teacher_logging.setTeacher_id(teacher.getId());
+        teacher_logging.setLogging("退出学习平台");
+        teacherService.addLogging(teacher_logging);
+        logger.info(teacher.getTeachername() + "老师退出平台了");
+
+        session.setAttribute("teacher",null);
+        session.setAttribute("course",null);
+
+        resp.getWriter().write("success");
+    }
+
+    /**
+     * 获得教师的历史操作记录
+     * @param req
+     * @param resp
+     * @throws SQLException
+     * @throws IOException
+     */
+    public void queryLoggingByid(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+        //获取当前学生对象
+        HttpSession session = req.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+
+        List<Teacher_logging> list = teacherService.queryLoggingById(teacher.getId());
+        String jsonString = JSON.toJSONString(list);
+
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
     }
 
 }

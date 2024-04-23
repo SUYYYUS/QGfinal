@@ -8,6 +8,8 @@ import com.suyyyus.pojo.PageBean;
 import com.suyyyus.pojo.Student;
 import com.suyyyus.service.DiscussionServcie;
 import com.suyyyus.service.impl.DiscussionServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,8 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+/**
+ * @author CHEN SHUYU
+ */
 @WebServlet("/Discussion/*")
 public class DiscussionServlet extends BaseServlet{
+
+    private static final Logger logger =  LoggerFactory.getLogger(DiscussionServlet.class);
 
     DiscussionDao discussionDao = new DiscussionDaoImpl();
     DiscussionServcie discussionService = new DiscussionServiceImpl();
@@ -64,6 +71,10 @@ public class DiscussionServlet extends BaseServlet{
         int[] ids = JSON.parseObject(params, int[].class);
         discussionService.deleteDiscussions(ids);
 
+        for (int i = 0; i < ids.length; i++) {
+            logger.info("id为" + ids[i] + "的留言被删除");
+        }
+
         resp.getWriter().write("success");
     }
 
@@ -81,6 +92,8 @@ public class DiscussionServlet extends BaseServlet{
         String id = reader.readLine();
 
         discussionService.deleteDiscussion(Integer.parseInt(id));
+
+        logger.info("id为" + id + "的留言被删除");
 
         resp.getWriter().write("success");
     }

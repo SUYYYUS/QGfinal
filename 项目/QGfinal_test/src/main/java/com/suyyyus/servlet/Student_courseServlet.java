@@ -16,6 +16,8 @@ import com.suyyyus.service.Student_courseService;
 import com.suyyyus.service.impl.CourseServiceImpl;
 import com.suyyyus.service.impl.StudentServiceImpl;
 import com.suyyyus.service.impl.Student_courseServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +28,8 @@ import java.util.List;
 
 @WebServlet("/Student_course/*")
 public class Student_courseServlet extends BaseServlet{
+
+    private static final Logger logger =  LoggerFactory.getLogger(Student_courseServlet.class);
 
     StudentDao studentDao = new StudentDaoImpl();
     StudentService studentService = new StudentServiceImpl();
@@ -59,7 +63,6 @@ public class Student_courseServlet extends BaseServlet{
         int i = 0;
         for (Student_course studentCourse : student_courses) {
             course_id[i] = studentCourse.getCourse_id();
-
             i++;
         }
 

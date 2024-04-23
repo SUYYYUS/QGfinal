@@ -10,6 +10,8 @@ import com.suyyyus.service.AdminService;
 import com.suyyyus.service.impl.AdminServiceImpl;
 import com.suyyyus.utils.JWTUtil;
 import com.suyyyus.utils.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +26,8 @@ import java.util.Map;
 
 @WebServlet("/Admin/*")
 public class AdminServlet extends BaseServlet{
+
+    private static final Logger logger =  LoggerFactory.getLogger(AdminServlet.class);
 
     AdminDao adminDao = new AdminDaoImpl();
     AdminService adminService = new AdminServiceImpl();
@@ -68,6 +72,7 @@ public class AdminServlet extends BaseServlet{
 
                 session.setAttribute("admin", admin1);
 
+                logger.info("管理员成功登录平台");
                 resp.getWriter().write("success");
                 System.out.println("adminlogin_success");
             }else {

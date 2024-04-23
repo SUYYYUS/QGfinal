@@ -40,4 +40,11 @@ public interface StudentService {
     //通过年级查找学生
     public List<Student> queryByGrade(String grade) throws SQLException;
 
+    //添加学生日志
+    public void addLogging(Student_logging student_logging) throws SQLException;
+
+    //通过id查询学生日志
+    public List<Student_logging> queryLoggingById(int student_id) throws SQLException;
+
+
 }

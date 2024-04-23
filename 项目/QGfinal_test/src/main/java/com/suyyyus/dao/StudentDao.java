@@ -2,6 +2,7 @@ package com.suyyyus.dao;
 
 import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Student_course;
+import com.suyyyus.pojo.Student_logging;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -40,4 +41,10 @@ public interface StudentDao {
 
     //通过年级查找学生
     public List<Student> queryByGrade(String grade) throws SQLException;
+
+    //添加学生日志
+    public void addLogging(Student_logging student_logging) throws SQLException;
+
+    //通过学生id查询日志情况
+    public List<Student_logging> queryLoggingById(int student_id) throws SQLException;
 }

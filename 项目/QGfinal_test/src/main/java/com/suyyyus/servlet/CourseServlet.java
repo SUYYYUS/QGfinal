@@ -11,6 +11,8 @@ import com.suyyyus.service.CourseService;
 import com.suyyyus.service.DiscussionServcie;
 import com.suyyyus.service.impl.CourseServiceImpl;
 import com.suyyyus.service.impl.DiscussionServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +26,8 @@ import java.util.List;
 
 @WebServlet("/Course/*")
 public class CourseServlet extends BaseServlet{
+
+    private static final Logger logger =  LoggerFactory.getLogger(CourseServlet.class);
 
     CourseService courseService = new CourseServiceImpl();
 
@@ -51,6 +55,7 @@ public class CourseServlet extends BaseServlet{
 
         courseService.addCourse(course);
 
+        logger.info(teacher.getTeachername() +"老师新添加了" + course.getCoursename() + "这门课程");
         System.out.println(teacher.getTeacherid());
 
         resp.getWriter().write("addcourse_success");

@@ -1,0 +1,4 @@
+2024-04-23 16:51:49.297 [main] DEBUG test1 - logback的--debug日志--输出了
+2024-04-23 16:51:49.300 [main] INFO  test1 - logback的--info日志--输出了
+2024-04-23 16:51:49.301 [main] WARN  test1 - logback的--warn日志--输出了
+2024-04-23 16:51:49.301 [main] ERROR test1 - logback的--error日志--输出了

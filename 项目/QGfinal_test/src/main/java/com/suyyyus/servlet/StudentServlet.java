@@ -20,6 +20,8 @@ import com.suyyyus.service.impl.StudentServiceImpl;
 import com.suyyyus.service.impl.Student_courseServiceImpl;
 import com.suyyyus.utils.JWTUtil;
 import com.suyyyus.utils.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,17 +41,20 @@ import java.util.Map;
 @WebServlet("/Student/*")
 public class StudentServlet extends BaseServlet{
 
-    StudentDao studentDao = new StudentDaoImpl();
+    private static final Logger logger =  LoggerFactory.getLogger(StudentServlet.class);
+
+//    StudentDao studentDao = new StudentDaoImpl();
     StudentService studentService = new StudentServiceImpl();
 
-    CourseDao courseDao = new CourseDaoImpl();
+//    CourseDao courseDao = new CourseDaoImpl();
     CourseService courseService = new CourseServiceImpl();
 
     Student_courseService student_courseService = new Student_courseServiceImpl();
-    Student_courseDao student_courseDao = new Student_courseDaoImpl();
+//    Student_courseDao student_courseDao = new Student_courseDaoImpl();
 
-    DiscussionDao discussionDao = new DiscussionDaoImpl();
+//    DiscussionDao discussionDao = new DiscussionDaoImpl();
     DiscussionServcie discussionServcie = new DiscussionServiceImpl();
+
 
     /**
      * 学生登录
@@ -90,8 +95,8 @@ public class StudentServlet extends BaseServlet{
 
                 if(student.getRemember() == 1){
                     //1. 创建Cookie对象
-                Cookie studentname = new Cookie("student",student.getStudentname());
-                Cookie password = new Cookie("password",student.getPassword());
+                Cookie studentname = new Cookie("student",student1.getStudentname());
+                Cookie password = new Cookie("password",student1.getPassword());
                 // 设置Cookie的存活时间,7天
                 studentname.setMaxAge( 60 * 60 * 24 * 7);
                 password.setMaxAge( 60 * 60 * 24 * 7);
@@ -116,7 +121,14 @@ public class StudentServlet extends BaseServlet{
                 resp.setHeader("Authorization", "Bearer " + jwt);
 
                 session.setAttribute("student", student1);
+                req.getSession().setMaxInactiveInterval(30 * 60); //会话过期时间为30分钟
 
+                //保存日志
+                Student_logging student_logging = new Student_logging();
+                student_logging.setStudent_id(student1.getId());
+                student_logging.setLogging("成功登录进入平台");
+                studentService.addLogging(student_logging);
+                logger.info(student1.getStudentname() + "同学成功登录平台");
                 resp.getWriter().write("success");
                 System.out.println("success");
             }else {
@@ -139,24 +151,20 @@ public class StudentServlet extends BaseServlet{
         //post方法获取数据
         BufferedReader reader = req.getReader();
         String s = reader.readLine(); //???? s = null ????
-        System.out.println(1);
+
         Student student = JSON.parseObject(s, Student.class);
-        System.out.println(2);
-        System.out.println(3);
 
+        System.out.println(student);
             studentService.addStudent(student);
-            System.out.println(4);
+
+        Student_logging student_logging = new Student_logging();
+        student_logging.setStudent_id(student.getId());
+        student_logging.setLogging("成功注册开通账号");
+        studentService.addLogging(student_logging);
+        logger.info(student.getStudentname() + "同学成功注册");
+
             resp.getWriter().write("success");
-            System.out.println(5);
 
-        //boolean b = userService.checkUsername(user.getUsername());
-
-
-//        if(!b){
-//            resp.getWriter().write("success");
-//        }
-
-        //System.out.println("User add---------------");
     }
 
 
@@ -192,12 +200,14 @@ public class StudentServlet extends BaseServlet{
         String s = reader.readLine();
         //获取session对象，储存Teacher
         HttpSession session = req.getSession();
-//        Teacher teacher = JSON.parseObject(s,Teacher.class);
+
         Student student = JSON.parseObject(s, Student.class);
         studentService.updateStudent(student);
 
-//        Teacher teacher1 = teacherService.queryByTeacherid(teacher.getTeacherid());
+
         Student student1 = studentService.queryByStudentid(student.getStudentid());
+
+        logger.info(student1.getStudentname() + "同学修改了自己的个人信息");
         session.setAttribute("student", student1);
 
         resp.getWriter().write("success");
@@ -241,7 +251,15 @@ public class StudentServlet extends BaseServlet{
             //报名成功
             courseService.addRegisternumber(course);
             //先储存课程对象
-            Course course1 = courseDao.queryByCourse_id(course.getId());
+            Course course1 = courseService.queryByCourse_id(course.getId());
+
+            Student_logging student_logging = new Student_logging();
+            student_logging.setStudent_id(student.getId());
+            student_logging.setLogging("报名了课程：" + course1.getCoursename());
+            studentService.addLogging(student_logging);
+
+            logger.info(student.getStudentname() + "同学成功报名了" + course1.getCoursename() + "这门课程");
+
             session.setAttribute("course", course1);
             resp.getWriter().write("success");
         }
@@ -307,6 +325,13 @@ public class StudentServlet extends BaseServlet{
         discussion.setStudent_id(student.getId());
         discussion.setCourse_id(course.getId());
         discussion.setTeacher_id(course.getTeacher_id());
+
+        Student_logging student_logging = new Student_logging();
+        student_logging.setStudent_id(student.getId());
+        student_logging.setLogging("对" + course.getCoursename() + "这门课程发出了提问");
+        studentService.addLogging(student_logging);
+
+        logger.info(student.getStudentname() + "同学对" + course.getCoursename() + "这门课程发出了提问");
 
         discussionServcie.addDiscussion(discussion);
 
@@ -380,9 +405,18 @@ public class StudentServlet extends BaseServlet{
         int[] ids = JSON.parseObject(params, int[].class);
         studentService.deleteStudents(ids);
 
+        logger.info("管理员对学生进行了删除操作");
+
         resp.getWriter().write("success");
     }
 
+    /**
+     * 重置学生密码
+     * @param req
+     * @param resp
+     * @throws IOException
+     * @throws SQLException
+     */
     public void resetPassword(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         //获取对象
         BufferedReader reader = req.getReader();
@@ -396,10 +430,23 @@ public class StudentServlet extends BaseServlet{
         boolean b = studentService.resetPassword(student);
 
         if(b){
+            Student_logging student_logging = new Student_logging();
+            student_logging.setStudent_id(student.getId());
+            student_logging.setLogging("重置了自己的密码");
+            studentService.addLogging(student_logging);
+
+            logger.info("管理员重置了" + student.getStudentname() + "同学的密码");
             resp.getWriter().write("resetsuccess");
         }
     }
 
+    /**
+     * 通过年级查询学生
+     * @param req
+     * @param resp
+     * @throws SQLException
+     * @throws IOException
+     */
     public void queryByGrade(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         req.setCharacterEncoding("UTF-8");
 
@@ -410,6 +457,50 @@ public class StudentServlet extends BaseServlet{
         List<Student> studentList = studentService.queryByGrade(s);
 
         String jsonString = JSON.toJSONString(studentList);
+
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
+    /**
+     * 学生退出登录
+     * @param req
+     * @param resp
+     * @throws IOException
+     */
+    public void getout(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+        //获取当前学生对象
+        HttpSession session = req.getSession();
+        Student student = (Student) session.getAttribute("student");
+
+        Student_logging student_logging = new Student_logging();
+        student_logging.setStudent_id(student.getId());
+        student_logging.setLogging("退出在线学习平台");
+        studentService.addLogging(student_logging);
+
+        logger.info(student.getStudentname() + "退出了在线学习平台");
+
+        session.setAttribute("student",null);
+        session.setAttribute("course",null);
+
+        resp.getWriter().write("success");
+    }
+
+    /**
+     * 获得学生的历史学习记录
+     * @param req
+     * @param resp
+     * @throws SQLException
+     * @throws IOException
+     */
+    public void queryLoggingByid(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+        //获取当前学生对象
+        HttpSession session = req.getSession();
+        Student student = (Student) session.getAttribute("student");
+
+        List<Student_logging> student_loggings = studentService.queryLoggingById(student.getId());
+
+        String jsonString = JSON.toJSONString(student_loggings);
 
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);

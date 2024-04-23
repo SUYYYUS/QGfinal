@@ -4,6 +4,7 @@ import com.suyyyus.dao.StudentDao;
 import com.suyyyus.pojo.Course;
 import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Student_course;
+import com.suyyyus.pojo.Student_logging;
 import com.suyyyus.utils.*;
 
 import java.sql.Connection;
@@ -39,11 +40,13 @@ public class StudentDaoImpl implements StudentDao {
      */
     @Override
     public void addStudent(Student student) throws SQLException {
+        //对密码进行加密操作
+        String saltPassword = MD5Util.generateSaltPassword(student.getPassword());
+
         //sql语句
         String sql = "insert into tb_student (studentname, studentid, password, grade, qq, description, create_time, update_time) " +
                 "values (?,?,?,?,?,?,?,?)";
-        //对密码进行加密操作
-        String saltPassword = MD5Util.generateSaltPassword(student.getPassword());
+
         //添加信息
         CRUDUtils.ZengShanGai(sql,student.getStudentname(),student.getStudentid(),saltPassword,student.getGrade(),student.getQq(),student.getDescription(),TimeUtil.formatDateTime(LocalDateTime.now()),TimeUtil.formatDateTime(LocalDateTime.now()));
 
@@ -248,5 +251,51 @@ public class StudentDaoImpl implements StudentDao {
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
+    }
+
+    /**
+     * 添加日志
+     * @param student_logging
+     * @throws SQLException
+     */
+    @Override
+    public void addLogging(Student_logging student_logging) throws SQLException {
+        String sql = "insert into tb_student_logging (student_id, logging) values (?,?)";
+
+        CRUDUtils.ZengShanGai(sql, student_logging.getStudent_id(), student_logging.getLogging());
+    }
+
+    /**
+     * 通过id查询学生的日志
+     * @param student_id
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<Student_logging> queryLoggingById(int student_id) throws SQLException {
+        String sql = "select * from tb_student_logging where student_id = ?";
+        //获取连接
+        Connection connection = myConnectionPool.getConnection();
+        //预编译
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1,student_id);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        List<Student_logging> list = new ArrayList<>();
+
+        while(resultSet.next()){
+            list.add(new Student_logging(resultSet.getInt("id"),resultSet.getInt("student_id"),
+                    resultSet.getString("logging")));
+        }
+        if(list.size() == 0) {
+            System.out.println("当前没有行为");
+            JDBCUtil.close(connection,preparedStatement,resultSet);
+            return null;
+        }else {
+            JDBCUtil.close(connection,preparedStatement,resultSet);
+            return list;
+        }
+
     }
 }

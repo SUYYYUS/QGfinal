@@ -1,16 +1,17 @@
 package com.suyyyus.servlet;
 
 import com.alibaba.fastjson.JSON;
-import com.suyyyus.pojo.Course;
-import com.suyyyus.pojo.Question;
-import com.suyyyus.pojo.Section;
-import com.suyyyus.pojo.Teacher;
+import com.suyyyus.pojo.*;
 import com.suyyyus.service.CourseService;
 import com.suyyyus.service.QuestionService;
 import com.suyyyus.service.SectionService;
+import com.suyyyus.service.TeacherService;
 import com.suyyyus.service.impl.CourseServiceImpl;
 import com.suyyyus.service.impl.QuestionServiceImpl;
 import com.suyyyus.service.impl.SectionServiceImpl;
+import com.suyyyus.service.impl.TeacherServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +23,15 @@ import java.util.List;
 @WebServlet("/Question/*")
 public class QuestionServlet extends BaseServlet{
 
+    private static final Logger logger =  LoggerFactory.getLogger(QuestionServlet.class);
+
     QuestionService questionService = new QuestionServiceImpl();
 
     SectionService sectionService = new SectionServiceImpl();
 
     CourseService courseService = new CourseServiceImpl();
+
+    TeacherService teacherService = new TeacherServiceImpl();
     /**
      * 用于添加题目
      * @param req
@@ -50,11 +55,17 @@ public class QuestionServlet extends BaseServlet{
         System.out.println(question);
 
         question.setCourse_section_id(section.getId());
-//        question.setCourse_id(section.getCourse_id());
+
         question.setCourse_id(course.getId());
 
         questionService.addQuestion(question);
 
+        Teacher_logging teacher_logging = new Teacher_logging();
+        teacher_logging.setTeacher_id(course.getTeacher_id());
+        teacher_logging.setLogging("添加了题目在" + section.getSectionname() + "这一章节中");
+        teacherService.addLogging(teacher_logging);
+
+        logger.info("id为" + course.getTeacher_id() + "的老师在" + section.getSectionname() + "章节中添加了题目");
 
         resp.getWriter().write("addquestion_success");
     }
@@ -96,9 +107,6 @@ public class QuestionServlet extends BaseServlet{
         String _id = reader.readLine();
         int id = Integer.parseInt(_id);
 
-//        Course course = courseService.queryByCourse_id(id);
-
-//        Section section = sectionService.queryById(id);
 
         Question question = questionService.queryQuesionById(id);
         session.setAttribute("question",question);

@@ -79,6 +79,12 @@
         </el-table>
     </el-dialog>
 
+    <el-dialog title="历史记录" :visible.sync="dialogVisible_logging">
+        <el-table :data="loggingData">
+            <el-table-column property="id" label="ID" width="150"></el-table-column>
+            <el-table-column property="logging" label="内容" ></el-table-column>
+        </el-table>
+    </el-dialog>
 
 <!--个人信息表单-->
 <template>
@@ -116,12 +122,6 @@
         >
         </el-table-column>
 
-        <!--        </el-table>-->
-        <!--        <el-table-->
-        <!--                :data="tableData"-->
-        <!--                style="width: 100%"-->
-        <!--                :row-class-name="tableRowClassName"-->
-        <!--                @selection-change="handleSelectionChange">-->
         <el-table-column
                 prop="description"
                 label="描述"
@@ -147,12 +147,15 @@
             <template slot-scope="scope">
                 <el-row>
                     <el-button type="primary" @click="allData(scope.row)">修改</el-button>
-                    <!--                        <el-button type="danger" @click="deleteById(scope.row.id)">删除</el-button>-->
                 </el-row>
             </template>
         </el-table-column>
     </el-table>
 </template>
+
+    <el-row>
+        <el-button type="primary" @click="getLogging" plain>查看历史记录</el-button>
+    </el-row>
 
     <h2 class="welcome">我学习的课程</h2>
 
@@ -208,6 +211,7 @@
 <el-row>
     <el-button type="primary" @click="dialogTableVisible_questionrecord = true">查看问答记录</el-button>
         <el-button type="primary" @click="gotocoursecenter">课程中心</el-button>
+    <el-button type="primary" @click="gotochatroom">进入聊天室</el-button>
         <el-button type="warning" @click="getout" round>退出登录</el-button>
     </el-row>
 
@@ -241,10 +245,13 @@
 
                 discussionData:[],
 
+                loggingData:[],
                 //修改个人信息
                 dialogVisible_update: false,
 
                 dialogTableVisible_questionrecord:false,
+
+                dialogVisible_logging:false,
 
                 Student:{
                     id:'',
@@ -311,6 +318,12 @@
                     reply:'',
                     question_time:'',
                     reply_time:'',
+                },
+
+                Student_logging:{
+                    id:'',
+                    student_id:'',
+                    logging:'',
                 },
 
             }
@@ -455,7 +468,15 @@
             },
 
             getout(){
-                location.href = "/QGfinal_test_war/StudentLogin.html";
+                var _this = this;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Student/getout",
+                }).then(function (resp) {
+                    if(resp.data == "success"){
+                        location.href = "/QGfinal_test_war/StudentLogin.html";
+                    }
+                })
             },
 
             //获得学生的提问记录
@@ -472,6 +493,27 @@
                     console.log(_this.discussionData);
                 })
 
+            },
+
+            //进入聊天室
+            gotochatroom(){
+                location.href = "/QGfinal_test_war/studentindex.html";
+            },
+
+            //获得历史记录
+            getLogging(){
+                var _this = this;
+
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/QGfinal_test_war/Student/queryLoggingByid",
+                }).then(resp =>{
+                    //获得数据
+                    _this.loggingData = resp.data;
+
+                    console.log(_this.loginData);
+                    _this.dialogVisible_logging = true;
+                })
             },
 
         }

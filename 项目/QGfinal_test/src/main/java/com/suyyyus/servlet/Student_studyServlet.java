@@ -6,6 +6,8 @@ import com.suyyyus.pojo.Student;
 import com.suyyyus.pojo.Student_study;
 import com.suyyyus.service.Student_studyService;
 import com.suyyyus.service.impl.Student_studyServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +19,8 @@ import java.sql.SQLException;
 
 @WebServlet("/Student_study/*")
 public class Student_studyServlet extends BaseServlet{
+
+    private static final Logger logger =  LoggerFactory.getLogger(Student_studyServlet.class);
 
     Student_studyService student_studyService = new Student_studyServiceImpl();
 

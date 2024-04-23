@@ -16,7 +16,7 @@
         <h1 class="signup">注册账号</h1>
         <div id="errorMsg" v-model="errorMsg">{{errorMsg}}</div>
         <p class="signup">姓名<input id="teachername" type="text" name="teachername" v-model="Teacher.teachername"></p>
-        <p class="signup">学号<input id="teacherid" type="text" name="teacherid" v-model="Teacher.teacherid"></p>
+        <p class="signup">工号<input id="teacherid" type="text" name="teacherid" v-model="Teacher.teacherid"></p>
         <p class="signup">密码<input  id="password" type="password" name="password" v-model="Teacher.password"></p>
         <template>
             <p class="signup">学院<el-select v-model="Teacher.college" placeholder="请选择">

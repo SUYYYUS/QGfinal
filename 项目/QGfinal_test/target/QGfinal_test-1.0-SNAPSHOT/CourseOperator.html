@@ -192,6 +192,7 @@
 
     <el-row>
         <el-button type="primary" @click="goback" plain>返回</el-button>
+        <el-button type="primary" @click="gotochatroom" plain>进入聊天室</el-button>
     </el-row>
 </div>
 
@@ -408,8 +409,11 @@
                     }
                 })
 
-            }
+            },
 
+            gotochatroom(){
+            location.href = "teacherindex.html";
+            }
 
         },
 
