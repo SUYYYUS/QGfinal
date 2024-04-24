@@ -3,14 +3,13 @@ package com.suyyyus.servlet;
 import com.alibaba.fastjson.JSON;
 import com.suyyyus.dao.DiscussionDao;
 import com.suyyyus.dao.impl.DiscussionDaoImpl;
-import com.suyyyus.pojo.Course;
-import com.suyyyus.pojo.Discussion;
-import com.suyyyus.pojo.PageBean;
-import com.suyyyus.pojo.Teacher;
+import com.suyyyus.pojo.*;
 import com.suyyyus.service.CourseService;
 import com.suyyyus.service.DiscussionServcie;
+import com.suyyyus.service.TeacherService;
 import com.suyyyus.service.impl.CourseServiceImpl;
 import com.suyyyus.service.impl.DiscussionServiceImpl;
+import com.suyyyus.service.impl.TeacherServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +33,7 @@ public class CourseServlet extends BaseServlet{
     DiscussionDao discussionDao = new DiscussionDaoImpl();
     DiscussionServcie discussionServcie = new DiscussionServiceImpl();
 
+    TeacherService teacherService  = new TeacherServiceImpl();
 
     /**
      * 用于添加课程
@@ -54,6 +54,11 @@ public class CourseServlet extends BaseServlet{
         course.setTeacher_id(teacher.getId());
 
         courseService.addCourse(course);
+
+        Teacher_logging teacher_logging = new Teacher_logging();
+        teacher_logging.setTeacher_id(teacher.getId());
+        teacher_logging.setLogging("添加了新课程");
+        teacherService.addLogging(teacher_logging);
 
         logger.info(teacher.getTeachername() +"老师新添加了" + course.getCoursename() + "这门课程");
         System.out.println(teacher.getTeacherid());

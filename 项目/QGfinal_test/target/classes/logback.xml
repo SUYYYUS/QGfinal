@@ -2,7 +2,7 @@
 <configuration debug="false">
     <!--设置存储路径变量-->
     <!-- windows -->
-    <property name="log.path" value="C:/Users/28937/Desktop/alllog"/>
+    <property name="log.path" value="C:/Users/28937/Desktop/QG/QGfinal/项目/QGfinal_test/Users28937Desktopalllog/info"/>
     <!-- linux -->
     <!--<property name="log.path" value="/home/log"/>-->
 
@@ -17,12 +17,15 @@
         </encoder>
     </appender>
 
+
+
     <!--输出到文件-->
 
     <!-- 时间滚动输出 level为 INFO 日志 -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名 -->
         <file>${log.path}/log_info.log</file>
+        
         <!--日志文件输出格式-->
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
@@ -32,6 +35,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 每天日志归档路径以及格式 -->
             <fileNamePattern>${log.path}/info/log-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>

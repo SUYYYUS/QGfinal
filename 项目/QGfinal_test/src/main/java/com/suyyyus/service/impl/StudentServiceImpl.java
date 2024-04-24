@@ -4,7 +4,7 @@ import com.suyyyus.dao.StudentDao;
 import com.suyyyus.dao.impl.StudentDaoImpl;
 import com.suyyyus.pojo.*;
 import com.suyyyus.service.StudentService;
-import com.suyyyus.utils.TCP.Client;
+
 import com.suyyyus.utils.TimeUtil;
 
 import java.io.IOException;
@@ -97,11 +97,6 @@ public class StudentServiceImpl implements StudentService {
         return  student;
     }
 
-
-    @Override
-    public void sendMsg(String msg) throws IOException {
-        Client.sendMsg(msg);
-    };
 
     /**
      * 分页查询

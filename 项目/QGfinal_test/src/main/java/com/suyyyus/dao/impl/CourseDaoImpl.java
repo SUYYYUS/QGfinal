@@ -30,7 +30,7 @@ public class CourseDaoImpl implements CourseDao {
         String sql = "insert into tb_course (coursename, subject, description, teacher_id, limitnumber, create_time, end_time) " +
                 "values (?,?,?,?,?,?,?)";
 
-        CRUDUtils.ZengShanGai(sql,course.getCoursename(), course.getSubject(),course.getDescription(),course.getTeacher_id(),course.getLimitnumber(), TimeUtil.formatDateTime(LocalDateTime.now()),TimeUtil.formatDateTime(LocalDateTime.now().plus(7, ChronoUnit.DAYS)));
+        CRUDUtils.ZengShanGai(sql,course.getCoursename(), course.getSubject(),course.getDescription(),course.getTeacher_id(),course.getLimitnumber(), TimeUtil.formatDateTime(LocalDateTime.now()),course.getEnd_time());
     }
 
 

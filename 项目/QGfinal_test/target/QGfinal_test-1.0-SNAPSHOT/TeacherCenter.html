@@ -9,13 +9,14 @@
             color: #cdb1ef;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 </head>
 <body>
 
 <h2 class = "welcome" >欢迎回到个人中心</h2>
 
 <div id="selfinfoDiv" >
-
 
 
 <!--    修改数据表单-->
@@ -185,7 +186,17 @@
                 <el-input v-model="Course.description"></el-input>
             </el-form-item>
             <el-form-item label="限制人数">
-                <el-input v-model="Course.limitnumber"></el-input>
+<!--                <el-input v-model="Course.limitnumber"></el-input>-->
+                <template>
+                    <el-input-number v-model="Course.limitnumber" ></el-input-number>
+                </template>
+            </el-form-item>
+            <el-form-item label="结束时间">
+            <el-date-picker
+                    v-model="value1"
+                    type="datetime"
+                    placeholder="选择日期时间">
+            </el-date-picker>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="addCourse">提交</el-button>
@@ -291,7 +302,8 @@
 <script src="js/vue.js"></script>
 <script src="element-ui/lib/index.js"></script>
 <link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
-
+<script>
+</script>
 <script>
 
 
@@ -306,6 +318,8 @@
 
         data(){
             return{
+
+                value1: '',
 
                 dialogVisible_logging : false,
                 dialogTableVisible_questionrecord: false,
@@ -492,6 +506,9 @@
             addCourse(){
                 var _this = this;
 
+                const formattedDateTime = moment(this.value1).format('YYYY-MM-DD HH:mm:ss');
+                console.log(formattedDateTime);
+                _this.Course.end_time = formattedDateTime;
                 axios({
                     method:"post",
                     url:"http://localhost:8080/QGfinal_test_war/Course/addCourse",
@@ -540,20 +557,7 @@
 
             //获得学生的提问记录
             queryMyDiscussionByTeacher_id(){
-                // var _this = this;
-                //
-                // axios({
-                //     method:"get",
-                //     url:"http://localhost:8080/QGfinal_test_war/Teacher/queryMyDiscussionByTeacher_id",
-                // }).then(resp =>{
-                //     //获得数据
-                //     _this.discussionData = resp.data;
-                //
-                //     console.log(_this.discussionData);
-                // })
-
                 location.href = "/QGfinal_test_war/TeacherLeavemessage.html";
-
             },
 
             gotochatroom() {

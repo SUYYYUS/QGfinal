@@ -4,25 +4,21 @@ import com.suyyyus.dao.impl.*;
 import com.suyyyus.pojo.*;
 import com.suyyyus.service.*;
 import com.suyyyus.service.impl.*;
-import com.suyyyus.utils.DatabaseBackup.DatabaseBackup;
+import com.suyyyus.utils.DatabaseBackup.MyTimer;
 import com.suyyyus.utils.JWTUtil;
 import com.suyyyus.utils.MD5Util;
 import com.suyyyus.utils.MyConnectionPool;
-import com.suyyyus.utils.TCP.Client;
-import com.suyyyus.utils.TCP.Server;
+
 import com.suyyyus.utils.TimeUtil;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,26 +164,9 @@ public class test1 {
         System.out.println(student_study);
     }
 
-    @Test
-    public void test_Server() throws IOException {
-//        Server server = new Server();
-        Server.startDiscussionArea();
-
-        StudentService studentService = new StudentServiceImpl();
-
-        studentService.sendMsg("123456");
 
 
-    }
 
-    @Test
-    public void test_clientstudent() throws IOException {
-        StudentService studentService = new StudentServiceImpl();
-
-        studentService.sendMsg("123456");
-
-
-    }
 
 
     @Test
@@ -195,7 +174,7 @@ public class test1 {
 
 //        DatabaseBackup.scheduleBackup("localhost","3306","root","csy090944CSY","db03","C:\\Users\\28937\\Desktop\\hhh.sql");
 
-        DatabaseBackup.scheduleBackup();
+//        DatabaseBackup.scheduleBackup();
         System.out.println("nbbbbbb");
     }
 
@@ -220,9 +199,14 @@ public class test1 {
     public void testlogging(){
         logger.info("logback的--info日志--输出了");
 
+    }
 
+    @Test
+    public void test_Timer() throws InterruptedException {
+        MyTimer myTimer = new MyTimer();
 
-
+        myTimer.start();
+//        Thread.sleep();
     }
 
 }
