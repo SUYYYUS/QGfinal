@@ -9,3 +9,11 @@
 2024-04-24 10:00:19.092 [http-nio-8080-exec-3] INFO  com.suyyyus.servlet.CourseServlet - 江川老师新添加了瓦罗兰特这门课程
 2024-04-24 10:06:37.644 [http-nio-8080-exec-4] INFO  com.suyyyus.servlet.TeacherServlet - 江川老师成功登录
 2024-04-24 10:07:05.087 [http-nio-8080-exec-10] INFO  com.suyyyus.servlet.CourseServlet - 江川老师新添加了英雄联盟这门课程
+2024-04-24 19:30:37.783 [http-nio-8080-exec-9] INFO  com.suyyyus.servlet.StudentServlet - 江川同学成功登录平台
+2024-04-24 19:33:13.227 [http-nio-8080-exec-4] INFO  com.suyyyus.servlet.StudentServlet - 江川同学成功登录平台
+2024-04-24 19:34:09.826 [http-nio-8080-exec-9] INFO  com.suyyyus.servlet.StudentServlet - 江川退出了在线学习平台
+2024-04-24 19:34:14.998 [http-nio-8080-exec-3] INFO  com.suyyyus.servlet.StudentServlet - 江川同学成功登录平台
+2024-04-24 23:47:44.239 [http-nio-8080-exec-6] INFO  com.suyyyus.servlet.TeacherServlet - 江川老师成功登录
+2024-04-25 00:11:27.461 [http-nio-8080-exec-4] INFO  com.suyyyus.servlet.TeacherServlet - 江川老师成功登录
+2024-04-25 00:14:16.966 [http-nio-8080-exec-6] INFO  com.suyyyus.servlet.TeacherServlet - 江川老师成功登录
+2024-04-25 00:14:29.427 [http-nio-8080-exec-6] INFO  com.suyyyus.servlet.TeacherServlet - 江川帮小周报名了英雄联盟该课程

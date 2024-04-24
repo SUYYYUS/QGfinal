@@ -87,7 +87,7 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     /**
-     * 通过学号查找学生
+     * 通过id查找学生
      * @param id
      * @return
      * @throws SQLException
@@ -297,5 +297,40 @@ public class StudentDaoImpl implements StudentDao {
             return list;
         }
 
+    }
+
+
+    /**
+     * 通过姓名查找学生
+     * @param studentname
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public Student queryByName(String studentname) throws SQLException {
+        String sql = "select * from tb_student where studentname = ?";
+        //获取连接池的连接
+        Connection connection = myConnectionPool.getConnection();
+        //预编译
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, studentname);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        Student student = new Student();
+
+        if(resultSet.next()){
+            student.setId(resultSet.getInt("id"));
+            student.setStudentname(resultSet.getString("studentname"));
+            student.setStudentid(resultSet.getString("studentid"));
+            student.setPassword(resultSet.getString("password"));
+            student.setGrade(resultSet.getString("grade"));
+            student.setQq(resultSet.getString("qq"));
+            student.setDescription(resultSet.getString("description"));
+            student.setCreate_time(resultSet.getString("create_time"));
+            student.setUpdate_time(resultSet.getString("update_time"));
+        }else {
+            student = null;
+        }
+        return student;
     }
 }

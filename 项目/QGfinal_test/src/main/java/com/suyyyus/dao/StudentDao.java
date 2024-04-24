@@ -47,4 +47,7 @@ public interface StudentDao {
 
     //通过学生id查询日志情况
     public List<Student_logging> queryLoggingById(int student_id) throws SQLException;
+
+    //通过姓名查找学生
+    public Student queryByName(String studentname) throws SQLException;
 }

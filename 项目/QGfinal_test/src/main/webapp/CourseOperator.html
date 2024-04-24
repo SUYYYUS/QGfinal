@@ -26,18 +26,29 @@
             <el-form-item label="教学内容">
                 <el-input v-model="Section.content"></el-input>
             </el-form-item>
-<!--            <el-form-item label="简要描述">-->
-<!--                <el-input v-model="Course.description"></el-input>-->
-<!--            </el-form-item>-->
-<!--            <el-form-item label="限制人数">-->
-<!--                <el-input v-model="Course.limitnumber"></el-input>-->
-<!--            </el-form-item>-->
             <el-form-item>
                 <el-button type="primary" @click="addSection">提交</el-button>
                 <el-button @click="dialogVisible = false">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
+
+    <el-dialog
+            title="增加学生"
+            :visible.sync="dialogVisible_addstudent"
+            width="30%"
+    >
+        <el-form ref="form" :model="STUDENTNAME" label-width="80px">
+            <el-form-item label="学生名字">
+                <el-input v-model="STUDENTNAME.studentname"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="addSTUDENT">提交</el-button>
+                <el-button @click="dialogVisible_addstudent = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
 
     <el-dialog title="学习情况" :visible.sync="dialogTableVisible_total">
         <table border="1px" cellspacing = "0" width = "600px">
@@ -127,15 +138,19 @@
                 label="操作">
             <template slot-scope="scope">
                 <el-row>
-                    <el-button type="primary" @click="dialogVisible = true">添加章节</el-button>
-                    <el-button type="primary" @click="dialogTableVisible_total = true">查看学习情况</el-button>
+<!--                    <el-button type="primary" @click="dialogVisible = true">添加章节</el-button>-->
+<!--                    <el-button type="primary" @click="dialogTableVisible_total = true">查看学习情况</el-button>-->
                     <el-button type="primary" @click="gotocourseforum(scope.row)">进入讨论区</el-button>
                 </el-row>
             </template>
         </el-table-column>
     </el-table>
 </template>
-
+<el-row>
+    <el-button type="primary" @click="dialogVisible = true">添加章节</el-button>
+    <el-button type="primary" @click="dialogTableVisible_total = true">查看学习情况</el-button>
+    <el-button type="primary" @click="dialogVisible_addstudent = true">添加学生</el-button>
+</el-row>
     <h2 class = "welcome" >课程章节</h2>
 
     <template>
@@ -215,6 +230,12 @@
             return{
 
                 dialogTableVisible_total: false,
+
+                dialogVisible_addstudent:false,
+
+                STUDENTNAME:{
+                    studentname:'',
+                },
 
                 Course:{
                     id:'',
@@ -410,6 +431,30 @@
 
             gotochatroom(){
             location.href = "teacherindex.html";
+            },
+
+            //手动添加学生
+            addSTUDENT(){
+                var _this = this;
+
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Teacher/helpAddStudent",
+                    data:_this.STUDENTNAME.studentname,
+                }).then(function (resp) {
+                    if(resp.data == "null"){
+                        _this.$message({
+                            message: '没有找到该学生',
+                            type: 'warning'
+                        });
+                    }else if(resp.data == "success"){
+                        _this.$message({
+                            message: '添加成功',
+                            type: 'success'
+                        });
+                        _this.dialogVisible_addstudent = false;
+                    }
+                })
             }
 
         },

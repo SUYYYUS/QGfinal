@@ -331,4 +331,48 @@ public class TeacherServlet extends BaseServlet{
         resp.getWriter().write(jsonString);
     }
 
+    /**
+     * 帮助学生报名课程
+     * @param req
+     * @param resp
+     * @throws IOException
+     * @throws SQLException
+     */
+    public void helpAddStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+        //获取当前课程对象
+        HttpSession session = req.getSession();
+        Course course = (Course) session.getAttribute("course");
+//        Teacher teacher  = (Teacher) session.getAttribute("teacher");
+
+        //防止乱码
+        req.setCharacterEncoding("UTF-8");
+        BufferedReader reader = req.getReader();
+        String s = reader.readLine();
+
+        Student student = studentService.queryByName(s);
+
+        if(student == null){
+            //没有该学生
+            resp.getWriter().write("null");
+            return;
+        }else {
+            Student_course student_course = new Student_course();
+            student_course.setCourse_id(course.getId());
+            student_course.setStudent_id(student.getId());
+            studentService.addStudent_course(course,student_course);
+
+            Teacher_logging teacher_logging = new Teacher_logging();
+            teacher_logging.setTeacher_id(course.getTeacher_id());
+            teacher_logging.setLogging("帮助学生" + s + "报名了" + course.getCoursename() + "该课程");
+            teacherService.addLogging(teacher_logging);
+
+            logger.info(teacherService.queryByid(course.getTeacher_id()).getTeachername() + "帮" + s + "报名了" + course.getCoursename() + "该课程");
+
+            resp.getWriter().write("success");
+        }
+
+
+
+    }
+
 }

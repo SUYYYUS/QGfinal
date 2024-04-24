@@ -60,7 +60,7 @@ CREATE TABLE `tb_course` (
   `end_time` varchar(30) NOT NULL COMMENT '结课时间',
   `section_number` int DEFAULT '0' COMMENT '章节数',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='课程表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='课程表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +69,7 @@ CREATE TABLE `tb_course` (
 
 LOCK TABLES `tb_course` WRITE;
 /*!40000 ALTER TABLE `tb_course` DISABLE KEYS */;
-INSERT INTO `tb_course` VALUES (1,'高等数学','数学','简单上手',9,50,1,'2024-04-14 13:48:24','2024-04-21 13:48:24',4),(2,'线性代数','数学','矩阵',9,0,0,'2024-04-15 00:26:17','2024-04-22 00:26:18',1),(3,'离散数学','数学','苦难',9,60,0,'2024-04-15 00:29:18','2024-04-22 00:29:18',2),(4,'大学物理','物理','手拿把掐',9,300,1,'2024-04-15 23:20:08','2024-04-22 23:20:08',2);
+INSERT INTO `tb_course` VALUES (1,'高等数学','数学','简单上手',9,50,1,'2024-04-14 13:48:24','2024-04-21 13:48:24',4),(2,'线性代数','数学','矩阵',9,0,0,'2024-04-15 00:26:17','2024-04-22 00:26:18',1),(3,'离散数学','数学','苦难',9,60,0,'2024-04-15 00:29:18','2024-04-22 00:29:18',2),(4,'大学物理','物理','手拿把掐',9,300,1,'2024-04-15 23:20:08','2024-04-22 23:20:08',2),(5,'王者荣耀','体育','5v5',9,10,0,'2024-04-24 09:53:44','2024-05-01 09:53:44',0),(6,'瓦罗兰特','体育','收徒',9,10,0,'2024-04-24 10:00:19','2024-04-25 03:02:02',0),(7,'英雄联盟','体育','uzi',9,10,0,'2024-04-24 10:07:05','2024-05-16 00:00:00',0);
 /*!40000 ALTER TABLE `tb_course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +235,7 @@ CREATE TABLE `tb_student_course` (
   `register_time` varchar(30) NOT NULL COMMENT '报名时间',
   `status` int unsigned DEFAULT NULL COMMENT '状态：1.学习中，2.已完成',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生课程表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生课程表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,7 +244,7 @@ CREATE TABLE `tb_student_course` (
 
 LOCK TABLES `tb_student_course` WRITE;
 /*!40000 ALTER TABLE `tb_student_course` DISABLE KEYS */;
-INSERT INTO `tb_student_course` VALUES (1,3,1,'2024-04-16 10:22:56',1),(2,3,4,'2024-04-16 10:24:53',1);
+INSERT INTO `tb_student_course` VALUES (1,3,1,'2024-04-16 10:22:56',1),(2,3,4,'2024-04-16 10:24:53',1),(3,5,7,'2024-04-25 00:14:29',1);
 /*!40000 ALTER TABLE `tb_student_course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -260,7 +260,7 @@ CREATE TABLE `tb_student_logging` (
   `student_id` int unsigned DEFAULT NULL COMMENT '学生ID',
   `logging` varchar(100) DEFAULT NULL COMMENT '日志记录',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学生日志表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,6 +269,7 @@ CREATE TABLE `tb_student_logging` (
 
 LOCK TABLES `tb_student_logging` WRITE;
 /*!40000 ALTER TABLE `tb_student_logging` DISABLE KEYS */;
+INSERT INTO `tb_student_logging` VALUES (1,3,'2024-04-23 23:56:43:成功登录进入平台'),(2,3,'2024-04-24 00:44:10:成功登录进入平台'),(3,3,'2024-04-24 00:44:18:退出在线学习平台'),(4,3,'2024-04-24 00:44:22:成功登录进入平台'),(5,3,'2024-04-24 19:30:37:成功登录进入平台'),(6,3,'2024-04-24 19:33:13:成功登录进入平台'),(7,3,'2024-04-24 19:34:09:退出在线学习平台'),(8,3,'2024-04-24 19:34:14:成功登录进入平台');
 /*!40000 ALTER TABLE `tb_student_logging` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -349,7 +350,7 @@ CREATE TABLE `tb_teacher_logging` (
   `teacher_id` int unsigned DEFAULT NULL COMMENT '教师ID',
   `logging` varchar(100) DEFAULT NULL COMMENT '日志记录',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='教师日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='教师日志表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -358,6 +359,7 @@ CREATE TABLE `tb_teacher_logging` (
 
 LOCK TABLES `tb_teacher_logging` WRITE;
 /*!40000 ALTER TABLE `tb_teacher_logging` DISABLE KEYS */;
+INSERT INTO `tb_teacher_logging` VALUES (1,9,'2024-04-24 00:29:31:成功登录平台'),(2,9,'2024-04-24 00:38:56:成功登录平台'),(3,9,'2024-04-24 00:39:52:成功登录平台'),(4,9,'2024-04-24 09:48:25:成功登录平台'),(5,9,'2024-04-24 09:53:25:成功登录平台'),(6,9,'2024-04-24 09:59:42:成功登录平台'),(7,9,'2024-04-24 10:06:37:成功登录平台'),(8,9,'2024-04-24 23:47:44:成功登录平台'),(9,9,'2024-04-25 00:11:27:成功登录平台'),(10,9,'2024-04-25 00:14:16:成功登录平台'),(11,9,'2024-04-25 00:14:29:帮助学生小周报名了英雄联盟该课程');
 /*!40000 ALTER TABLE `tb_teacher_logging` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -370,4 +372,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-23 23:32:41
+-- Dump completed on 2024-04-25  0:15:19

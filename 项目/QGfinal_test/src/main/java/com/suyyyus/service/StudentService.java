@@ -25,7 +25,8 @@ public interface StudentService {
     //学生报名课程
     public int addStudent_course(Course course, Student_course student_course) throws SQLException;
 
-
+    //通过姓名查找学生
+    public Student queryByName(String studentname) throws SQLException;
 
     //所有学生分页查询
     public PageBean<Student> selectStudentByPage(int currentPage, int pageSize) throws Exception;

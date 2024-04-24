@@ -179,4 +179,17 @@ public class StudentServiceImpl implements StudentService {
 
         return student_loggings;
     }
+
+    /**
+     * 通过姓名查找学生
+     * @param studentname
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public Student queryByName(String studentname) throws SQLException {
+        Student student = studentDao.queryByName(studentname);
+
+        return student;
+    }
 }
