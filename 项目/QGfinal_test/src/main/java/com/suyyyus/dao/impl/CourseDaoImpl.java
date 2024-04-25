@@ -189,7 +189,34 @@ public class CourseDaoImpl implements CourseDao {
     }
 
 
+    /**
+     * 查询所有课程
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<Course> queryAllCourse() throws Exception {
+        String sql = "select * from tb_course";
 
+        List<Course> courseList = CRUDUtils.queryAllCourse(sql);
 
+        return courseList;
+    }
+
+    /**
+     * 批量删除课程操作
+     * @param id
+     */
+    @Override
+    public void deleteCourses(int[] id) {
+        for (int i : id) {
+            try {
+                String sql = "delete from tb_course where id = ?";
+                CRUDUtils.ZengShanGai(sql,i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

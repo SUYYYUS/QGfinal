@@ -8,9 +8,11 @@ import com.suyyyus.dao.impl.DiscussionDaoImpl;
 import com.suyyyus.dao.impl.StudentDaoImpl;
 import com.suyyyus.dao.impl.TeacherDaoImpl;
 import com.suyyyus.pojo.*;
+import com.suyyyus.service.CourseService;
 import com.suyyyus.service.DiscussionServcie;
 import com.suyyyus.service.StudentService;
 import com.suyyyus.service.TeacherService;
+import com.suyyyus.service.impl.CourseServiceImpl;
 import com.suyyyus.service.impl.DiscussionServiceImpl;
 import com.suyyyus.service.impl.StudentServiceImpl;
 import com.suyyyus.service.impl.TeacherServiceImpl;
@@ -40,6 +42,8 @@ public class TeacherServlet extends BaseServlet{
 
     StudentDao studentDao = new StudentDaoImpl();
     StudentService studentService = new StudentServiceImpl();
+
+    CourseService courseService = new CourseServiceImpl();
 
     /**
      * 教师登录
@@ -258,7 +262,7 @@ public class TeacherServlet extends BaseServlet{
         String params = reader.readLine();
 
         int[] ids = JSON.parseObject(params, int[].class);
-        teacherService.deleteStudents(ids);
+        teacherService.deleteTeachers(ids);
 
         logger.info("管理员对教师进行删除");
 
@@ -360,6 +364,8 @@ public class TeacherServlet extends BaseServlet{
             student_course.setCourse_id(course.getId());
             student_course.setStudent_id(student.getId());
             studentService.addStudent_course(course,student_course);
+
+            courseService.addRegisternumber(course);
 
             Teacher_logging teacher_logging = new Teacher_logging();
             teacher_logging.setTeacher_id(course.getTeacher_id());

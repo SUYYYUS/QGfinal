@@ -13,6 +13,7 @@
 <body>
 <div id="sectionDiv">
     <h2 class = "welcome" >当前课程</h2>
+
     <!--    新增课程-->
     <el-dialog
             title="新增课程"
@@ -33,6 +34,7 @@
         </el-form>
     </el-dialog>
 
+<!--    帮助学生报名-->
     <el-dialog
             title="增加学生"
             :visible.sync="dialogVisible_addstudent"
@@ -49,7 +51,7 @@
         </el-form>
     </el-dialog>
 
-
+<!--查看总体学生学习情况-->
     <el-dialog title="学习情况" :visible.sync="dialogTableVisible_total">
         <table border="1px" cellspacing = "0" width = "600px">
             <tr>
@@ -151,6 +153,12 @@
     <el-button type="primary" @click="dialogTableVisible_total = true">查看学习情况</el-button>
     <el-button type="primary" @click="dialogVisible_addstudent = true">添加学生</el-button>
 </el-row>
+
+<!--    <el-row>-->
+<!--        <input type="file" id="videoFileInput">-->
+<!--        <el-button type="primary" @click="uploadVideo">Upload</el-button>-->
+<!--    </el-row>-->
+
     <h2 class = "welcome" >课程章节</h2>
 
     <template>
@@ -455,11 +463,30 @@
                         _this.dialogVisible_addstudent = false;
                     }
                 })
-            }
+            },
+
+
+            // uploadVideo(){
+            //     var fileInput = document.getElementById('videoFileInput');
+            //     var file = fileInput.files[0];
+            //     var formData = new FormData();
+            //     formData.append('videoFile', file);
+            //
+            //     axios({
+            //         method:"post",
+            //         url:"http://localhost:8080/QGfinal_test_war/uploadvideo/uploadvideo",
+            //         data:formData,
+            //     }).then(function (resp) {
+            //         if(resp.data == "upload_success"){
+            //             console.log('Video uploaded successfully.');
+            //         }
+            //     })
+            //     .catch(error =>{
+            //         console.error('Error uploading video:', error);
+            //     })
+            // },
 
         },
-
-
 
 
     })

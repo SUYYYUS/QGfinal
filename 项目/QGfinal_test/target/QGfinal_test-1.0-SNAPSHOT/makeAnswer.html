@@ -98,7 +98,8 @@
                     label="操作">
                 <template slot-scope="scope">
                     <el-row>
-                        <el-button  type="primary"  @click="answerQuestion(scope.row)">开始作答</el-button>
+                        <el-button  type="primary" @click="answerQuestion(scope.row)">开始作答</el-button>
+
                     </el-row>
                 </template>
             </el-table-column>
@@ -149,7 +150,10 @@
 
                 Answer:{
                     answer:'',
-                }
+
+                },
+
+
 
 
             }
@@ -161,11 +165,14 @@
         },
 
         methods:{
+
+
             answerQuestion(row){
 
                 var _this = this;
                 this.Question = row;
                 console.log(_this.Question);
+
 
                 axios({
                     method:"post",
@@ -175,13 +182,12 @@
                     if(resp.data == "success"){
 
                         console.log("成功开始作答");
-                        if(_this.Question.type === "填空题"){
-                            _this.dialogVisible = true;
-                        }
-                        else if(_this.Question.type === "判断题"){
+                        if(_this.Question.type === "判断题"){
                             _this.dialogVisible_judge = true;
                         }else if(_this.Question.type === "选择题"){
                             _this.dialogVisible_select = true;
+                        }else {
+                            _this.dialogVisible = true;
                         }
 
                     }
@@ -219,6 +225,7 @@
                             type: 'success'
                         });
                         _this.Answer.answer = '';
+
                     }else if(resp.data == "wrong"){
                         console.log("成功提交");
                         _this.dialogVisible_select = false;
@@ -230,6 +237,7 @@
                             type: 'warning'
                         });
                         _this.Answer.answer = '';
+                        
                     }
                 })
             },

@@ -116,11 +116,11 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     /**
-     * 批量删除学生
+     * 批量删除教师
      * @param id
      */
     @Override
-    public void deleteStudents(int[] id) {
+    public void deleteTeachers(int[] id) {
         teacherDao.deleteTeachers(id);
     }
 

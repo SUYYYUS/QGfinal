@@ -31,6 +31,10 @@ public interface CourseDao {
     //增加报名人数
     public void addRegister_number(Course course) throws SQLException;
 
+    //查询所有课程
+    public List<Course> queryAllCourse() throws Exception;
+
+    public void deleteCourses(int[] id);
 
 
 }

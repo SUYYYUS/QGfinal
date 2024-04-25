@@ -12,9 +12,9 @@
 <div id="welcomeDiv">
     <h2 id = "select">请选择你的身份:</h2>
     <el-row>
-
         <el-button type="primary" @click="Teacher" round>教师登录</el-button>
         <el-button type="primary" @click="Student" round>学生登录</el-button>
+        <el-button type="primary" @click="Admin" round>管理员登录</el-button>
     </el-row>
 
 
@@ -41,6 +41,11 @@
                 gotoStudent();
             },
 
+            //选择管理员
+            Admin(){
+                gotoAdmin();
+            }
+
         }
 
     })
@@ -51,6 +56,9 @@
     }
     function gotoStudent() {
         location.href = "/QGfinal_test_war/StudentLogin.html";
+    }
+    function gotoAdmin() {
+        location.href = "/QGfinal_test_war/AdminLogin.html";
     }
 </script>
 

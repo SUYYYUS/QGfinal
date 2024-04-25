@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class test1 {
 
@@ -209,4 +207,19 @@ public class test1 {
 //        Thread.sleep();
     }
 
+    @Test
+    public void test_compare() throws Exception {
+        CourseService courseService = new CourseServiceImpl();
+
+        List<Course> courseList = courseService.queryAllCourse();
+        for (Course course : courseList) {
+            System.out.println(course);
+        }
+        Collections.sort(courseList);
+        System.out.println("=================================================");
+        for (Course course : courseList) {
+            System.out.println(course);
+        }
+
+    }
 }

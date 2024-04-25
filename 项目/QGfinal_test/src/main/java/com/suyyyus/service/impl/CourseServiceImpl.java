@@ -112,4 +112,21 @@ public class CourseServiceImpl implements CourseService {
     public void addRegisternumber(Course course) throws SQLException {
         courseDao.addRegister_number(course);
     }
+
+    @Override
+    public List<Course> queryAllCourse() throws Exception {
+        List<Course> courseList = courseDao.queryAllCourse();
+
+        return courseList;
+    }
+
+
+    /**
+     * 批量删除课程
+     * @param id
+     */
+    @Override
+    public void deleteCourses(int[] id) {
+        courseDao.deleteCourses(id);
+    }
 }

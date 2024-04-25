@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 @WebServlet("/Course/*")
@@ -261,6 +262,43 @@ public class CourseServlet extends BaseServlet{
 
     }
 
+    /**
+     * 展示热门榜单
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
+    public void hitCourse(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        List<Course> courseList = courseService.queryAllCourse();
+
+        Collections.sort(courseList);
+
+        String jsonString = JSON.toJSONString(courseList);
+
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
+    /**
+     * 批量删除课程
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void deleteByIds(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        //post方法
+        BufferedReader reader = req.getReader();
+
+        String params = reader.readLine();
+
+        int[] ids = JSON.parseObject(params, int[].class);
+        courseService.deleteCourses(ids);
+
+        logger.info("管理员对课程进行删除");
+
+        resp.getWriter().write("success");
+    }
 
 
 }

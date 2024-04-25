@@ -3,7 +3,7 @@ package com.suyyyus.pojo;
 /**
  * 课程类
  */
-public class Course {
+public class Course implements Comparable<Course>{
    private int id;
    private String coursename;
    private String subject; //学科分类
@@ -136,5 +136,11 @@ public class Course {
                 ", end_time='" + end_time + '\'' +
                 ", section_number=" + section_number +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Course othercourse) {
+        // 按照报名升序排序
+        return othercourse.getRegisternumber() - this.getRegisternumber();
     }
 }

@@ -95,13 +95,19 @@ public class StudentServlet extends BaseServlet{
 
                 if(student.getRemember() == 1){
                     //1. 创建Cookie对象
-                Cookie studentname = new Cookie("student",student1.getStudentname());
+                Cookie studentid = new Cookie("studentid",student1.getStudentid());
                 Cookie password = new Cookie("password",student1.getPassword());
                 // 设置Cookie的存活时间,7天
-                studentname.setMaxAge( 60 * 60 * 24 * 7);
+                studentid.setMaxAge( 60 * 60 * 24 * 7);
                 password.setMaxAge( 60 * 60 * 24 * 7);
+
+
+                studentid.setPath(req.getContextPath() + "/");
+                password.setPath(req.getContextPath() + "/");
+
+
                 //2. 发送
-                resp.addCookie(studentname);
+                resp.addCookie(studentid);
                 resp.addCookie(password);
                 }
 
@@ -116,6 +122,7 @@ public class StudentServlet extends BaseServlet{
                 Cookie jwtCookie = new Cookie("jwt", jwt);
                 jwtCookie.setHttpOnly(true);
                 jwtCookie.setMaxAge(60 * 60 * 24 * 7); // 设置JWT的有效期，例如7天
+                jwtCookie.setPath(req.getContextPath() + "/");
                 resp.addCookie(jwtCookie);
 
                 resp.setHeader("Authorization", "Bearer " + jwt);

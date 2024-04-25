@@ -29,4 +29,9 @@ public interface CourseService {
     //添加报名人数
     public void addRegisternumber(Course course) throws SQLException;
 
+    //查询所有课程
+    public List<Course> queryAllCourse() throws Exception;
+
+    public void deleteCourses(int[] id);
+
 }

@@ -30,7 +30,7 @@ public interface TeacherService {
 
     public PageBean<Teacher> selectTeacherByPage(int currentPage, int pageSize) throws Exception;
 
-    public void deleteStudents(int[] id);
+    public void deleteTeachers(int[] id);
 
     //通过学院查询老师
     public List<Teacher> queryByCollege(String college) throws SQLException;

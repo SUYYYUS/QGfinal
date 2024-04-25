@@ -37,6 +37,24 @@
         </el-form-item>
     </el-form>
 
+    <el-row>
+        <el-button type="primary" @click="showHitCourse">热门榜单</el-button>
+    </el-row>
+
+    <el-dialog title="热门榜单" :visible.sync="dialogTableVisible_hitcourse">
+        <el-table :data="courseData">
+            <el-table-column
+                    type="index"
+                    width="50">
+            </el-table-column>
+            <el-table-column property="coursename" label="课程" width="150"></el-table-column>
+            <el-table-column property="registernumber" label="报名人数" width="150"></el-table-column>
+            <el-table-column property="subject" label="学科" ></el-table-column>
+            <el-table-column property="end_time" label="结课时间" ></el-table-column>
+        </el-table>
+    </el-dialog>
+
+
     <!--    所有的课程-->
     <template>
         <el-table
@@ -148,6 +166,7 @@
             //异步通成功后，刷新页面展示数据
             this.queryAll();
 
+            // this.showHitCourse();
         },
 
         data(){
@@ -172,6 +191,10 @@
                 //每页显示条数
                 pageSize:5,
                 totalCount:100, // 添加这一行
+
+                dialogTableVisible_hitcourse:false,
+
+                courseData:[],
 
             }
 
@@ -316,6 +339,19 @@
             //返回学生个人中心
             gobackstudentcenter(){
                 location.href = "/QGfinal_test_war/StudentCenter.html";
+            },
+
+            showHitCourse(){
+                var _this = this;
+
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/QGfinal_test_war/Course/hitCourse",
+                }).then(resp =>{
+                    _this.courseData = resp.data;
+                    //打开表单
+                    _this.dialogTableVisible_hitcourse = true;
+                })
             }
 
 

@@ -112,6 +112,44 @@ public class CRUDUtils {
 
 
     /**
+     * 查询当前所有课程
+     * @param sql
+     * @return
+     * @throws Exception
+     */
+    public static List<Course> queryAllCourse(String sql) throws Exception {
+        //获取连接
+        connection = myConnectionPool.getConnection();
+        //预编译
+        preparedStatement = connection.prepareStatement(sql);
+
+        //获取resultSet
+        resultSet = preparedStatement.executeQuery();
+
+        List<Course> list = new ArrayList<>();
+
+        while(resultSet.next()) {
+            list.add(new Course(resultSet.getInt("id"),resultSet.getString("coursename"),
+                    resultSet.getString("subject"), resultSet.getString("description"),
+                    resultSet.getInt("teacher_id"), resultSet.getInt("section_number"),
+                    resultSet.getInt("limitnumber"),resultSet.getInt("registernumber"),
+                    resultSet.getString("create_time"), resultSet.getString("end_time")));
+
+        }
+        if(list.size() == 0) {
+            System.out.println("当前没有开设课程");
+            JDBCUtil.close(connection,preparedStatement,resultSet);
+            return null;
+        }else {
+            JDBCUtil.close(connection,preparedStatement,resultSet);
+            return list;
+        }
+        //释放资源
+    }
+
+
+
+    /**
      * 查询当前教师的ID查找其所开的所有课程
      * @param sql
      * @return
