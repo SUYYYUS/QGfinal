@@ -85,6 +85,7 @@ public class DiscussionServlet extends BaseServlet{
         //post方法
         BufferedReader reader = req.getReader();
         String id = reader.readLine();
+        System.out.println(id);
         //进行删除
         discussionService.deleteDiscussion(Integer.parseInt(id));
         //日志记录

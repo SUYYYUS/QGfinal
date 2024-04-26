@@ -184,3 +184,6 @@
 2024-04-26 17:52:42.918 [http-nio-8080-exec-9] INFO  com.suyyyus.servlet.StudentServlet - 鲤鱼同学成功登录平台
 2024-04-26 17:55:31.592 [http-nio-8080-exec-7] INFO  com.suyyyus.servlet.StudentServlet - 鲤鱼同学成功登录平台
 2024-04-26 17:55:40.426 [http-nio-8080-exec-8] INFO  com.suyyyus.servlet.StudentServlet - 鲤鱼退出了在线学习平台
+2024-04-26 22:29:14.950 [http-nio-8080-exec-10] INFO  com.suyyyus.servlet.AdminServlet - 管理员成功登录平台
+2024-04-26 22:32:22.387 [http-nio-8080-exec-5] INFO  com.suyyyus.servlet.AdminServlet - 管理员成功登录平台
+2024-04-26 22:32:26.401 [http-nio-8080-exec-9] INFO  com.suyyyus.servlet.DiscussionServlet - id为2的留言被删除

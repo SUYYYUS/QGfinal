@@ -84,7 +84,7 @@
                     label="操作">
                 <template slot-scope="scope">
                     <el-row>
-                        <el-button type="danger" @click="delete(scope.row.id)">删除</el-button>
+                        <el-button type="danger" @click="deletediscussion(scope.row)">删除</el-button>
                     </el-row>
                 </template>
             </el-table-column>
@@ -234,17 +234,18 @@
                 });
             },
 
-            delete(index) {
+            deletediscussion(row) {
                 //用户点击确认按钮
 
                 //ajax请求
                 var _this = this;
-                _this.Discussion.id = index;
-                console.log(index)
+                _this.Discussion = row;
+                _this.Discussion.id = row.id;
+                console.log(_this.Discussion);
                 axios({
                     method: "post",
                     url: "http://localhost:8080/QGfinal_test_war/Discussion/deleteById",
-                    data: index,
+                    data: _this.Discussion.id,
                 }).then(function (resp) {
                     if (resp.data == "success") {
                         //添加成功，关闭添加信息的对话框
