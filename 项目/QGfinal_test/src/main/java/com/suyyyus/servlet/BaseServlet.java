@@ -19,7 +19,6 @@ public class BaseServlet extends HttpServlet {
         //截取方法名
         int index = requestURI.lastIndexOf("/");
         String methodName = requestURI.substring(index+1); // /selectAll? selectAll?
-
         //2.获取方法
         //获取UserServlet class对象
         //谁调用我（this所在的方法），我（this）代表谁

@@ -25,8 +25,12 @@ public class SectionDaoImpl implements SectionDao {
     @Override
     public void addSection(Section section) throws SQLException {
         String sql = "insert into tb_course_section (sectionname, content, course_id, create_time) values (?,?,?,?)";
-
-        CRUDUtils.ZengShanGai(sql,section.getSectionname(), section.getContent(),section.getCourse_id(), TimeUtil.formatDateTime(LocalDateTime.now()));
+        //执行sql语句
+        CRUDUtils.ZengShanGai(sql,
+                section.getSectionname(),
+                section.getContent(),
+                section.getCourse_id(),
+                TimeUtil.formatDateTime(LocalDateTime.now()));
     }
 
     /**
@@ -38,9 +42,9 @@ public class SectionDaoImpl implements SectionDao {
     @Override
     public List<Section> queryAllSectionByCourse_id(int course_id) throws Exception {
         String sql = "select * from tb_course_section where course_id = ?";
-
+        //执行sql语句
         List<Section> sections = CRUDUtils.queryAllSectionByCourse_id(sql, course_id);
-
+        //返回集合
         return sections;
     }
 
@@ -73,7 +77,6 @@ public class SectionDaoImpl implements SectionDao {
         }else {
             section = null;
         }
-return section;
-
+        return section;
     }
 }

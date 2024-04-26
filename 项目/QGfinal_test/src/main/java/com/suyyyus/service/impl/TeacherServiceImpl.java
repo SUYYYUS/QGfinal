@@ -24,6 +24,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public boolean Login(String teacherid, String password) throws SQLException {
         boolean login = teacherDao.Login(teacherid, password);
+        //判断是否登录成功
         return login;
     }
 
@@ -47,6 +48,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Teacher queryByTeacherid(String teacherid) throws SQLException {
         Teacher teacher = teacherDao.queryByTeacherid(teacherid);
+        //返回老师对象
         return teacher;
     }
 
@@ -134,7 +136,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Teacher> queryByCollege(String college) throws SQLException {
         List<Teacher> teacherList = teacherDao.queryByCollege(college);
-
+        //返回集合
         return teacherList;
     }
 
@@ -146,7 +148,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public void addLogging(Teacher_logging teacher_logging) throws SQLException {
         teacher_logging.setLogging(TimeUtil.formatDateTime(LocalDateTime.now()) + ":" + teacher_logging.getLogging());
-
+        //添加教师的历史记录
         teacherDao.addLogging(teacher_logging);
     }
 
@@ -159,7 +161,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Teacher_logging> queryLoggingById(int teacher_id) throws SQLException {
         List<Teacher_logging> list = teacherDao.queryLoggingById(teacher_id);
-
+        //返回教师的历史记录
         return list;
     }
 

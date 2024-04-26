@@ -28,8 +28,10 @@ public interface TeacherService {
     //修改教师信息
     public int updateInfo(Teacher teacher) throws SQLException;
 
+    //分页查询
     public PageBean<Teacher> selectTeacherByPage(int currentPage, int pageSize) throws Exception;
 
+    //批量删除学生
     public void deleteTeachers(int[] id);
 
     //通过学院查询老师

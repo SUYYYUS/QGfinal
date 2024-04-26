@@ -26,7 +26,6 @@ public class DiscussionServlet extends BaseServlet{
 
     private static final Logger logger =  LoggerFactory.getLogger(DiscussionServlet.class);
 
-    DiscussionDao discussionDao = new DiscussionDaoImpl();
     DiscussionServcie discussionService = new DiscussionServiceImpl();
 
     /**
@@ -43,16 +42,13 @@ public class DiscussionServlet extends BaseServlet{
 
         int currentPage = Integer.parseInt(_currentPage);
         int pageSize = Integer.parseInt(_pageSize);
-
+        //获取讨论区的所有留言
         PageBean<Discussion> pageBean = discussionService.selectDiscussionByPage(currentPage, pageSize);
-
         //2.转为JSON
         String jsonString = JSON.toJSONString(pageBean);
         //3.写数据
-
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
-        //System.out.println("User selectAll----------");
     }
 
     /**
@@ -65,16 +61,16 @@ public class DiscussionServlet extends BaseServlet{
     public void deleteByIds(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //post方法
         BufferedReader reader = req.getReader();
-
         String params = reader.readLine();
-
+        //获取要删除的对象的所有id
         int[] ids = JSON.parseObject(params, int[].class);
+        //进行删除
         discussionService.deleteDiscussions(ids);
-
+        //日志记录
         for (int i = 0; i < ids.length; i++) {
             logger.info("id为" + ids[i] + "的留言被删除");
         }
-
+        //提示操作成功
         resp.getWriter().write("success");
     }
 
@@ -88,15 +84,12 @@ public class DiscussionServlet extends BaseServlet{
     public void deleteById(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         //post方法
         BufferedReader reader = req.getReader();
-
         String id = reader.readLine();
-
+        //进行删除
         discussionService.deleteDiscussion(Integer.parseInt(id));
-
+        //日志记录
         logger.info("id为" + id + "的留言被删除");
-
+        //提示操作成功
         resp.getWriter().write("success");
     }
-
-
 }

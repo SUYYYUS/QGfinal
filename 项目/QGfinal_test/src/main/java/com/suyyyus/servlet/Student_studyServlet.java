@@ -36,13 +36,10 @@ public class Student_studyServlet extends BaseServlet{
         HttpSession session = req.getSession();
         Student student = (Student) session.getAttribute("student");
         Course course = (Course) session.getAttribute("course");
-//        System.out.println(user);
-
+        //获取记录对象集
         Student_study student_study = student_studyService.queryStudentRecordByIds(student.getId(), course.getId());
-
         //  JSON数据化
         String jsonString = JSON.toJSONString(student_study);
-//        System.out.println(jsonString);
         // 写数据
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
@@ -59,14 +56,12 @@ public class Student_studyServlet extends BaseServlet{
     public void getStudynumber(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
         // 从seession中拿出登录成功的用户信息
         HttpSession session = req.getSession();
-
+        //获取当前课程
         Course course = (Course) session.getAttribute("course");
-//        System.out.println(user);
+        //查询人数
         int number = student_studyService.queryStudyNumber(course.getId());
-
         //  JSON数据化
         String jsonString = JSON.toJSONString(number);
-//        System.out.println(jsonString);
         // 写数据
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
@@ -83,14 +78,12 @@ public class Student_studyServlet extends BaseServlet{
     public void gettotalaverage_score(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
         // 从seession中拿出登录成功的用户信息
         HttpSession session = req.getSession();
-
+        //获取当前课程
         Course course = (Course) session.getAttribute("course");
-//        System.out.println(user);
+        //得出总评分
         double number = student_studyService.querytotalaverage_score(course.getId());
-
         //  JSON数据化
         String jsonString = JSON.toJSONString(number);
-//        System.out.println(jsonString);
         // 写数据
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
@@ -107,17 +100,14 @@ public class Student_studyServlet extends BaseServlet{
     public void gettotalaccuracy(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
         // 从seession中拿出登录成功的用户信息
         HttpSession session = req.getSession();
-
+        //获取当前课程
         Course course = (Course) session.getAttribute("course");
-//        System.out.println(user);
+        //得出总平均正确率
         double number = student_studyService.querytotalaccuracy(course.getId());
-
         //  JSON数据化
         String jsonString = JSON.toJSONString(number);
-//        System.out.println(jsonString);
         // 写数据
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
     }
-
 }

@@ -12,7 +12,6 @@
 
 </head>
 <body>
-
 <div id="questionDiv">
     <h2 class = "welcome" >当前章节的题目设置</h2>
 
@@ -50,7 +49,6 @@
                 <el-input v-model="Question.content"></el-input>
             </el-form-item>
             <el-form-item label="答案">
-<!--                <el-input v-model="Question.answer"></el-input>-->
                 <template>
                     <el-radio v-model="Question.answer" label="对">对</el-radio>
                     <el-radio v-model="Question.answer" label="错">错</el-radio>
@@ -78,7 +76,6 @@
             <el-form-item label="题目">
                 <el-input v-model="Question.content"></el-input>
             </el-form-item>
-
             <el-form-item label="答案">
                 <template>
                     <el-radio v-model="Question.answer" label="A">A</el-radio>
@@ -96,7 +93,6 @@
             </el-form-item>
         </el-form>
     </el-dialog>
-
 
 
 <!--    题目信息-->
@@ -144,17 +140,6 @@
                 align="center"
         >
         </el-table-column>
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--                prop="id"-->
-<!--                align="center"-->
-<!--                label="操作">-->
-<!--            <template slot-scope="scope">-->
-<!--                <el-row>-->
-<!--                    <el-button type="primary" @click="dialogVisible = true">添加章节</el-button>-->
-<!--                </el-row>-->
-<!--            </template>-->
-<!--        </el-table-column>-->
     </el-table>
 </template>
     <el-row>
@@ -165,9 +150,6 @@
         <el-button type="primary" @click="goback" round>返回</el-button>
     </el-row>
 
-<!--    <el-row>-->
-<!--        -->
-<!--    </el-row>-->
 </div>
 <script src="js/axios-0.18.0.js"></script>
 <script src="js/vue.js"></script>
@@ -179,14 +161,11 @@
         el:"#questionDiv",
 
         mounted(){
-
             this.showQuestion();
-
         },
 
         data(){
             return{
-
                 dialogVisible:false,
                 dialogVisible_judge:false,
                 dialogVisible_select:false,
@@ -202,8 +181,6 @@
                 },
 
                 tableData:[],
-
-
             }
         },
 
@@ -303,9 +280,7 @@
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex%2 === 0) {
                     return 'warning-row';
-                } //else  {
-                //return 'success-row';
-                //}
+                }
                 return 'success-row';
             },
             //复选框选中后执行的方法
@@ -316,13 +291,9 @@
 
             goback(){
                 location.href ="/QGfinal_test_war/CourseOperator.html";
-            }
-
+            },
         },
-
     })
-
 </script>
-
 </body>
 </html>

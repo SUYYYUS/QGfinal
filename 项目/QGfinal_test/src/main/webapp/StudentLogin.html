@@ -16,9 +16,7 @@
         <p class="login">记住我<input id="remember" type="checkbox" name="remember" value="1" v-model="Student.remember"></input> </p>
         <el-row>
             <el-button type="primary" @click="studentLogin">登录</el-button>
-<!--            <el-button type="warning" @click="forgetPassword1">注册账号</el-button>-->
         </el-row>
-
         <span id="zhuce"> <a href="/QGfinal_test_war/StudentSignup.html" target="_blank">点击即可注册个人账号哦~</a></span>
         <form>
 
@@ -53,7 +51,6 @@
                     update_time:'',
                     remember:'',
                 }
-
             }
         },
 
@@ -73,11 +70,8 @@
                     alert(password.title);
                     return false;
                 }
-
                 return true;
-
             },
-
 
             //登录操作
             studentLogin(){
@@ -116,9 +110,8 @@
                     }
                 })
 
-            }
-        }
-
+            },
+        },
     })
 
 </script>

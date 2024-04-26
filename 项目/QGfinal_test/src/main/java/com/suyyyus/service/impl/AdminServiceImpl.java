@@ -56,7 +56,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Admin queryByAccount(String account) throws SQLException {
         Admin admin = adminDao.queryByAccount(account);
-
+        //返回对象
         return admin;
     }
 

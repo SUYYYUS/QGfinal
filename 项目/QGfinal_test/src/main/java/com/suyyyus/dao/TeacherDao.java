@@ -28,10 +28,13 @@ public interface TeacherDao {
     //修改教师信息
     public int updateInfo(Teacher teacher) throws SQLException;
 
+    //分页查询
     public List<Teacher> selectByPage(int begin, int size);
 
+    //查询总条数
     public int selectAllCount() throws Exception;
 
+    //批量删除老师
     public void deleteTeachers(int[] id);
 
     //通过学院查询老师

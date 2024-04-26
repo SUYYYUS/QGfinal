@@ -24,11 +24,15 @@ public class QuestionDaoImpl implements QuestionDao {
     @Override
     public void addQuestion(Question question) throws SQLException {
         String sql = "insert into tb_question (type, content, answer, score, course_section_id, course_id, create_time) values (?,?,?,?,?,?,?)";
-
-        CRUDUtils.ZengShanGai(sql,question.getType(),question.getContent(),question.getAnswer(),
-                question.getScore(),question.getCourse_section_id(),
-                question.getCourse_id(), TimeUtil.formatDateTime(LocalDateTime.now()));
-
+        //执行sql语句
+        CRUDUtils.ZengShanGai(sql,
+                question.getType(),
+                question.getContent(),
+                question.getAnswer(),
+                question.getScore(),
+                question.getCourse_section_id(),
+                question.getCourse_id(),
+                TimeUtil.formatDateTime(LocalDateTime.now()));
     }
 
     /**
@@ -46,9 +50,9 @@ public class QuestionDaoImpl implements QuestionDao {
         preparedStatement.setInt(1, id);
         //执行
         ResultSet resultSet = preparedStatement.executeQuery();
-
+        //新建问题对象
         Question question = new Question();
-
+        //执行
         if(resultSet.next()){
             question.setId(resultSet.getInt("id"));
             question.setType(resultSet.getString("type"));
@@ -62,6 +66,7 @@ public class QuestionDaoImpl implements QuestionDao {
         } else {
             question = null;
         }
+        //返回该对象
         return question;
     }
 
@@ -74,9 +79,9 @@ public class QuestionDaoImpl implements QuestionDao {
     @Override
     public List<Question> queryAllQuestionByTwoid(int course_section_id, int course_id) throws Exception {
         String sql = "select * from tb_question where course_section_id = ? and course_id = ?";
-
+        //执行sql语句
         List<Question> questions = CRUDUtils.queryAllQuestionByCidAndSid(sql, course_section_id, course_id);
-
+        //返回问题集合
         return questions;
     }
 

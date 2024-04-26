@@ -6,12 +6,12 @@ package com.suyyyus.utils;
 public class Validator {
 
     public static boolean isValidStudentid(String studentid){
-
+        //判断学生
         return studentid != null && studentid.matches("\\d{10}");
     }
 
     public static boolean isValidStuPassword(String password){
-
+        //判断密码
         return password != null && password.matches(".{6,}");
     }
 

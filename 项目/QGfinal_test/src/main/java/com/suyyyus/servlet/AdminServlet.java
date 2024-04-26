@@ -29,7 +29,6 @@ public class AdminServlet extends BaseServlet{
 
     private static final Logger logger =  LoggerFactory.getLogger(AdminServlet.class);
 
-    AdminDao adminDao = new AdminDaoImpl();
     AdminService adminService = new AdminServiceImpl();
 
     /**
@@ -39,13 +38,14 @@ public class AdminServlet extends BaseServlet{
      * @throws Exception
      */
     public void adminLogin(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-
+        //获取数据
         BufferedReader reader = req.getReader();
         String s = reader.readLine();
         // 获取session对象，存储Student
         HttpSession session = req.getSession();
-
+        //转化格式
         Admin admin = JSON.parseObject(s,Admin.class);
+        //判断是否空输入，进行正则表达式判断
         if(admin.getAccount().isEmpty() || admin.getPassword().isEmpty()){
             resp.getWriter().write("null");
             return;
@@ -64,21 +64,22 @@ public class AdminServlet extends BaseServlet{
             }
             //判断学号与密码是否正确
             boolean b = adminService.AdminLogin(admin.getAccount(), admin.getPassword());
-
             //都正确才能成功登录
             if(b){
                 Admin admin1 = adminService.queryByAccount(admin.getAccount());
-
-
+                //保存当前的管理员信息
                 session.setAttribute("admin", admin1);
-
+                //日志记录
                 logger.info("管理员成功登录平台");
+                //提示操作成功
                 resp.getWriter().write("success");
                 System.out.println("adminlogin_success");
             }else {
+                //提示操作失败
                 resp.getWriter().write("failed");
                 System.out.println("adminlogin_failed");
             }
+            //后台提示运行状态
             resp.setStatus(HttpServletResponse.SC_OK);
             System.out.println("Response status code: " + resp.getStatus());
         }
@@ -92,17 +93,13 @@ public class AdminServlet extends BaseServlet{
      * @throws IOException
      */
     public void getSelfInformation(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 从seession中拿出登录成功的用户信息
+        // 从seession中拿出登录成功的管理员信息
         HttpSession session = req.getSession();
         Object admin = session.getAttribute("admin");
-//        System.out.println(user);
         //  JSON数据化
         String jsonString = JSON.toJSONString(admin);
-//        System.out.println(jsonString);
         // 写数据
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
     }
-
-
 }

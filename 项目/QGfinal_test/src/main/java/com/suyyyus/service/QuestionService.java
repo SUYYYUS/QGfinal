@@ -13,7 +13,7 @@ public interface QuestionService {
     //通过id查找题目
     public Question queryQuesionById(int id) throws SQLException;
 
-    //s
+    //查询章节下的问题
     public List<Question> queryAllQuestionByTwoid(int course_section_id, int course_id) throws Exception;
 
 }

@@ -14,6 +14,6 @@ public interface QuestionDao {
     //通过id查找题目
     public Question queryQuestionById(int id) throws SQLException;
 
-    //s
+    //查询课程章节中的所有问题
     public List<Question> queryAllQuestionByTwoid(int course_section_id, int course_id) throws Exception;
 }

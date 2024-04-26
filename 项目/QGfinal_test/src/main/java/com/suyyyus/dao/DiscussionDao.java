@@ -22,13 +22,16 @@ public interface DiscussionDao {
     //展示某个学生它的提问记录
     public List<Discussion> queryAllByStudent_id(int student_id) throws SQLException;
 
+    //批量删除留言
     public void deleteDiscussions(int[] id);
 
+    //查询总条数
     public int selectAllCount() throws Exception;
 
+    //分页查询
     public List<Discussion> selectByPage(int begin, int size);
 
+    //单个删除留言
     public void deleteDiscussion(int id);
-
 
 }

@@ -230,10 +230,6 @@
                     type: 'warning'
                 }).then(() => {
                     //用户点击确认按钮
-
-                    //1.创建id数组
-                    //console.log(this.multipleSelection);
-
                     for (let i = 0; i < this.multipleSelection.length; i++) {
                         let multipleSelectionElement = this.multipleSelection[i];
                         this.selectIds[i] = multipleSelectionElement.id;
@@ -247,8 +243,6 @@
                         data: _this.selectIds,
                     }).then(function (resp) {
                         if(resp.data == "success"){
-                            //添加成功，关闭添加信息的对话框
-
                             //刷新所有用户信息
                             _this.queryAll();
 
@@ -260,7 +254,6 @@
                         }
                     })
 
-
                 }).catch(() => {
                     //选择取消按钮
 
@@ -270,13 +263,11 @@
                     });
                 });
 
-
             },
 
             goback(){
                 location.href = "/QGfinal_test_war/AdminCenter.html";
             },
-
 
             //重置密码
             resetpassword(row){
@@ -314,10 +305,7 @@
 
         },
 
-
     })
 </script>
-
-
 </body>
 </html>

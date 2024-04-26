@@ -29,8 +29,15 @@ public class CourseDaoImpl implements CourseDao {
     public void addCourse(Course course) throws SQLException {
         String sql = "insert into tb_course (coursename, subject, description, teacher_id, limitnumber, create_time, end_time) " +
                 "values (?,?,?,?,?,?,?)";
-
-        CRUDUtils.ZengShanGai(sql,course.getCoursename(), course.getSubject(),course.getDescription(),course.getTeacher_id(),course.getLimitnumber(), TimeUtil.formatDateTime(LocalDateTime.now()),course.getEnd_time());
+        //执行sql语句
+        CRUDUtils.ZengShanGai(sql,
+                course.getCoursename(),
+                course.getSubject(),
+                course.getDescription(),
+                course.getTeacher_id(),
+                course.getLimitnumber(),
+                TimeUtil.formatDateTime(LocalDateTime.now()),
+                course.getEnd_time());
     }
 
 
@@ -66,6 +73,7 @@ public class CourseDaoImpl implements CourseDao {
         } else {
             course = null;
         }
+        //返回课程对象
         return course;
     }
 
@@ -79,9 +87,9 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> queryAllCourseByTeacher_id(int teacher_id) throws Exception {
         String sql = "select * from tb_course where teacher_id = ?";
-
+        //执行sql语句
         List<Course> courses = CRUDUtils.queryAllCourseByTeacher_id(sql, teacher_id);
-
+        //返回集合
         return courses;
     }
 
@@ -97,11 +105,13 @@ public class CourseDaoImpl implements CourseDao {
         String sql = "select * from tb_course limit  ? , ?";
         List<Course> list = null;
         try {
+            //执行sql语句
             list = CRUDUtils.selectByPage(sql,begin,size);
             return list;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //返回集合
         return list;
     }
 
@@ -113,7 +123,9 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public int selectAllCount() throws Exception {
         String sql = "select count(*) from tb_course ";
+        //执行sql语句
         int count = CRUDUtils.allCount(sql);
+        //返回数据
         return count;
     }
 
@@ -127,7 +139,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> queryBySubject(String subject) throws Exception {
         String sql = "select * from tb_course where subject like ? ";
-
+        //设置格式
         subject = ("%" + subject + "%");
         //获取连接
         Connection connection = JDBCUtil.getConnection();
@@ -139,7 +151,6 @@ public class CourseDaoImpl implements CourseDao {
         ResultSet resultSet = preparedStatement.executeQuery();
 
         List<Course> list = new ArrayList<Course>();
-
 
         while (resultSet.next()) {
 
@@ -156,15 +167,15 @@ public class CourseDaoImpl implements CourseDao {
         }
         if (list.size() == 0) {
             System.out.println("查询失败");
+            //释放资源
             JDBCUtil.close(connection, preparedStatement, resultSet);
             return null;
         } else {
+            //释放资源
             JDBCUtil.close(connection, preparedStatement, resultSet);
             return list;
         }
-
     }
-
 
     /**
      * 添加章节数
@@ -173,8 +184,8 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void addSection_number(Course course) throws SQLException {
         String sql = "update tb_course set section_number = ? where id = ?";
+        //执行sql语句
         CRUDUtils.ZengShanGai(sql,course.getSection_number()+1,course.getId());
-
     }
 
     /**
@@ -185,6 +196,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void addRegister_number(Course course) throws SQLException {
         String sql = "update tb_course set registernumber = ? where id = ?";
+        //执行sql语句
         CRUDUtils.ZengShanGai(sql,course.getRegisternumber()+1, course.getId());
     }
 
@@ -197,9 +209,9 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> queryAllCourse() throws Exception {
         String sql = "select * from tb_course";
-
+        //执行sql语句
         List<Course> courseList = CRUDUtils.queryAllCourse(sql);
-
+        //返回集合
         return courseList;
     }
 
@@ -212,11 +224,11 @@ public class CourseDaoImpl implements CourseDao {
         for (int i : id) {
             try {
                 String sql = "delete from tb_course where id = ?";
+                //执行sql语句
                 CRUDUtils.ZengShanGai(sql,i);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-
 }

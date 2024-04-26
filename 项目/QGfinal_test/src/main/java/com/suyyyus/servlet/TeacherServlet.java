@@ -34,13 +34,11 @@ import java.util.List;
 public class TeacherServlet extends BaseServlet{
 
     private static final Logger logger =  LoggerFactory.getLogger(TeacherServlet.class);
-    TeacherService teacherService = new TeacherServiceImpl();
-    TeacherDao teacherDao = new TeacherDaoImpl();
 
-    DiscussionDao discussionDao = new DiscussionDaoImpl();
+    TeacherService teacherService = new TeacherServiceImpl();
+
     DiscussionServcie discussionServcie = new DiscussionServiceImpl();
 
-    StudentDao studentDao = new StudentDaoImpl();
     StudentService studentService = new StudentServiceImpl();
 
     CourseService courseService = new CourseServiceImpl();
@@ -66,11 +64,7 @@ public class TeacherServlet extends BaseServlet{
         }else {
             //设置编码格式
             resp.setContentType("text/html;charset=utf-8");
-
-
-
             boolean b = teacherService.Login(teacher.getTeacherid(), teacher.getPassword());
-
             if(b){
                 Teacher teacher1 = teacherService.queryByTeacherid(teacher.getTeacherid());
 
@@ -88,8 +82,6 @@ public class TeacherServlet extends BaseServlet{
                 resp.getWriter().write("failed");
                 logger.info("登录失败");
             }
-//            resp.setStatus(HttpServletResponse.SC_OK);
-//            System.out.println(resp.getStatus());
         }
     }
 
@@ -104,10 +96,8 @@ public class TeacherServlet extends BaseServlet{
         // 从seession中拿出登录成功的教师信息
         HttpSession session = req.getSession();
         Object teacher = session.getAttribute("teacher");
-//        System.out.println(user);
         //  JSON数据化
         String jsonString = JSON.toJSONString(teacher);
-//        System.out.println(jsonString);
         // 写数据
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
@@ -138,7 +128,7 @@ public class TeacherServlet extends BaseServlet{
         teacherService.addLogging(teacher_logging);
         logger.info(teacher1.getTeachername() + "老师修改了自己的个人信息");
         session.setAttribute("teacher", teacher1);
-
+        //提示成功
         resp.getWriter().write("success");
     }
 
@@ -151,8 +141,7 @@ public class TeacherServlet extends BaseServlet{
     public void teacherSignup(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         //post方法获取数据
         BufferedReader reader = req.getReader();
-        String s = reader.readLine(); //???? s = null ????
-
+        String s = reader.readLine();
 
         Teacher teacher = JSON.parseObject(s,Teacher.class);
 
@@ -163,9 +152,8 @@ public class TeacherServlet extends BaseServlet{
         teacher_logging.setLogging("成功注册账号");
         teacherService.addLogging(teacher_logging);
         logger.info(teacher.getTeachername() + "老师成功注册");
-
+        //提示成功
         resp.getWriter().write("success");
-
     }
 
     /**
@@ -217,9 +205,8 @@ public class TeacherServlet extends BaseServlet{
         teacher_logging.setLogging("回复了" + student.getStudentname() + "的留言");
         teacherService.addLogging(teacher_logging);
         logger.info(teacher.getTeachername() + "老师回复了" + student.getStudentname() + "同学的留言");
-
+        //提示成功
         resp.getWriter().write("success");
-
     }
 
     /**
@@ -242,10 +229,8 @@ public class TeacherServlet extends BaseServlet{
         //2.转为JSON
         String jsonString = JSON.toJSONString(pageBean);
         //3.写数据
-
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
-        //System.out.println("User selectAll----------");
     }
 
     /**
@@ -258,14 +243,14 @@ public class TeacherServlet extends BaseServlet{
     public void deleteByIds(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         //post方法
         BufferedReader reader = req.getReader();
-
         String params = reader.readLine();
 
+        //确定要删除的教师
         int[] ids = JSON.parseObject(params, int[].class);
         teacherService.deleteTeachers(ids);
-
+        //日志记录
         logger.info("管理员对教师进行删除");
-
+        //提示成功
         resp.getWriter().write("success");
     }
 
@@ -279,15 +264,12 @@ public class TeacherServlet extends BaseServlet{
      */
     public void queryByCollege(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         req.setCharacterEncoding("UTF-8");
-
         //post方法
         BufferedReader reader = req.getReader();
-
         String params = reader.readLine();
-        System.out.println(params);
-
+        //寻找符合条件的教师
         List<Teacher> teacherList = teacherService.queryByCollege(params);
-
+        //转为JSON格式
         String s = JSON.toJSONString(teacherList);
 
         resp.setContentType("text/json;charset=utf-8");
@@ -301,18 +283,19 @@ public class TeacherServlet extends BaseServlet{
      * @throws IOException
      */
     public void getout(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+        //获取此时所保存的教师对象
         HttpSession session = req.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
-
+        //日志记录
         Teacher_logging teacher_logging = new Teacher_logging();
         teacher_logging.setTeacher_id(teacher.getId());
         teacher_logging.setLogging("退出学习平台");
         teacherService.addLogging(teacher_logging);
         logger.info(teacher.getTeachername() + "老师退出平台了");
-
+        //刷新session保存对象
         session.setAttribute("teacher",null);
         session.setAttribute("course",null);
-
+        //提示成功
         resp.getWriter().write("success");
     }
 
@@ -346,15 +329,15 @@ public class TeacherServlet extends BaseServlet{
         //获取当前课程对象
         HttpSession session = req.getSession();
         Course course = (Course) session.getAttribute("course");
-//        Teacher teacher  = (Teacher) session.getAttribute("teacher");
 
         //防止乱码
         req.setCharacterEncoding("UTF-8");
+        //post请求获取数据
         BufferedReader reader = req.getReader();
         String s = reader.readLine();
-
+        //获取该学生对象
         Student student = studentService.queryByName(s);
-
+        //判断是否有该学生
         if(student == null){
             //没有该学生
             resp.getWriter().write("null");
@@ -364,21 +347,18 @@ public class TeacherServlet extends BaseServlet{
             student_course.setCourse_id(course.getId());
             student_course.setStudent_id(student.getId());
             studentService.addStudent_course(course,student_course);
-
+            //添加学生
             courseService.addRegisternumber(course);
-
+            //保存日志历史记录
             Teacher_logging teacher_logging = new Teacher_logging();
             teacher_logging.setTeacher_id(course.getTeacher_id());
             teacher_logging.setLogging("帮助学生" + s + "报名了" + course.getCoursename() + "该课程");
             teacherService.addLogging(teacher_logging);
 
             logger.info(teacherService.queryByid(course.getTeacher_id()).getTeachername() + "帮" + s + "报名了" + course.getCoursename() + "该课程");
-
+            //提示成功
             resp.getWriter().write("success");
         }
-
-
-
     }
 
 }

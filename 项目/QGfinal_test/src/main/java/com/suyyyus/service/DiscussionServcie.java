@@ -23,9 +23,12 @@ public interface DiscussionServcie {
     //展示某个学生它的提问记录
     public List<Discussion> queryAllByStudent_id(int student_id) throws SQLException;
 
+    //分页查询
     public PageBean<Discussion> selectDiscussionByPage(int currentPage, int pageSize) throws Exception;
 
+    //批量删除课程
     public void deleteDiscussions(int[] id);
 
+    //单个删除
     public void deleteDiscussion(int id);
 }

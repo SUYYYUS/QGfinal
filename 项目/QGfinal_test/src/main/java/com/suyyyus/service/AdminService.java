@@ -12,5 +12,6 @@ public interface AdminService {
     //管理员登录
     public boolean AdminLogin(String account, String password) throws SQLException;
 
+    //查询管理员
     public Admin queryByAccount(String account) throws SQLException;
 }

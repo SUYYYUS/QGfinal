@@ -17,6 +17,4 @@ public interface SectionDao {
     //通过章节id查找章节
     public Section queryById(int id) throws SQLException;
 
-
-
 }

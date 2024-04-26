@@ -5,7 +5,6 @@
     <title>课程操作</title>
     <style>
         .welcome{
-            /*text-align: center;*/
             color: #cdb1ef;
         }
     </style>
@@ -61,7 +60,6 @@
 
             </tr>
             <tr>
-                <!--            <td><img src="Pt/DSC_1256.jpg" width="100px"></td>-->
                 <td>{{studynumberdata}}</td>
                 <td>{{totalaverage_scoredata}}</td>
                 <td>{{totalaccuracydata}}</td>
@@ -153,11 +151,6 @@
     <el-button type="primary" @click="dialogTableVisible_total = true">查看学习情况</el-button>
     <el-button type="primary" @click="dialogVisible_addstudent = true">添加学生</el-button>
 </el-row>
-
-<!--    <el-row>-->
-<!--        <input type="file" id="videoFileInput">-->
-<!--        <el-button type="primary" @click="uploadVideo">Upload</el-button>-->
-<!--    </el-row>-->
 
     <h2 class = "welcome" >课程章节</h2>
 
@@ -291,13 +284,11 @@
                 }).then(resp =>{
                     _this.tableData = Array.isArray(resp.data) ? resp.data : [resp.data];
 
-                    // _this.tableData = resp.data;
                 });
             },
 
             //添加章节
             addSection(){
-
                 var _this = this;
 
                 axios({
@@ -339,9 +330,7 @@
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex%2 === 0) {
                     return 'warning-row';
-                } //else  {
-                //return 'success-row';
-                //}
+                }
                 return 'success-row';
             },
             //复选框选中后执行的方法
@@ -369,10 +358,7 @@
                         f();
                     }
                 })
-
-
             },
-
 
             //记录学习人数
             studynumber(){
@@ -397,15 +383,12 @@
                     _this.totalaverage_scoredata = resp.data;
 
                     console.log(_this.totalaverage_scoredata);
-
                 });
 
 
             },
 
-
             totalaccuracy(){
-
                 var _this = this;
                 axios({
                     method: "get",
@@ -416,7 +399,6 @@
                     console.log(_this.totalaccuracydata);
 
                 });
-
 
             },
 
@@ -465,30 +447,7 @@
                 })
             },
 
-
-            // uploadVideo(){
-            //     var fileInput = document.getElementById('videoFileInput');
-            //     var file = fileInput.files[0];
-            //     var formData = new FormData();
-            //     formData.append('videoFile', file);
-            //
-            //     axios({
-            //         method:"post",
-            //         url:"http://localhost:8080/QGfinal_test_war/uploadvideo/uploadvideo",
-            //         data:formData,
-            //     }).then(function (resp) {
-            //         if(resp.data == "upload_success"){
-            //             console.log('Video uploaded successfully.');
-            //         }
-            //     })
-            //     .catch(error =>{
-            //         console.error('Error uploading video:', error);
-            //     })
-            // },
-
         },
-
-
     })
 </script>
 <script>

@@ -68,6 +68,13 @@
     </el-dialog>
 
 
+    <el-dialog title="答案" :visible.sync="dialogTableVisible_lookanswer">
+        <el-table :data="answerData">
+            <el-table-column property="answer" label="答案" width=""></el-table-column>
+        </el-table>
+    </el-dialog>
+
+
     <template>
         <el-table
                 :data="tableData"
@@ -98,7 +105,8 @@
                     label="操作">
                 <template slot-scope="scope">
                     <el-row>
-                        <el-button  type="primary" @click="answerQuestion(scope.row)">开始作答</el-button>
+                        <el-button type="primary" @click="answerQuestion(scope.row)" >开始作答</el-button>
+                        <el-button type="primary" @click="lookAnswer(scope.row)" >查看答案</el-button>
 
                     </el-row>
                 </template>
@@ -141,62 +149,48 @@
 
                 tableData:[],
 
+                answerData:[],
+                dialogTableVisible_lookanswer:false,
                 dialogVisible:false,
                 dialogVisible_select: false,
                 dialogVisible_judge:false,
                 ANSWER:{
                     answer: '',
                 },
-
                 Answer:{
                     answer:'',
-
                 },
-
-
-
-
             }
         },
 
         mounted(){
-
             this.showQuestion();
         },
 
         methods:{
-
-
             answerQuestion(row){
-
                 var _this = this;
                 this.Question = row;
                 console.log(_this.Question);
-
-
-                axios({
-                    method:"post",
-                    url: "http://localhost:8080/QGfinal_test_war/Question/queryByIdAndSession",
-                    data: this.Question.id,
-                }).then(function (resp) {
-                    if(resp.data == "success"){
-
-                        console.log("成功开始作答");
-                        if(_this.Question.type === "判断题"){
-                            _this.dialogVisible_judge = true;
-                        }else if(_this.Question.type === "选择题"){
-                            _this.dialogVisible_select = true;
-                        }else {
-                            _this.dialogVisible = true;
-                        }
-
-                    }
-                })
-
-
+                        axios({
+                            method:"post",
+                            url: "http://localhost:8080/QGfinal_test_war/Question/queryByIdAndSession",
+                            data: this.Question.id,
+                        }).then(function (resp) {
+                            if(resp.data == "success"){
+                                console.log("成功开始作答");
+                                if(_this.Question.type === "判断题"){
+                                    _this.dialogVisible_judge = true;
+                                }else if(_this.Question.type === "选择题"){
+                                    _this.dialogVisible_select = true;
+                                }else {
+                                    _this.dialogVisible = true;
+                                }
+                            }
+                        })
             },
 
-
+            //提交答案
             submitanswer(){
                 var _this = this;
                 // this.Question.answer = this.Answer.answer;
@@ -237,31 +231,26 @@
                             type: 'warning'
                         });
                         _this.Answer.answer = '';
-                        
+
                     }
                 })
             },
 
             //展示题目
             showQuestion() {
-
                 var _this = this;
-
                 axios({
                     method:"get",
                     url:"http://localhost:8080/QGfinal_test_war/Question/showQuestion"
                 }).then(resp =>{
                     this.tableData = resp.data;
                 })
-
             },
 
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex%2 === 0) {
                     return 'warning-row';
-                } //else  {
-                //return 'success-row';
-                //}
+                }
                 return 'success-row';
             },
             //复选框选中后执行的方法
@@ -272,13 +261,25 @@
 
             goback(){
                 location.href = "/QGfinal_test_war/Study.html";
+            },
+
+            lookAnswer(row){
+                var _this = this;
+                _this.Question = row;
+
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/QGfinal_test_war/Question/queryById",
+                    data:_this.Question.id,
+                }).then(resp =>{
+                    _this.ANSWER.answer = resp.data.answer;
+                    _this.answerData = Array.isArray(resp.data) ? resp.data : [resp.data];
+                    _this.dialogTableVisible_lookanswer = true;
+                })
             }
-
         },
-
 
     })
 </script>
-
 </body>
 </html>

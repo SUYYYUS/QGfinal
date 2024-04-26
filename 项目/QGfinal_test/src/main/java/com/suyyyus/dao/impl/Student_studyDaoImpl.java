@@ -24,9 +24,15 @@ public class Student_studyDaoImpl implements Student_studyDao {
     @Override
     public void addStudent_studyRecord(Student_study student_study) throws SQLException {
         String sql = "insert into tb_student_study (student_id, course_id, answernumber, average_score, total_score, accuracy, rightnumber) values (?,?,?,?,?,?,?)";
-
-        CRUDUtils.ZengShanGai(sql,student_study.getStudent_id(),student_study.getCourse_id(),student_study.getAnswernumber(),student_study.getAverage_score(),student_study.getTotal_score(),student_study.getAccuracy(),student_study.getRightnumber());
-
+        //执行sql语句
+        CRUDUtils.ZengShanGai(sql,
+                student_study.getStudent_id(),
+                student_study.getCourse_id(),
+                student_study.getAnswernumber(),
+                student_study.getAverage_score(),
+                student_study.getTotal_score(),
+                student_study.getAccuracy(),
+                student_study.getRightnumber());
     }
 
     /**

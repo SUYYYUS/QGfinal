@@ -7,6 +7,7 @@
 <body>
 <div id="teachermessageDiv">
 
+<!--    回复学生表单-->
     <el-dialog
             title="回复学生"
             :visible.sync="dialogVisible_update"
@@ -27,6 +28,7 @@
 
     <h2 class = "welcome" >欢迎留言区</h2>
 
+<!--    该教师的所有留言-->
     <template>
         <el-table
                 :data="discussionData"
@@ -114,15 +116,12 @@
                 discussionData:[],
 
                 dialogVisible_update:false,
-
             }
 
         },
 
         mounted(){
-
             this.showTeacherMsg();
-
         },
 
         methods:{
@@ -150,6 +149,7 @@
                 this.dialogVisible_update= true;
             },
 
+            //提交回复
             submitReply(){
                 var _this = this;
 
@@ -182,25 +182,16 @@
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex%2 === 0) {
                     return 'warning-row';
-                } //else  {
-                //return 'success-row';
-                //}
+                }
                 return 'success-row';
             },
             //复选框选中后执行的方法
             handleSelectionChange(val) {
                 this.multipleSelection = val;
-
             },
-
-
         }
-
-
 
     })
 </script>
-
-
 </body>
 </html>

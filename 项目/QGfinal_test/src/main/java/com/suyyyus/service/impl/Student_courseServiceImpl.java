@@ -19,15 +19,15 @@ public class Student_courseServiceImpl implements Student_courseService {
      */
     @Override
     public List<Student_course> queryCourseByStudent_id(int student_id) throws Exception {
-
         List<Student_course> student_courses = student_courseDao.queryByStudent_id(student_id);
-
+        //返回集合
         return student_courses;
     }
 
     @Override
     public List<Student_course> queryStudentByCourse_id(int course_id) throws Exception {
         List<Student_course> student_courses = student_courseDao.queryStudentByCourse_id(course_id);
+        //返回集合
         return student_courses;
     }
 }

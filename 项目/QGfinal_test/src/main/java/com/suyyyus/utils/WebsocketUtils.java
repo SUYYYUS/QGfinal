@@ -54,5 +54,4 @@ public class WebsocketUtils {
         System.out.println("发生错误");
         error.printStackTrace();
     }
-
 }

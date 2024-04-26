@@ -184,14 +184,6 @@ public class test1 {
 
     }
 
-    /*@Test
-    public void addAdmin() throws SQLException {
-        Admin admin = new Admin("suyyyus","1234567899","123456");
-        AdminService adminService = new AdminServiceImpl();
-
-        adminService.addAdmin(admin);
-
-    }*/
 
     @Test
     public void testlogging(){

@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 进行数据备份
+ */
 public class MyTimer {
 
     private ScheduledThreadPoolExecutor executor ;
@@ -20,6 +23,7 @@ public class MyTimer {
             public void run(){
                 try {
                     bakcup();
+                    System.out.println(3456);
                 } catch (IOException e) {
                     System.out.println(111);
                     e.printStackTrace();
@@ -31,6 +35,9 @@ public class MyTimer {
         on = false;
     }
 
+    /**
+     * 定时任务
+     */
     public void start(){
         if(!on){
             executor.scheduleAtFixedRate(task,0,24, TimeUnit.HOURS);
@@ -38,6 +45,9 @@ public class MyTimer {
         }
     }
 
+    /**
+     * 关闭定时任务
+     */
     public void stop(){
         if(on){
             executor.shutdownNow();
@@ -45,11 +55,10 @@ public class MyTimer {
         }
     }
 
+    //数据备份函数
     public void bakcup() throws IOException {
         String command = "cmd /c " + "mysqldump -uroot -pcsy090944CSY db01>C:\\Users\\28937\\Desktop\\hhh.sql";
 
         Runtime.getRuntime().exec(command);
-
     }
-
 }

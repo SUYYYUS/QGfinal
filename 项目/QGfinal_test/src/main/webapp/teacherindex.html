@@ -48,7 +48,6 @@
     <el-row>
     <el-button type="info" @click="turnout" plain>退出聊天室</el-button>
     </el-row>
-
      </div>
 </div>
 
@@ -61,7 +60,6 @@ new Vue({
     el:"#teacherchatroom",
 
     mounted(){
-
         this.getTeacherinfo();
         this.textonline();
     },
@@ -81,7 +79,6 @@ new Vue({
                 update_time:'',
             },
 
-
         }
     },
 
@@ -93,6 +90,7 @@ new Vue({
             socket.send(message);
         },
 
+        //获取当前教师信息
         getTeacherinfo(){
             var _this = this;
             axios({
@@ -102,9 +100,6 @@ new Vue({
 
                 _this.Teacher = resp.data;
 
-                // _this.tableData = Array.isArray(resp.data) ? resp.data : [resp.data];
-
-                // _this.tableData = resp.data;
                 console.log(_this.Teacher);
             });
 
@@ -118,19 +113,16 @@ new Vue({
         messageInput.value = "";
         },
 
-
+        //退出聊天室
         turnout(){
             const message =  this.Teacher.teachername  + "老师已下线";
             socket.send(message);
             location.href = "/QGfinal_test_war/TeacherCenter.html";
-        }
-
+        },
     }
 
 })
-
 </script>
-
 <script>
     const socket = new WebSocket("ws://localhost:8080/QGfinal_test_war/websocket");
 
@@ -152,11 +144,7 @@ new Vue({
         li.appendChild(bubble);
         chat.appendChild(li);
 
-
-       /* li.appendChild(document.createTextNode(message));
-        chat.appendChild(li);*/
     };
-
 
 </script>
 </body>

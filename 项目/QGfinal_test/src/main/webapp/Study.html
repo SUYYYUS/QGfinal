@@ -47,20 +47,12 @@
                     align="center"
             >
             </el-table-column>
-<!--            <el-table-column-->
-<!--                    prop="content"-->
-<!--                    label=教学内容-->
-<!--                    align="center"-->
-<!--            >-->
-<!--            </el-table-column>-->
-
             <el-table-column
                     prop="create_time"
                     label="创建时间"
                     align="center"
             >
             </el-table-column>
-
             <el-table-column
                     prop="id"
                     align="center"
@@ -94,13 +86,10 @@
 
         mounted(){
             this.showAllSection();
-
         },
 
         data(){
             return{
-
-
                 Section:{
                     id:'',
                     sectionname:'',
@@ -127,13 +116,10 @@
                 PROBLEM:{
                     problem:'',
                 }
-
-
             }
         },
 
         methods:{
-
 
         showAllSection(){
             var _this = this;
@@ -150,15 +136,12 @@
         tableRowClassName({row, rowIndex}) {
             if (rowIndex%2 === 0) {
                 return 'warning-row';
-            } //else  {
-            //return 'success-row';
-            //}
+            }
             return 'success-row';
         },
         //复选框选中后执行的方法
         handleSelectionChange(val) {
             this.multipleSelection = val;
-
         },
 
         //展示内容
@@ -178,7 +161,6 @@
             });
 
         },
-
 
             //跳转到作答页面
             answerQuestion(row) {
@@ -200,7 +182,6 @@
             goback(){
              location.href = "/QGfinal_test_war/StudentCenter.html";
             },
-
 
             //提问
             submitproblem(){
@@ -232,16 +213,13 @@
 
             },
 
-
             //进入学习讨论区
             getintoforum(){
                 location.href = "/QGfinal_test_war/StudentStudyDiscussion.html";
-            }
+            },
 
         },
     })
-
-
 </script>
 <script>
     function answerquestion() {

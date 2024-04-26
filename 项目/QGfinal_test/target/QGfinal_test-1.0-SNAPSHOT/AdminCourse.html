@@ -40,7 +40,6 @@
     </el-form>
 
 
-
     <el-row>
         <el-button type="danger" plain @click="deleteByIds">批量删除</el-button>
     </el-row>
@@ -107,16 +106,6 @@
                     align="center"
             >
             </el-table-column>
-            <!--<el-table-column
-                    prop="id"
-                    align="center"
-                    label="操作">
-                <template slot-scope="scope">
-                    <el-row>
-                        <el-button type="primary" @click="delete(scope.row)">删除</el-button>
-                    </el-row>
-                </template>
-            </el-table-column>-->
         </el-table>
     </template>
 
@@ -130,7 +119,6 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="totalCount">
     </el-pagination>
-
 
     <el-row>
         <el-button type="primary" @click="goback" round>返回</el-button>
@@ -168,14 +156,11 @@
                 //每页显示条数
                 pageSize:5,
                 totalCount:20, // 添加这一行
-
                 //被选中的id数组
                 selectIds:[],
 
             }
-
         },
-
 
         mounted(){
             this.queryAll();
@@ -269,11 +254,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    //用户点击确认按钮
-
                     //1.创建id数组
-                    //console.log(this.multipleSelection);
-
                     for (let i = 0; i < this.multipleSelection.length; i++) {
                         let multipleSelectionElement = this.multipleSelection[i];
                         this.selectIds[i] = multipleSelectionElement.id;
@@ -287,11 +268,8 @@
                         data: _this.selectIds,
                     }).then(function (resp) {
                         if (resp.data == "success") {
-                            //添加成功，关闭添加信息的对话框
-
                             //刷新所有用户信息
                             _this.queryAll();
-
                             //提示添加成功
                             _this.$message({
                                 message: '恭喜你，批量删除成功啦',
@@ -299,7 +277,6 @@
                             });
                         }
                     })
-
 
                 }).catch(() => {
                     //选择取消按钮
@@ -309,19 +286,13 @@
                         message: '已取消删除'
                     });
                 });
-
-
             },
 
             goback() {
                 location.href = "/QGfinal_test_war/AdminCenter.html";
             },
-
         }
-
-
     })
 </script>
-
 </body>
 </html>

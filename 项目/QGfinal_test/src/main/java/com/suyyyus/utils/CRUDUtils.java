@@ -34,6 +34,7 @@ public class CRUDUtils {
          resultSet = preparedStatement.executeQuery();
 
          if(resultSet.next()){
+             //判断密码正确与否
              if(MD5Util.verifySaltPassword(password,resultSet.getString("password"))){
                  JDBCUtil.close(connection, preparedStatement, resultSet);
                  return true;
@@ -66,12 +67,12 @@ public class CRUDUtils {
              preparedStatement.setObject(i + 1, params[i]);
          }
          int i = preparedStatement.executeUpdate();
-
+         //判断操作是否成功
          if(i != 0){
              System.out.println("操作成功");
              JDBCUtil.close(connection, preparedStatement);
          }else {
-             System.out.println("f**k");
+             System.out.println("操作失败");
              JDBCUtil.close(connection, preparedStatement);
          }
      }
@@ -89,7 +90,7 @@ public class CRUDUtils {
         preparedStatement = connection.prepareStatement(sql);
         //获取resultSet
         resultSet = preparedStatement.executeQuery();
-
+        //获取所有老师集合
         List<Teacher> list = new ArrayList<>();
 
         while(resultSet.next()) {
@@ -101,13 +102,14 @@ public class CRUDUtils {
         }
         if(list.size() == 0) {
             System.out.println("当前没有用户");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-        //释放资源
     }
 
 
@@ -125,7 +127,7 @@ public class CRUDUtils {
 
         //获取resultSet
         resultSet = preparedStatement.executeQuery();
-
+        //获取所有课程信息
         List<Course> list = new ArrayList<>();
 
         while(resultSet.next()) {
@@ -136,17 +138,18 @@ public class CRUDUtils {
                     resultSet.getString("create_time"), resultSet.getString("end_time")));
 
         }
+        //判断是否有课程
         if(list.size() == 0) {
             System.out.println("当前没有开设课程");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-        //释放资源
     }
-
 
 
     /**
@@ -166,7 +169,7 @@ public class CRUDUtils {
         }
         //获取resultSet
         resultSet = preparedStatement.executeQuery();
-
+        //某教师开设的课程的集合
         List<Course> list = new ArrayList<>();
 
         while(resultSet.next()) {
@@ -177,15 +180,17 @@ public class CRUDUtils {
                         resultSet.getString("create_time"), resultSet.getString("end_time")));
 
         }
+        //判断是否有符合条件的
         if(list.size() == 0) {
             System.out.println("当前没有开设课程");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-        //释放资源
     }
 
     /**
@@ -205,7 +210,7 @@ public class CRUDUtils {
         }
         //获取resultSet
         resultSet = preparedStatement.executeQuery();
-
+        //获得章节集合
         List<Section> list = new ArrayList<>();
 
         while(resultSet.next()) {
@@ -215,15 +220,17 @@ public class CRUDUtils {
                     resultSet.getString("create_time")));
 
         }
+        //判断是否有符合条件的内容
         if(list.size() == 0) {
             System.out.println("当前没有对应章节");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-        //释放资源
     }
 
     /**
@@ -244,7 +251,7 @@ public class CRUDUtils {
         }
         //获取resultSet
         resultSet = preparedStatement.executeQuery();
-
+        //问题集合
         List<Question> questions = new ArrayList<>();
 
         while (resultSet.next()){
@@ -254,14 +261,14 @@ public class CRUDUtils {
         }
         if(questions.size() == 0) {
             System.out.println("当前没有对应题目");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return questions;
         }
-        //释放资源
-
     }
 
     /**
@@ -292,13 +299,14 @@ public class CRUDUtils {
         }
         if(list.size() == 0) {
             System.out.println("当前没有开设课程");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-        //释放资源
     }
 
 
@@ -330,13 +338,14 @@ public class CRUDUtils {
         }
         if(list.size() == 0) {
             System.out.println("当前没有开设课程");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-        //释放资源
     }
 
 
@@ -370,16 +379,17 @@ public class CRUDUtils {
                     resultSet.getString("create_time"), resultSet.getString("end_time")));
 
         }
+        //判断是否有符合条件的
         if(list.size() == 0) {
-            System.out.println("当前没有用户");
+            System.out.println("当前没有符合的课程");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-
-
     }
 
 
@@ -396,12 +406,13 @@ public class CRUDUtils {
         preparedStatement = connection.prepareStatement(sql);
         //获取resultSet
         resultSet = preparedStatement.executeQuery();
-
+        //记录条数
         int count = 0;
-
+        //执行
         if (resultSet.next()) {
             count = resultSet.getInt(1);
         }
+        //返回条数
         return count;
     }
 
@@ -435,16 +446,17 @@ public class CRUDUtils {
                     resultSet.getString("update_time")));
 
         }
+        //判断有无符合条件的内容
         if(list.size() == 0) {
             System.out.println("当前没有学生");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-
-
     }
 
     /**
@@ -459,12 +471,13 @@ public class CRUDUtils {
         preparedStatement = connection.prepareStatement(sql);
         //获取resultSet
         resultSet = preparedStatement.executeQuery();
-
+        //统计条数
         int count = 0;
-
+        //进行
         if (resultSet.next()) {
             count = resultSet.getInt(1);
         }
+        //返回数据
         return count;
     }
 
@@ -499,14 +512,14 @@ public class CRUDUtils {
         }
         if(list.size() == 0) {
             System.out.println("当前没有留言");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-
-
     }
 
     /**
@@ -521,12 +534,13 @@ public class CRUDUtils {
         preparedStatement = connection.prepareStatement(sql);
         //获取resultSet
         resultSet = preparedStatement.executeQuery();
-
+        //记录条数
         int count = 0;
-
+        //执行
         if (resultSet.next()) {
             count = resultSet.getInt(1);
         }
+        //返回数据
         return count;
     }
 
@@ -561,16 +575,16 @@ public class CRUDUtils {
                     resultSet.getString("create_time"), resultSet.getString("update_time")));
 
         }
+        //判断有无符合条件的
         if(list.size() == 0) {
-            System.out.println("当前没有学生");
+            System.out.println("当前没有老师");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
-
-
     }
 
     /**
@@ -585,12 +599,13 @@ public class CRUDUtils {
         preparedStatement = connection.prepareStatement(sql);
         //获取resultSet
         resultSet = preparedStatement.executeQuery();
-
+        //条目数
         int count = 0;
 
         if (resultSet.next()) {
             count = resultSet.getInt(1);
         }
+        //返回数据
         return count;
     }
 

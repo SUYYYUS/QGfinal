@@ -32,8 +32,6 @@
         <p class="signup">QQ<input  id="qq" type="text" name="qq" v-model="Student.qq"></p>
         <p class="signup">个人介绍<input  id="description" type="text" name="description" v-model="Student.description"></p>
 
-        <!--            <p class="signup">性别<input  id="gender" type="text" name="gender" v-model="User.gender"></p>-->
-
         <el-row>
             <el-button type="primary" @click="signup">注册</el-button>
             <el-button type="primary" @click="login">返回登录</el-button>
@@ -83,12 +81,9 @@
                 }],
 
             }
-
         },
 
-
         methods:{
-
             //校验
             validateForm(){
                 let studentid = document.getElementById('studentid');
@@ -103,9 +98,7 @@
                     alert(password.title);
                     return false;
                 }
-
                 return true;
-
             },
 
 
@@ -147,14 +140,7 @@
             },
         },
 
-        // mounted(){
-        //
-        //     this.adduser(this.User);
-        // },
-
     })
 </script>
-
-
 </body>
 </html>

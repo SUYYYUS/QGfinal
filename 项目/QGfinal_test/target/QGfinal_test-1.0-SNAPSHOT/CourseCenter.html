@@ -166,7 +166,6 @@
             //异步通成功后，刷新页面展示数据
             this.queryAll();
 
-            // this.showHitCourse();
         },
 
         data(){
@@ -198,11 +197,9 @@
 
             }
 
-
         },
 
         methods:{
-
             //分页查询
             queryAll(){
                 axios({
@@ -261,6 +258,7 @@
                         message: '恭喜你，查询成功啦',
                         type: 'success'
                     });
+                    _this.Course.id = '';
                 })
             },
 
@@ -281,7 +279,7 @@
                         type: 'success'
                     });
                 })
-
+                this.Course.subject = '';
             },
 
             //报名课程
@@ -352,11 +350,9 @@
                     //打开表单
                     _this.dialogTableVisible_hitcourse = true;
                 })
-            }
-
+            },
 
         }
-
 
     })
 </script>

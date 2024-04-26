@@ -30,9 +30,6 @@
             <el-form-item label="学号">
                 <el-input v-model="Student.studentid"></el-input>
             </el-form-item>
-            <!--<el-form-item label="密码">
-                <el-input v-model="Teacher.password"></el-input>
-            </el-form-item>-->
             <template>
                 <p class="signup">年级<el-select v-model="Student.grade" placeholder="请选择">
                     <el-option
@@ -200,8 +197,6 @@
                     <el-row>
                         <el-button type="primary" @click="getIntoStudy(scope.row)">进入课程</el-button>
                         <el-button type="primary" @click="seeStudy(scope.row)">获取学习记录</el-button>
-<!--                        <el-button type="text" @click="dialogTableVisible = true">查看学习情况</el-button>-->
-
                     </el-row>
                 </template>
             </el-table-column>
@@ -228,6 +223,7 @@
         el:"#studentcenterDiv",
 
         mounted(){
+
             this.getMyQuestionRecord();
             this.see();
             this.showCourse();
@@ -342,8 +338,6 @@
                     _this.Student = resp.data;
 
                     _this.tableData = Array.isArray(resp.data) ? resp.data : [resp.data];
-
-                    // _this.tableData = resp.data;
                 });
             },
 
@@ -366,10 +360,8 @@
                 }).then(function (resp) {
                     //添加成功，关闭添加信息的对话框
                     _this.dialogVisible_update = false;
-
                     //刷新所有学生信息
                     _this.see();
-
                     //提示修改成功
                     _this.$message({
                         message: '恭喜你，修改成功啦',
@@ -377,7 +369,6 @@
                     });
                 })
             },
-
 
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex%2 === 0) {
@@ -425,7 +416,6 @@
                         f1();
                     }
                 })
-
             },
 
             seeStudy(row){
@@ -439,13 +429,8 @@
                 }).then(function (resp) {
                     if(resp.data == "success"){
                      _this.seeStudy1();
-                        /*_this.$message({
-                            message: '获取成功',
-                            type: 'success'
-                        });*/
                     }
                 })
-
             },
 
             seeStudy1(){
@@ -460,7 +445,6 @@
 
                     _this.gridData = Array.isArray(resp.data) ? resp.data : [resp.data];
 
-                    // _this.tableData = resp.data;
                     console.log(_this.Student_study);
                     _this.dialogTableVisible = true
                 });
@@ -525,6 +509,5 @@
         location.href = "/QGfinal_test_war/Study.html";
     }
 </script>
-
 </body>
 </html>

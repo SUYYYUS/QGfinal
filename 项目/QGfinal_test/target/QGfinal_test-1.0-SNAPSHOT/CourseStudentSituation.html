@@ -8,9 +8,6 @@
 
 <div id="coursestudentsituationDiv">
 
-<!--    <h2 v-model="Course.coursename">{{Course.coursename}}</h2>-->
-<!--    <el-button type="text" @click="dialogTableVisible = true">打开嵌套表格的 Dialog</el-button>-->
-
     <el-dialog title="学习情况" :visible.sync="dialogTableVisible">
         <el-table :data="gridData">
             <el-table-column property="answernumber" label="作答次数" width="150"></el-table-column>
@@ -19,7 +16,6 @@
             <el-table-column property="accuracy" label="正确率" width="200"></el-table-column>
         </el-table>
     </el-dialog>
-
 
     <template>
         <el-table
@@ -62,7 +58,6 @@
                 <template slot-scope="scope">
                     <el-row>
                         <el-button type="primary" @click="checklearning(scope.row)">获取学习情况</el-button>
-<!--                        <el-button type="text" @click="dialogTableVisible = true">查看学习情况</el-button>-->
                     </el-row>
                 </template>
             </el-table-column>
@@ -75,7 +70,6 @@
 
 
 </div>
-
 
 <script src="js/axios-0.18.0.js"></script>
 <script src="js/vue.js"></script>
@@ -143,7 +137,6 @@
             //展示报名这个课程的学生
             showRegisterStudent(){
                 var _this = this;
-
                 axios({
                     method:"get",
                     url:"http://localhost:8080/QGfinal_test_war/Student_course/showRegisterStudent",
@@ -154,7 +147,6 @@
 
             },
 
-
             //展示当前课程信息
             queryCourse(){
                 var _this = this;
@@ -163,17 +155,13 @@
                     url:"http://localhost:8080/QGfinal_test_war/Course/getSelfInformation",
                 }).then(resp =>{
                     _this.Course.coursename = resp.data.coursename;
-
-                    // _this.tableData = resp.data;
                 });
             },
 
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex%2 === 0) {
                     return 'warning-row';
-                } //else  {
-                //return 'success-row';
-                //}
+                }
                 return 'success-row';
             },
             //复选框选中后执行的方法
@@ -198,11 +186,6 @@
                             message: '获取成功',
                             type: 'success'
                         });
-
-                        //打开学习情况表单
-
-
-
                     }
                 })
             },
@@ -219,29 +202,21 @@
 
                     _this.gridData = Array.isArray(resp.data) ? resp.data : [resp.data];
 
-                    // _this.tableData = resp.data;
                     console.log(_this.Student_study);
                     _this.dialogTableVisible = true;
                 });
 
             },
-
-
             gobackteachercenter(){
                 location.href = "/QGfinal_test_war/TeacherCenter.html";
-            }
+            },
         }
-
-
     })
-
 </script>
 <script>
     function checklearn() {
         location.href = "AdminCenter.html";
     }
 </script>
-
-
 </body>
 </html>

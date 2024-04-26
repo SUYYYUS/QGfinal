@@ -33,7 +33,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> queryAllCourseByTeacher_id(int teacher_id) throws Exception {
         List<Course> courseList = courseDao.queryAllCourseByTeacher_id(teacher_id);
-
+        //返回集合
         return courseList;
     }
 
@@ -61,7 +61,7 @@ public class CourseServiceImpl implements CourseService {
         PageBean<Course> pageBean = new PageBean<>();
         pageBean.setRows(rows);
         pageBean.setTotalCount(count);
-
+        //返回pagebean对象
         return pageBean;
     }
 
@@ -74,7 +74,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course queryByCourse_id(int id) throws SQLException {
         Course course = courseDao.queryByCourse_id(id);
-
+        //返回课程对象
         return course;
     }
 

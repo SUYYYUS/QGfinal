@@ -33,8 +33,6 @@
         <p class="signup">email<input  id="email" type="text" name="email" v-model="Teacher.email"></p>
         <p class="signup">个人介绍<input  id="description" type="text" name="description" v-model="Teacher.description"></p>
 
-        <!--            <p class="signup">性别<input  id="gender" type="text" name="gender" v-model="User.gender"></p>-->
-
         <el-row class="signup">
             <el-button  type="primary" @click="signup">注册</el-button>
             <el-button  type="primary" @click="login">返回登录</el-button>
@@ -54,9 +52,7 @@
         el:"#signupDiv",
 
         data(){
-
             errorMeg:''
-
             return{
                 Teacher:{
                     id:'',
@@ -83,11 +79,9 @@
                     value: '自动化学院',
                     label: '自动化学院'
                 }],
-
             }
 
         },
-
 
         methods:{
             signup(){
@@ -104,7 +98,6 @@
                             message: '恭喜你，注册成功啦',
                             type: 'success'
                         });
-
                     }
                     else if(resp.data == "failed"){
                         _this.errorMsg = "此用户名已存在";
@@ -117,18 +110,15 @@
                     }
                 })
             },
+
+            //回到登录页面
             login(){
                 location.href = "/QGfinal_test_war/TeacherLogin.html";
             },
         },
 
-        // mounted(){
-        //
-        //     this.adduser(this.User);
-        // },
 
     })
 </script>
-
 </body>
 </html>

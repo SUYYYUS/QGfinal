@@ -34,9 +34,5 @@ public class TimeUtil {
         LocalDateTime localDateTime = LocalDateTime.parse(time, dateTimeFormatter);
         //返回时间
         return localDateTime;
-
     }
-
-
-
 }

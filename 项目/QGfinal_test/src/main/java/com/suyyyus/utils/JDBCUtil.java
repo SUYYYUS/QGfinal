@@ -36,7 +36,11 @@ public class JDBCUtil {
         return connection;
     }
 
-    //释放资源
+    /**
+     * 释放资源
+     * @param connection
+     * @param preparedStatement
+     */
     public static void close(Connection connection, PreparedStatement preparedStatement)  {
         try {
             if(connection != null){
@@ -51,6 +55,12 @@ public class JDBCUtil {
         }
     }
 
+    /**
+     * 释放资源
+     * @param connection
+     * @param preparedStatement
+     * @param resultSet
+     */
     public static void close(Connection connection, PreparedStatement preparedStatement, ResultSet resultSet)  {
         try {
             if(connection != null){

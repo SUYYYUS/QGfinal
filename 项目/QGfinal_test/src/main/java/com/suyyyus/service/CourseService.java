@@ -32,6 +32,7 @@ public interface CourseService {
     //查询所有课程
     public List<Course> queryAllCourse() throws Exception;
 
+    //批量删除课程
     public void deleteCourses(int[] id);
 
 }

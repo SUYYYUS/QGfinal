@@ -32,9 +32,6 @@
             <el-form-item label="教职工号">
                 <el-input v-model="Teacher.teacherid"></el-input>
             </el-form-item>
-            <!--<el-form-item label="密码">
-                <el-input v-model="Teacher.password"></el-input>
-            </el-form-item>-->
             <template>
                 <p class="signup">学院<el-select v-model="Teacher.college" placeholder="请选择">
                     <el-option
@@ -70,7 +67,6 @@
             <el-table-column property="reply" label="我的回复"></el-table-column>
             <el-table-column property="question_time" label="提问时间"></el-table-column>
             <el-table-column property="reply_time" label="回复时间"></el-table-column>
-            <!--            <el-table-column property="accuracy" label="正确率" width="200"></el-table-column>-->
         </el-table>
     </el-dialog>
 
@@ -127,12 +123,6 @@
                     align="center"
             >
             </el-table-column>
-<!--        </el-table>-->
-<!--        <el-table-->
-<!--                :data="tableData"-->
-<!--                style="width: 100%"-->
-<!--                :row-class-name="tableRowClassName"-->
-<!--                @selection-change="handleSelectionChange">-->
             <el-table-column
                     prop="description"
                     label="描述"
@@ -158,13 +148,11 @@
                 <template slot-scope="scope">
                     <el-row>
                         <el-button type="primary" @click="allData(scope.row)">修改</el-button>
-<!--                        <el-button type="danger" @click="deleteById(scope.row.id)">删除</el-button>-->
                     </el-row>
                 </template>
             </el-table-column>
         </el-table>
     </template>
-
 
 
 <h2 class="welcome">以下是{{Teacher.teachername}}老师管理的课程</h2>
@@ -186,7 +174,6 @@
                 <el-input v-model="Course.description"></el-input>
             </el-form-item>
             <el-form-item label="限制人数">
-<!--                <el-input v-model="Course.limitnumber"></el-input>-->
                 <template>
                     <el-input-number v-model="Course.limitnumber" ></el-input-number>
                 </template>
@@ -217,10 +204,6 @@
                 style="width: 100%"
                 :row-class-name="tableRowClassName"
                 @selection-change="handleSelectionChange">
-<!--            <el-table-column-->
-<!--                    type="selection"-->
-<!--                    width="55">-->
-<!--            </el-table-column>-->
             <el-table-column
                     type="index"
                     width="50">
@@ -231,24 +214,6 @@
                     align="center"
             >
             </el-table-column>
-<!--            <el-table-column-->
-<!--                    prop="subject"-->
-<!--                    label=学科分类-->
-<!--                    align="center"-->
-<!--            >-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--                    prop="description"-->
-<!--                    label="描述"-->
-<!--                    align="center"-->
-<!--            >-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--                    prop="section_number"-->
-<!--                    label="章节数"-->
-<!--                    align="center"-->
-<!--            >-->
-<!--            </el-table-column>-->
             <el-table-column
                     prop="limitnumber"
                     label="限制人数"
@@ -261,12 +226,6 @@
                     align="center"
             >
             </el-table-column>
-<!--            <el-table-column-->
-<!--                    prop="create_time"-->
-<!--                    label="开课时间"-->
-<!--                    align="center"-->
-<!--            >-->
-<!--            </el-table-column>-->
             <el-table-column
                     prop="end_time"
                     label="结课时间"
@@ -294,8 +253,6 @@
         <el-button type="warning" @click="getout" round>退出登录</el-button>
     </el-row>
 
-
-
 </div>
 
 <script src="js/axios-0.18.0.js"></script>
@@ -306,12 +263,10 @@
 </script>
 <script>
 
-
     new Vue({
         el:'#selfinfoDiv',
 
         mounted(){
-            // this.queryMyDiscussionByTeacher_id();
             this.see();
             this.selectAllCourse();
         },
@@ -391,11 +346,8 @@
                     teacher_id:'',
                     logging:'',
                 },
-
             };
         },
-
-
 
         methods: {
 
@@ -409,9 +361,7 @@
                 }).then(resp =>{
                     //设置表格数据
                     this.tableData1 = resp.data;
-
                 })
-
             },
 
 
@@ -427,7 +377,6 @@
 
                     _this.tableData = Array.isArray(resp.data) ? resp.data : [resp.data];
 
-                    // _this.tableData = resp.data;
                     console.log(_this.Teacher);
                 });
             },
@@ -477,7 +426,6 @@
                         f1();
                     }
                 })
-
             },
 
 
@@ -532,9 +480,7 @@
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex%2 === 0) {
                     return 'warning-row';
-                } //else  {
-                //return 'success-row';
-                //}
+                }
                 return 'success-row';
             },
             //复选框选中后执行的方法
@@ -578,9 +524,7 @@
                     _this.dialogVisible_logging = true;
                 })
             },
-
         }
-
     })
 </script>
 <script>
@@ -594,6 +538,5 @@
         location.href = "/QGfinal_test_war/CourseStudentSituation.html"
     }
 </script>
-
 </body>
 </html>

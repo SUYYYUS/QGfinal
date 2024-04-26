@@ -17,9 +17,9 @@ public class Student_courseDaoImpl implements Student_courseDao {
     @Override
     public List<Student_course> queryByStudent_id(int student_id) throws Exception {
         String sql = "select * from tb_student_course where student_id = ?";
-
+        //执行sql语句
         List<Student_course> student_courses = CRUDUtils.queryAllCourseByStudent_id(sql, student_id);
-
+        //返回集合
         return student_courses;
     }
 
@@ -32,9 +32,9 @@ public class Student_courseDaoImpl implements Student_courseDao {
     @Override
     public List<Student_course> queryStudentByCourse_id(int course_id) throws Exception {
         String sql = "select * from tb_student_course where course_id = ?";
-
+        //执行sql语句
         List<Student_course> student_courses = CRUDUtils.queryAllStudentByCourse_id(sql, course_id);
-
+        //返回集合
         return  student_courses;
     }
 }

@@ -9,15 +9,12 @@
 <div id="adminloginDiv" style="height: 350px">
     <form id = "form">
         <h1 id="loginmsg">管理员登录</h1>
-<!--        <div id="errorMsg" v-model="errorMsg">{{errorMsg}}</div>-->
         <p class="login">账号<input id="account" type="text" name="account" v-model="Admin.account" ></p>
         <p class="login">密码<input  id="password" type="password" name="password" v-model="Admin.password" ></p>
         <el-row>
             <el-button type="primary" @click="adminLogin">登录</el-button>
         </el-row>
-        <!--        <span id="zhuce"> <a href="/forthweek_war/UserSignup.html" target="_blank">点击即可注册个人账号哦~</a></span>-->
         <form>
-
 
 </div>
 
@@ -31,18 +28,14 @@
         el:"#adminloginDiv",
 
         data(){
-
             errorMsg:'';
-
             return{
-
                 Admin:{
                     id:'',
                     adminname:'',
                     account:'',
                     password:'',
                 },
-
             }
         },
 
@@ -84,14 +77,11 @@
                 })
             },
 
-
-
         },
 
 
     })
 </script>
-
 <script>
     function turnto(){
         location.href = "/QGfinal_test_war/AdminCenter.html";

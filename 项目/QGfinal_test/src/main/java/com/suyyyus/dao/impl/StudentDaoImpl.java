@@ -29,6 +29,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public boolean Login(String studentid, String password) throws SQLException {
         String sql = "select * from tb_student where studentid = ?";
+        //执行sql语句
         boolean b = CRUDUtils.Login(sql, studentid, password);
         return b;
     }
@@ -46,10 +47,17 @@ public class StudentDaoImpl implements StudentDao {
         //sql语句
         String sql = "insert into tb_student (studentname, studentid, password, grade, qq, description, create_time, update_time) " +
                 "values (?,?,?,?,?,?,?,?)";
-
+        //执行sql语句
         //添加信息
-        CRUDUtils.ZengShanGai(sql,student.getStudentname(),student.getStudentid(),saltPassword,student.getGrade(),student.getQq(),student.getDescription(),TimeUtil.formatDateTime(LocalDateTime.now()),TimeUtil.formatDateTime(LocalDateTime.now()));
-
+        CRUDUtils.ZengShanGai(sql,
+                student.getStudentname(),
+                student.getStudentid(),
+                saltPassword,
+                student.getGrade(),
+                student.getQq(),
+                student.getDescription(),
+                TimeUtil.formatDateTime(LocalDateTime.now()),
+                TimeUtil.formatDateTime(LocalDateTime.now()));
     }
 
     /**
@@ -83,6 +91,7 @@ public class StudentDaoImpl implements StudentDao {
         }else {
             student = null;
         }
+        //返回数据
         return student;
     }
 
@@ -117,6 +126,7 @@ public class StudentDaoImpl implements StudentDao {
         }else {
             student = null;
         }
+        //返回数据
         return student;
     }
 
@@ -131,11 +141,16 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public int updateStudent(Student student) throws SQLException {
         String sql = "update tb_student set studentname = ?, studentid = ?, grade = ?, qq = ?, description = ?, update_time = ? where id = ?";
-        CRUDUtils.ZengShanGai(sql,student.getStudentname(),student.getStudentid(),
-                student.getGrade(),student.getQq(),student.getDescription(),
-                TimeUtil.formatDateTime(LocalDateTime.now()),student.getId());
+        //执行sql语句
+        CRUDUtils.ZengShanGai(sql,
+                student.getStudentname(),
+                student.getStudentid(),
+                student.getGrade(),
+                student.getQq(),
+                student.getDescription(),
+                TimeUtil.formatDateTime(LocalDateTime.now()),
+                student.getId());
         return 0;
-
     }
 
     /**
@@ -147,9 +162,9 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public boolean addStudent_course(Student_course student_course) throws SQLException {
         String sql = "insert into tb_student_course (student_id, course_id, register_time, status) values (?,?,?,?)";
-
+        //执行sql语句
         CRUDUtils.ZengShanGai(sql,student_course.getStudent_id(),student_course.getCourse_id(),TimeUtil.formatDateTime(LocalDateTime.now()),1);
-
+        //执行成功操作
         return true;
     }
 
@@ -164,11 +179,13 @@ public class StudentDaoImpl implements StudentDao {
         String sql = "select * from tb_student limit  ? , ?";
         List<Student> list = null;
         try {
+            //执行sql语句
             list = CRUDUtils.selectStudentByPage(sql,begin,size);
             return list;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //返回数据
         return list;
     }
 
@@ -180,7 +197,9 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public int selectAllCount() throws Exception {
         String sql = "select count(*) from tb_student ";
+        //执行sql语句
         int count = CRUDUtils.allStudentCount(sql);
+        //返回数据
         return count;
     }
 
@@ -190,9 +209,11 @@ public class StudentDaoImpl implements StudentDao {
      */
     @Override
     public void deleteStudents(int[] id) {
+        //遍历数组
         for (int i : id) {
             try {
                 String sql = "delete from tb_student where id = ?";
+                //执行sql语句
                 CRUDUtils.ZengShanGai(sql,i);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -211,7 +232,7 @@ public class StudentDaoImpl implements StudentDao {
         String password = MD5Util.generateSaltPassword("123456");
 
         String sql = "update tb_student set password = ? where id = ?";
-
+        //执行sql语句
         CRUDUtils.ZengShanGai(sql, password, student.getId());
     }
 
@@ -245,9 +266,11 @@ public class StudentDaoImpl implements StudentDao {
         }
         if(list.size() == 0) {
             System.out.println("当前没有学生");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
@@ -261,7 +284,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void addLogging(Student_logging student_logging) throws SQLException {
         String sql = "insert into tb_student_logging (student_id, logging) values (?,?)";
-
+        //执行sql语句
         CRUDUtils.ZengShanGai(sql, student_logging.getStudent_id(), student_logging.getLogging());
     }
 
@@ -290,9 +313,11 @@ public class StudentDaoImpl implements StudentDao {
         }
         if(list.size() == 0) {
             System.out.println("当前没有行为");
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return null;
         }else {
+            //释放资源
             JDBCUtil.close(connection,preparedStatement,resultSet);
             return list;
         }
@@ -331,6 +356,7 @@ public class StudentDaoImpl implements StudentDao {
         }else {
             student = null;
         }
+        //返回学生对象
         return student;
     }
 }

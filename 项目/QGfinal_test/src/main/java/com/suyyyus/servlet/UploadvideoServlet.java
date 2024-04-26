@@ -17,6 +17,13 @@ import java.util.List;
 @WebServlet("/uploadvideo/*")
 public class UploadvideoServlet extends BaseServlet{
 
+    /**
+     * 教师上传视频
+     * @param req
+     * @param resp
+     * @throws IOException
+     * @throws ServletException
+     */
     public void uploadvideo(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if (ServletFileUpload.isMultipartContent(req)) {
             DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -42,11 +49,16 @@ public class UploadvideoServlet extends BaseServlet{
         }
     }
 
+    /**
+     * 学生接收视频并观看
+     * @param req
+     * @param resp
+     * @throws IOException
+     */
     public void getvideo(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String parameter = req.getParameter("videofilename");
         String videourl = "uploaded_videos/" + parameter;
         resp.getWriter().write(videourl);
-
     }
 
 

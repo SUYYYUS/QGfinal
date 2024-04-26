@@ -71,7 +71,6 @@ public class MD5Util {
      * @return
      */
     public static String md5Hex(String src){
-
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
             byte[] bs = md5.digest(src.getBytes());
@@ -81,5 +80,4 @@ public class MD5Util {
             return null;
         }
     }
-
 }

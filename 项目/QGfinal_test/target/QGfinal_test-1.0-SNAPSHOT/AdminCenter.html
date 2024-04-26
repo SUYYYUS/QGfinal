@@ -5,13 +5,11 @@
     <title>管理员中心</title>
     <style>
         .welcome{
-            /*text-align: center;*/
             color: #cdb1ef;
         }
     </style>
 </head>
 <body>
-<!--<h1>FUCK FCUK FUCK</h1>-->
 <div id="adminDiv">
 
     <h2 class="welcome">欢迎回来，管理员{{Admin.adminname}}</h2>
@@ -22,8 +20,6 @@
         <el-button type="primary" @click="queryAllCourse">查看所有课程</el-button>
         <el-button type="primary" @click="queryAllDiscussion">查看所有留言</el-button>
     </el-row>
-
-
 
 </div>
 
@@ -42,18 +38,13 @@
 
         data() {
             return {
-
                 Admin: {
                     id: '',
                     adminname: '',
                     account: '',
                     password: '',
                 },
-
-
             };
-
-
         },
 
         methods: {
@@ -65,11 +56,7 @@
                     url: "http://localhost:8080/QGfinal_test_war/Admin/getSelfInformation",
                 }).then(resp => {
                     _this.Admin = resp.data;
-
                     console.log(this.Admin);
-                    // _this.tableData = Array.isArray(resp.data) ? resp.data : [resp.data];
-
-                    // _this.tableData = resp.data;
 
                 })
 
@@ -86,11 +73,9 @@
             },
             queryAllCourse(){
                 location.href = "/QGfinal_test_war/AdminCourse.html";
-            }
+            },
         },
     })
 </script>
-
-
 </body>
 </html>

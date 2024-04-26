@@ -23,7 +23,6 @@ public class MyConnectionPool implements DataSource {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 

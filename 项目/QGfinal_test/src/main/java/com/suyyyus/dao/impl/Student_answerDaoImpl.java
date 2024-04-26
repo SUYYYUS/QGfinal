@@ -18,8 +18,13 @@ public class Student_answerDaoImpl implements Student_answerDao {
     @Override
     public void addAnswerRecord(Answer answer) throws SQLException {
         String sql = "insert into tb_student_answer (student_id, question_id, course_id, answer, score, answer_time) values(?,?,?,?,?,?)";
-
-        CRUDUtils.ZengShanGai(sql, answer.getStudent_id(), answer.getQuestion_id(), answer.getCourse_id(), answer.getAnswer(), answer.getScore(), TimeUtil.formatDateTime(LocalDateTime.now()));
-
+        //执行sql语句
+        CRUDUtils.ZengShanGai(sql,
+                answer.getStudent_id(),
+                answer.getQuestion_id(),
+                answer.getCourse_id(),
+                answer.getAnswer(),
+                answer.getScore(),
+                TimeUtil.formatDateTime(LocalDateTime.now()));
     }
 }

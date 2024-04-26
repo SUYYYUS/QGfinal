@@ -99,16 +99,6 @@
                     align="center"
             >
             </el-table-column>
-            <!--<el-table-column
-                    prop="id"
-                    align="center"
-                    label="操作">
-                <template slot-scope="scope">
-                    <el-row>
-                        <el-button type="primary" @click="delete(scope.row)">删除</el-button>
-                    </el-row>
-                </template>
-            </el-table-column>-->
         </el-table>
     </template>
 
@@ -236,10 +226,6 @@
                     type: 'warning'
                 }).then(() => {
                     //用户点击确认按钮
-
-                    //1.创建id数组
-                    //console.log(this.multipleSelection);
-
                     for (let i = 0; i < this.multipleSelection.length; i++) {
                         let multipleSelectionElement = this.multipleSelection[i];
                         this.selectIds[i] = multipleSelectionElement.id;
@@ -266,7 +252,6 @@
                         }
                     })
 
-
                 }).catch(() => {
                     //选择取消按钮
 
@@ -275,7 +260,6 @@
                         message: '已取消删除'
                     });
                 });
-
 
             },
 
@@ -306,11 +290,8 @@
 
         }
 
-
     })
 
 </script>
-
-
 </body>
 </html>

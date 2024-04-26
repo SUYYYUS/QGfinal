@@ -26,6 +26,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public boolean StudentLogin(String studentid, String password) throws SQLException {
         boolean login = studentDao.Login(studentid, password);
+        //返回结果
         return login;
     }
 
@@ -47,6 +48,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student queryByStudentid(String studentid) throws SQLException {
         Student student = studentDao.queryByStudentid(studentid);
+        //返回学生对象
         return student;
     }
 
@@ -57,6 +59,7 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public void updateStudent(Student student) throws SQLException {
+        //执行更新数据信息操作
         studentDao.updateStudent(student);
     }
 
@@ -70,8 +73,6 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public int addStudent_course(Course course, Student_course student_course) throws SQLException {
-
-
         //判断人数
         if(course.getRegisternumber() >= course.getLimitnumber()){
             return 1;
@@ -94,9 +95,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student queryById(int id) throws SQLException {
         Student student = studentDao.queryById(id);
+        //返回学生对象
         return  student;
     }
-
 
     /**
      * 分页查询
@@ -136,15 +137,15 @@ public class StudentServiceImpl implements StudentService {
     }
 
     /**
-     * 重置学生账号密码
+     * 重置学生账号的密码
      * @param student
      * @return
      * @throws SQLException
      */
     @Override
     public boolean resetPassword(Student student) throws SQLException {
+        //重置密码
         studentDao.resetPassword(student);
-
         return true;
     }
 
@@ -163,7 +164,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void addLogging(Student_logging student_logging) throws SQLException {
         student_logging.setLogging(TimeUtil.formatDateTime(LocalDateTime.now()) + ":" + student_logging.getLogging());
-
+        //添加历史记录
         studentDao.addLogging(student_logging);
     }
 
@@ -176,7 +177,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student_logging> queryLoggingById(int student_id) throws SQLException {
         List<Student_logging> student_loggings = studentDao.queryLoggingById(student_id);
-
+        //返回学生的历史记录集合
         return student_loggings;
     }
 
@@ -189,7 +190,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student queryByName(String studentname) throws SQLException {
         Student student = studentDao.queryByName(studentname);
-
+        //返回学生对象
         return student;
     }
 }

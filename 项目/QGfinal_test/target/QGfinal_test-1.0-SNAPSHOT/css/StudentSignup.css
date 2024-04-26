@@ -87,17 +87,12 @@
 }
 
 .el-select {
-    /*width: 150px; !* 与密码输入框宽度一致 *!*/
-    /*height: 25px; !* 与密码输入框高度一致 *!*/
-    /*font-size: 14px; !* 与密码输入框字体大小一致 *!*/
 
     width: 150px;
     margin-left: 15px;
     border-radius: 5px;
     border-style: hidden;
     height: 25px;
-    /*background-color: rgb(191, 216, 213);*/
     outline: none;
-    /*color: #403d3d;*/
     padding-left: 10px;
 }
